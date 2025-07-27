@@ -94,6 +94,7 @@
         <Compile Include="Types\Part.cs" />
         <Compile Include="Types\SpecDatabase.cs" />
         <Compile Include="Types\TextureSet.cs" />
+        <Compile Include="Types\WeaponSpecificOffset.cs" />
         <Compile Include="Window\CustomizeWeaponWindow.cs" />
         <Compile Include="Window\Dialog_TextInput.cs" />
         <Compile Include="Window\ViewDrawers\AsideDrawer.cs" />

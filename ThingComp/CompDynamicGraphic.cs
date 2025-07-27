@@ -57,14 +57,21 @@ public class CompDynamicGraphic : ThingComp {
         var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
 
         foreach (var point in Props.attachmentPoints) {
-            var finalTextureSet = compDynamicTraits?.GetInstalledTraitFor(point.part) is { } installedTrait
-                ? CustomizeWeaponUtility.GetModuleDefFor(installedTrait)?
-                    .GetModExtension<TraitModuleExtension>()?.texture
-                : point.baseTexture;
-            finalTextureSet ??= point.baseTexture;
+            var ext = compDynamicTraits?.GetInstalledTraitFor(point.part) is { } installedTrait
+                ? CustomizeWeaponUtility.GetModuleDefFor(installedTrait)?.GetModExtension<TraitModuleExtension>()
+                : null;
+
+            var finalTextureSet = ext?.texture ?? point.baseTexture;
+
             if (finalTextureSet == null) continue;
 
-            var finalOffset = point.offset + finalTextureSet.offset;
+            var finalOffset = point.offset;
+            finalOffset += finalTextureSet.offset;
+
+            var specificOffsetData = ext?.offsets?.FirstOrFallback(o => o.weaponDef == parent.def);
+            if (specificOffsetData != null) {
+                finalOffset += specificOffsetData.offset;
+            }
 
             // module layers
             var baseSortOrder = point.layer * 10;

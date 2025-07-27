@@ -12,12 +12,12 @@ public class MainDrawer {
     private readonly CompDynamicTraits _compDynamicTraits;
     private readonly HashSet<Part> _supportParts = new();
     private readonly Action<Part, WeaponTraitDef> _onSlotClick;
-    private readonly CompDynamicGraphic _compDynamicGraphic;
+    // private readonly CompDynamicGraphic _compDynamicGraphic;
 
     public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef> onSlotClick) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-        _compDynamicGraphic = weapon.TryGetComp<CompDynamicGraphic>();
+        // _compDynamicGraphic = weapon.TryGetComp<CompDynamicGraphic>();
 
         if (_compDynamicTraits?.props is CompProperties_DynamicTraits props && !props.supportParts.NullOrEmpty()) {
             _supportParts = new HashSet<Part>(props.supportParts);
@@ -122,14 +122,21 @@ public class MainDrawer {
         if (installedTrait != null) {
             Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
-            // render label
-            var originalAnchor = Text.Anchor;
-            var originalFont = Text.Font;
-            Text.Anchor = TextAnchor.MiddleCenter;
-            Text.Font = GameFont.Tiny;
-            Widgets.Label(rect, installedTrait.LabelCap);
-            Text.Anchor = originalAnchor;
-            Text.Font = originalFont;
+            var textureSet = CustomizeWeaponUtility.GetModuleDefFor(installedTrait)
+                ?.GetModExtension<TraitModuleExtension>()?.texture;
+
+            if (textureSet != null && !string.IsNullOrEmpty(textureSet.texturePath)) {
+                DrawModuleTexture(rect, textureSet);
+            } else {
+                // fallback: render label
+                var originalAnchor = Text.Anchor;
+                var originalFont = Text.Font;
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Text.Font = GameFont.Tiny;
+                Widgets.Label(rect, installedTrait.LabelCap);
+                Text.Anchor = originalAnchor;
+                Text.Font = originalFont;
+            }
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {
@@ -137,6 +144,21 @@ public class MainDrawer {
         }
 
         if (clicked) _onSlotClick?.Invoke(part, installedTrait);
+    }
+
+    private static void DrawModuleTexture(Rect rect, TextureSet textureSet) {
+        // outline
+        if (!string.IsNullOrEmpty(textureSet.outlinePath)) {
+            var outlineTexture = ContentFinder<Texture2D>.Get(textureSet.outlinePath, false);
+            if (outlineTexture != null) {
+                Widgets.DrawTextureFitted(rect, outlineTexture, 1f);
+            }
+        }
+
+        var mainTexture = ContentFinder<Texture2D>.Get(textureSet.texturePath);
+        if (mainTexture != null) {
+            Widgets.DrawTextureFitted(rect, mainTexture, 1f);
+        }
     }
 
     // Returns a boolean indicating whether the element was clicked.

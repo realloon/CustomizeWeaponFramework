@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using RimWorld;
 using Verse;
 
@@ -7,10 +8,10 @@ public class TraitModuleExtension : DefModExtension {
     public WeaponTraitDef weaponTraitDef;
     public Part part;
     public TextureSet texture;
+    public List<ThingDef> requiredWeaponDefs;
+    public List<string> requiredWeaponTags;
+    public List<ThingDef> excludeWeaponDefs;
+    public List<string> excludeWeaponTags;
 
     // public Rarity rarity; // enum
-    // public List<ThingDef> requiredWeaponDefs;
-    // public List<string> requiredWeaponTags;
-    // public List<ThingDef> excludeWeaponDefs;
-    // public List<string> excludeWeaponTags;
 }

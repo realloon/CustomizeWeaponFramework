@@ -245,12 +245,18 @@ public class CompDynamicTraits : ThingComp {
     private void OnTraitsChanged() {
         ClearAllCaches();
         SetupAbility(false);
-        
+
         // graphic dirty
         var compDynamicGraphic = parent.TryGetComp<CompDynamicGraphic>();
         if (compDynamicGraphic == null) return;
         compDynamicGraphic.Notify_GraphicDirty();
-        parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlagDefOf.Things);
+        if (parent.Map != null) {
+            // ground graphic dirty
+            parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlagDefOf.Things);
+        } else if (parent.ParentHolder is Pawn_EquipmentTracker { pawn: not null } equipmentTracker) {
+            // equipment graphic dirty
+            equipmentTracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
+        }
     }
 
     // === Gizmos ===

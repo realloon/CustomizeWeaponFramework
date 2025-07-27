@@ -34,6 +34,57 @@ public static class CustomizeWeaponUtility {
         return moduleDef;
     }
 
+    /// <summary>
+    /// Checks whether a module definition is compatible with the specified weapon instance.
+    /// </summary>
+    /// <param name="moduleDef">ThingDef of the module to check.</param>
+    /// <param name="weapon">Thing instance of the target weapon.</param>
+    /// <returns>True if compatible; otherwise, false.</returns>
+    public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, Thing weapon) {
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        if (ext == null) return false;
+
+        var weaponDef = weapon.def;
+
+        // exclude first 
+        if (ext.excludeWeaponDefs != null && ext.excludeWeaponDefs.Contains(weaponDef)) {
+            return false;
+        }
+
+        if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
+            if (ext.excludeWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag))) {
+                return false;
+            }
+        }
+
+        var hasRequiredDefs = !ext.requiredWeaponDefs.NullOrEmpty();
+        var hasRequiredTags = !ext.requiredWeaponTags.NullOrEmpty();
+
+        // defs
+        switch (hasRequiredDefs) {
+            case false when !hasRequiredTags:
+            case true when ext.requiredWeaponDefs.Contains(weaponDef):
+                return true;
+        }
+
+        // tags
+        if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
+
+        return ext.requiredWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag));
+    }
+
+    /// <summary>
+    /// Retrieves all compatible module definitions for a given part slot on the specified weapon.
+    /// </summary>
+    /// <param name="part">The part slot to query, e.g., Part.Sight.</param>
+    /// <param name="weapon">The weapon instance being modified.</param>
+    /// <returns>An enumerable collection of all compatible module ThingDefs.</returns>
+    public static IEnumerable<ThingDef> GetCompatibleModulesForPart(Part part, Thing weapon) {
+        return AllCaches.Value.TraitToModule.Values
+            .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
+            .Where(moduleDef => IsModuleCompatibleWithWeapon(moduleDef, weapon));
+    }
+
     // This method is invoked only once, the first time any cache is accessed.
     private static Caches BuildCaches() {
         var traitToPart = new Dictionary<WeaponTraitDef, Part>();

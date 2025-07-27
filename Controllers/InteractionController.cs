@@ -45,6 +45,7 @@ public class InteractionController {
             var availableModules = searchScope.Where(t => {
                 var ext = t.def.GetModExtension<TraitModuleExtension>();
                 if (ext == null || ext.part != part) return false;
+                if (!CustomizeWeaponUtility.IsModuleCompatibleWithWeapon(t.def, _weapon)) return false;
                 return ownerPawn != null || !t.IsForbidden(Faction.OfPlayer);
             });
 

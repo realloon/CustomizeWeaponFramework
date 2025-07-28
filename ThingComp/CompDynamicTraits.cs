@@ -264,10 +264,11 @@ public class CompDynamicTraits : ThingComp {
         foreach (var g in base.CompGetGizmosExtra())
             yield return g;
 
-        if (!Prefs.DevMode) yield break;
+        if (parent.IsForbidden(Faction.OfPlayer)) yield break;
 
         yield return new Command_Action {
-            defaultLabel = "Dev: Show Panel",
+            defaultLabel = "CWF_UI_WeaponPanel".Translate(),
+            defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
             action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
         };
     }

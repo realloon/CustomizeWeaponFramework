@@ -70,7 +70,7 @@ public class CompDynamicGraphic : ThingComp {
 
             var specificOffsetData = ext?.offsets?.FirstOrFallback(o => o.weaponDef == parent.def);
             if (specificOffsetData != null) {
-                finalOffset += specificOffsetData.offset;
+                finalOffset = specificOffsetData.offset; // override
             }
 
             // module layers

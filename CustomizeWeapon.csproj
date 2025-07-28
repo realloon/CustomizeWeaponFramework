@@ -73,6 +73,7 @@
         <Compile Include="CustomizeWeapon.cs" />
         <Compile Include="CustomizeWeaponUtility.cs" />
         <Compile Include="DefModExtension\TraitModuleExtension.cs" />
+        <Compile Include="DefModExtension\UpgradeExtension.cs" />
         <Compile Include="HarmonyPatches\Postfix_CompColorable_ForceColor.cs" />
         <Compile Include="HarmonyPatches\Postfix_Pawn_EquipmentTracker_GetGizmos.cs" />
         <Compile Include="HarmonyPatches\Postfix_Projectile_Launch_StoppingPower.cs" />
@@ -84,7 +85,7 @@
         <Compile Include="JobDriver\JobDriver_ModifyWeaponHaul.cs" />
         <Compile Include="JobDriver\JobDriver_ModifyWeaponSelf.cs" />
         <Compile Include="JobGiver\JobGiver_ModifyWeapon.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="RecipeWorker\Recipe_UpgradeWeapon.cs" />
         <Compile Include="ThingComp\CompColorable.cs" />
         <Compile Include="ThingComp\CompDynamicGraphic.cs" />
         <Compile Include="ThingComp\CompDynamicTraits.cs" />
@@ -103,9 +104,6 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="WorkGiver\" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

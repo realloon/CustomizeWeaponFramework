@@ -59,7 +59,6 @@ public class JobDispatcher {
             return;
         }
 
-        // 找出所有需要安装的模块，并找到它们在地图上的实体
         var modulesToHaul = new List<Thing>();
         var installChanges = netChanges
             .Where(c => c.Type == ModificationType.Install)
@@ -124,7 +123,6 @@ public class JobDispatcher {
             }
         }
 
-        // 确保拆卸总是在安装之前
         return changes.OrderBy(c => c.Type).ToList();
     }
 

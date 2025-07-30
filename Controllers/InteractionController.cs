@@ -29,7 +29,7 @@ public class InteractionController {
         if (options.Any()) Find.WindowStack.Add(new FloatMenu(options));
     }
 
-    // === helper ===
+    // === Helper ===
     private void Install(Part part, List<FloatMenuOption> options) {
         var compatibleModuleDefs = new HashSet<ThingDef>(
             CustomizeWeaponUtility.GetCompatibleModulesForPart(part, _weapon)

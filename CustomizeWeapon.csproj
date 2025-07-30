@@ -91,10 +91,12 @@
         <Compile Include="ThingComp\CompDynamicTraits.cs" />
         <Compile Include="ThingComp\CompRenamable.cs" />
         <Compile Include="Types\AttachmentPointData.cs" />
+        <Compile Include="Types\GraphicCase.cs" />
         <Compile Include="Types\ModificationData.cs" />
         <Compile Include="Types\Part.cs" />
         <Compile Include="Types\SpecDatabase.cs" />
-        <Compile Include="Types\TextureSet.cs" />
+        <Compile Include="Types\ModuleGraphicData.cs" />
+        <Compile Include="Types\WeaponMatcher.cs" />
         <Compile Include="Types\WeaponSpecificOffset.cs" />
         <Compile Include="Window\CustomizeWeaponWindow.cs" />
         <Compile Include="Window\Dialog_TextInput.cs" />

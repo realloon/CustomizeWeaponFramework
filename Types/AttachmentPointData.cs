@@ -5,7 +5,7 @@ namespace CustomizeWeapon;
 
 public class AttachmentPointData {
     public Part part;
-    public TextureSet baseTexture;
+    public ModuleGraphicData baseTexture;
     public Vector2 offset;
     public int layer;
     public float scale = 1f;

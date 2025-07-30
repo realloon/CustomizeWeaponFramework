@@ -48,25 +48,26 @@ public class CompDynamicGraphic : ThingComp {
         if (compDynamicTraits != null) {
             foreach (var point in Props.attachmentPoints) {
                 var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
-                if (installedTrait == null) continue;
 
-                var moduleGraphicData = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent);
-                if (moduleGraphicData == null) continue;
+                var graphicToRender = installedTrait != null
+                    ? CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent)
+                    : point.baseTexture;
 
-                var finalOffset = moduleGraphicData.offset ?? point.offset;
-                var finalScale = point.scale * (moduleGraphicData.scale ?? 1f);
+                if (graphicToRender == null) continue;
+
+                var finalOffset = graphicToRender.offset ?? point.baseTexture?.offset ?? Vector2.zero;
+                var finalScale = graphicToRender.scale ?? point.baseTexture?.scale ?? 1f;
                 var baseSortOrder = point.layer * 10;
 
-                if (!string.IsNullOrEmpty(moduleGraphicData.outlinePath)) {
-                    var outlineTex = ContentFinder<Texture2D>.Get(moduleGraphicData.outlinePath, false);
+                if (!string.IsNullOrEmpty(graphicToRender.outlinePath)) {
+                    var outlineTex = ContentFinder<Texture2D>.Get(graphicToRender.outlinePath, false);
                     if (outlineTex != null) {
-                        layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white,
-                            null));
+                        layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white, null));
                     }
                 }
 
-                if (string.IsNullOrEmpty(moduleGraphicData.texturePath)) continue;
-                var moduleTexture = ContentFinder<Texture2D>.Get(moduleGraphicData.texturePath);
+                if (string.IsNullOrEmpty(graphicToRender.texturePath)) continue;
+                var moduleTexture = ContentFinder<Texture2D>.Get(graphicToRender.texturePath);
                 if (moduleTexture == null) continue;
 
                 var color = point.receivesColor
@@ -129,6 +130,7 @@ public class CompDynamicGraphic : ThingComp {
             originalGraphicData.drawSize, Color.white, Color.white,
             originalGraphicData, 0, null, null
         );
+        
         graphic.Init(request);
         return graphic;
     }

@@ -31,89 +31,73 @@ public class CompDynamicGraphic : ThingComp {
 
     // === Helper ===
     private Graphic GenerateGraphic() {
-        Log.Message("[&CWF Dev] Perform multi-texture compositing and render it as Graphic_Single...");
+        Log.Message("[&CWF Dev] Graphic rendering...");
 
         var originalGraphicData = parent.def.graphicData;
         if (originalGraphicData == null) return BaseContent.BadGraphic;
 
-        // Get canvas size
-        var canvasSizeReference = ContentFinder<Texture2D>.Get(originalGraphicData.texPath);
-        if (canvasSizeReference == null) {
-            Log.Warning(
-                $"[CWF] Could not load canvas size reference texture at {originalGraphicData.texPath}. " +
-                "Falling back to 512x512.");
-            canvasSizeReference = new Texture2D(512, 512);
-        }
+        var sizeReference = ContentFinder<Texture2D>.Get(originalGraphicData.texPath, false)
+                            ?? new Texture2D(512, 512);
 
-        // Make canvas
-        var renderTex = RenderTexture.GetTemporary(canvasSizeReference.width, canvasSizeReference.height, 0);
-        RenderTexture.active = renderTex;
-        GL.Clear(true, true, Color.clear);
-        RenderTexture.active = null;
+        var renderTexture = RenderTexture.GetTemporary(sizeReference.width, sizeReference.height, 0);
 
-        // Collect all layers that need to be rendered
-        var layersToDraw = new List<(Texture2D texture, Vector2 offset,
-            float scale, int sortOrder, Color color, Texture2D maskTexture)>();
+        var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
+            Color color, Texture2D maskTexture)>();
         var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
 
-        foreach (var point in Props.attachmentPoints) {
-            var ext = compDynamicTraits?.GetInstalledTraitFor(point.part) is { } installedTrait
-                ? CustomizeWeaponUtility.GetModuleDefFor(installedTrait)?.GetModExtension<TraitModuleExtension>()
-                : null;
+        if (compDynamicTraits != null) {
+            foreach (var point in Props.attachmentPoints) {
+                var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
+                if (installedTrait == null) continue;
 
-            var finalTextureSet = ext?.texture ?? point.baseTexture;
+                var moduleGraphicData = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent);
+                if (moduleGraphicData == null) continue;
 
-            if (finalTextureSet == null) continue;
+                var finalOffset = moduleGraphicData.offset ?? point.offset;
+                var finalScale = point.scale * (moduleGraphicData.scale ?? 1f);
+                var baseSortOrder = point.layer * 10;
 
-            var finalOffset = point.offset;
-            finalOffset += finalTextureSet.offset;
-
-            var specificOffsetData = ext?.offsets?.FirstOrFallback(o => o.weaponDef == parent.def);
-            if (specificOffsetData != null) {
-                finalOffset = specificOffsetData.offset; // override
-            }
-
-            // module layers
-            var baseSortOrder = point.layer * 10;
-
-            // outline layers
-            if (!string.IsNullOrEmpty(finalTextureSet.outlinePath)) {
-                var outlineTex = ContentFinder<Texture2D>.Get(finalTextureSet.outlinePath, false);
-                if (outlineTex != null) {
-                    layersToDraw.Add((outlineTex, finalOffset, point.scale, baseSortOrder - 1000, Color.white, null));
+                if (!string.IsNullOrEmpty(moduleGraphicData.outlinePath)) {
+                    var outlineTex = ContentFinder<Texture2D>.Get(moduleGraphicData.outlinePath, false);
+                    if (outlineTex != null) {
+                        layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white,
+                            null));
+                    }
                 }
+
+                if (string.IsNullOrEmpty(moduleGraphicData.texturePath)) continue;
+                var moduleTexture = ContentFinder<Texture2D>.Get(moduleGraphicData.texturePath);
+                if (moduleTexture == null) continue;
+
+                var color = point.receivesColor
+                    ? parent.TryGetComp<CompColorable>()?.ColorDef?.color ?? originalGraphicData.color
+                    : Color.white;
+
+                var mask = point.receivesColor
+                    ? ContentFinder<Texture2D>.Get(
+                        originalGraphicData.maskPath.NullOrEmpty()
+                            ? originalGraphicData.texPath + "_m"
+                            : originalGraphicData.maskPath, false)
+                    : null;
+
+                layersToDraw.Add((moduleTexture, finalOffset, finalScale, baseSortOrder, color, mask));
             }
-
-            // add texture layer
-            if (string.IsNullOrEmpty(finalTextureSet.texturePath)) continue;
-            var mainTex = ContentFinder<Texture2D>.Get(finalTextureSet.texturePath);
-            if (mainTex == null) continue;
-
-            var color = point.receivesColor
-                ? parent.TryGetComp<CompColorable>()?.ColorDef?.color ?? originalGraphicData.color
-                : Color.white;
-
-            var mask = point.receivesColor
-                ? ContentFinder<Texture2D>.Get(
-                    originalGraphicData.maskPath.NullOrEmpty()
-                        ? originalGraphicData.texPath + "_m"
-                        : originalGraphicData.maskPath, false)
-                : null;
-
-            layersToDraw.Add((mainTex, finalOffset, point.scale, baseSortOrder + 1, color, mask));
         }
 
-        // Render all layers in a single pass
-        RenderTexture.active = renderTex;
+        RenderTexture.active = renderTexture;
+        GL.Clear(true, true, Color.clear);
         GL.PushMatrix();
-        GL.LoadPixelMatrix(0, renderTex.width, renderTex.height, 0);
+        GL.LoadPixelMatrix(0, renderTexture.width, renderTexture.height, 0);
+
         var sortedLayers = layersToDraw.OrderBy(l => l.sortOrder).ToList();
+
         foreach (var layer in sortedLayers) {
             var scaledWidth = layer.texture.width * layer.scale;
             var scaledHeight = layer.texture.height * layer.scale;
-            var y = (renderTex.height - scaledHeight) - layer.offset.y;
+            var y = (renderTexture.height - scaledHeight) - layer.offset.y;
             var destRect = new Rect(layer.offset.x, y, scaledWidth, scaledHeight);
-            if (layer.color != Color.white) {
+
+            if (layer.color != Color.white && originalGraphicData.shaderType?.Shader != null) {
                 var tempMaterial = new Material(originalGraphicData.shaderType.Shader) { color = layer.color };
                 if (tempMaterial.HasProperty(ShaderPropertyIDs.ColorTwo)) {
                     tempMaterial.SetColor(ShaderPropertyIDs.ColorTwo, layer.color);
@@ -131,15 +115,14 @@ public class CompDynamicGraphic : ThingComp {
         }
 
         GL.PopMatrix();
-        RenderTexture.active = null;
 
-        // package and output
-        var finalBakedTexture = new Texture2D(renderTex.width, renderTex.height);
-        RenderTexture.active = renderTex;
-        finalBakedTexture.ReadPixels(new Rect(0, 0, renderTex.width, renderTex.height), 0, 0);
+        var finalBakedTexture = new Texture2D(renderTexture.width, renderTexture.height);
+        finalBakedTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
         finalBakedTexture.Apply();
+
         RenderTexture.active = null;
-        RenderTexture.ReleaseTemporary(renderTex);
+        RenderTexture.ReleaseTemporary(renderTexture);
+
         var graphic = new Graphic_Single();
         var request = new GraphicRequest(
             typeof(Graphic_Single), finalBakedTexture, ShaderDatabase.Cutout,

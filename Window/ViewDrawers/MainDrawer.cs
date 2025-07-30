@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
-using RimWorld;
+using System.Linq;
 using UnityEngine;
+using RimWorld;
 using Verse;
 
 namespace CustomizeWeapon.ViewDrawers;
@@ -12,12 +13,10 @@ public class MainDrawer {
     private readonly CompDynamicTraits _compDynamicTraits;
     private readonly HashSet<Part> _supportParts = new();
     private readonly Action<Part, WeaponTraitDef> _onSlotClick;
-    // private readonly CompDynamicGraphic _compDynamicGraphic;
 
     public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef> onSlotClick) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-        // _compDynamicGraphic = weapon.TryGetComp<CompDynamicGraphic>();
 
         if (_compDynamicTraits?.props is CompProperties_DynamicTraits props && !props.supportParts.NullOrEmpty()) {
             _supportParts = new HashSet<Part>(props.supportParts);
@@ -122,13 +121,11 @@ public class MainDrawer {
         if (installedTrait != null) {
             Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
-            var textureSet = CustomizeWeaponUtility.GetModuleDefFor(installedTrait)
-                ?.GetModExtension<TraitModuleExtension>()?.texture;
+            var moduleGraphic = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, _weapon);
 
-            if (textureSet != null && !string.IsNullOrEmpty(textureSet.texturePath)) {
-                DrawModuleTexture(rect, textureSet);
+            if (moduleGraphic != null && !string.IsNullOrEmpty(moduleGraphic.texturePath)) {
+                DrawModuleTexture(rect, moduleGraphic);
             } else {
-                // fallback: render label
                 var originalAnchor = Text.Anchor;
                 var originalFont = Text.Font;
                 Text.Anchor = TextAnchor.MiddleCenter;
@@ -146,16 +143,18 @@ public class MainDrawer {
         if (clicked) _onSlotClick?.Invoke(part, installedTrait);
     }
 
-    private static void DrawModuleTexture(Rect rect, TextureSet textureSet) {
-        // outline
-        if (!string.IsNullOrEmpty(textureSet.outlinePath)) {
-            var outlineTexture = ContentFinder<Texture2D>.Get(textureSet.outlinePath, false);
+
+    private static void DrawModuleTexture(Rect rect, ModuleGraphicData moduleGraphicData) {
+        // Outline
+        if (!string.IsNullOrEmpty(moduleGraphicData.outlinePath)) {
+            var outlineTexture = ContentFinder<Texture2D>.Get(moduleGraphicData.outlinePath, false);
             if (outlineTexture != null) {
                 Widgets.DrawTextureFitted(rect, outlineTexture, 1f);
             }
         }
 
-        var mainTexture = ContentFinder<Texture2D>.Get(textureSet.texturePath);
+        // module
+        var mainTexture = ContentFinder<Texture2D>.Get(moduleGraphicData.texturePath);
         if (mainTexture != null) {
             Widgets.DrawTextureFitted(rect, mainTexture, 1f);
         }
@@ -186,7 +185,6 @@ public class MainDrawer {
         Text.Font = originalFont;
         GUI.color = originalColor;
 
-        // 使用一个不可见的按钮来检测点击，并返回结果
         return Widgets.ButtonInvisible(rect);
     }
 }

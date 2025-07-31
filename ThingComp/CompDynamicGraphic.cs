@@ -49,9 +49,11 @@ public class CompDynamicGraphic : ThingComp {
             foreach (var point in Props.attachmentPoints) {
                 var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
 
-                var graphicToRender = installedTrait != null
-                    ? CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent)
-                    : point.baseTexture;
+                ModuleGraphicData graphicToRender = null;
+                if (installedTrait != null) {
+                    graphicToRender = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent) ??
+                                      point.baseTexture;
+                }
 
                 if (graphicToRender == null) continue;
 
@@ -130,7 +132,7 @@ public class CompDynamicGraphic : ThingComp {
             originalGraphicData.drawSize, Color.white, Color.white,
             originalGraphicData, 0, null, null
         );
-        
+
         graphic.Init(request);
         return graphic;
     }

@@ -51,9 +51,10 @@ public class CompDynamicGraphic : ThingComp {
 
                 ModuleGraphicData graphicToRender = null;
                 if (installedTrait != null) {
-                    graphicToRender = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent) ??
-                                      point.baseTexture;
+                    graphicToRender = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent);
                 }
+
+                graphicToRender ??= point.baseTexture;
 
                 if (graphicToRender == null) continue;
 

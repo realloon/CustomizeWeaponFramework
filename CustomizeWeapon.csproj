@@ -75,6 +75,7 @@
         <Compile Include="DefModExtension\TraitModuleExtension.cs" />
         <Compile Include="DefModExtension\UpgradeExtension.cs" />
         <Compile Include="HarmonyPatches\Postfix_CompColorable_ForceColor.cs" />
+        <Compile Include="HarmonyPatches\Postfix_CompEquippableAbility_AbilityForReading.cs" />
         <Compile Include="HarmonyPatches\Postfix_Pawn_EquipmentTracker_GetGizmos.cs" />
         <Compile Include="HarmonyPatches\Postfix_Projectile_Launch_StoppingPower.cs" />
         <Compile Include="HarmonyPatches\Postfix_ThingDef_SpecialDisplayStats.cs" />

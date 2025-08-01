@@ -62,7 +62,6 @@ public class CompDynamicTraits : ThingComp {
         OnTraitsChanged();
     }
 
-
     // === Stat ===
     public override float GetStatOffset(StatDef stat) {
         return Traits
@@ -213,17 +212,24 @@ public class CompDynamicTraits : ThingComp {
 
         // only the first ability is applied
         var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
+
         if (traitWithAbility != null) {
             abilityComp.props = traitWithAbility.abilityProps;
         } else {
-            var originalProps = parent.def.comps
-                .FirstOrDefault(p => p is CompProperties_EquippableAbilityReloadable);
-            abilityComp.props = originalProps;
+            abilityComp.props = parent.def.comps
+                .OfType<CompProperties_EquippableAbilityReloadable>()
+                .FirstOrFallback();
         }
 
-        if (!isPostLoad) {
-            abilityComp.Notify_PropsChanged();
-        }
+        if (isPostLoad) return;
+
+        abilityComp.Notify_PropsChanged();
+
+        // refresh gizmo
+        var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
+            ? equipmentTracker.pawn
+            : null;
+        holder?.abilities.Notify_TemporaryAbilitiesChanged();
     }
 
     private void ClearAllCaches() {
@@ -243,8 +249,8 @@ public class CompDynamicTraits : ThingComp {
 
     // A helper method to reduce redundancy
     private void OnTraitsChanged() {
-        ClearAllCaches();
         SetupAbility(false);
+        ClearAllCaches();
 
         // graphic dirty
         var compDynamicGraphic = parent.TryGetComp<CompDynamicGraphic>();

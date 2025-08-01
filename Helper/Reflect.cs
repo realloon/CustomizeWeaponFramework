@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace CustomizeWeapon.Helper;
 
-public class Reflect {
+public static class Reflect {
     public static T Get<T>(object instance, string fieldName) {
         var type = instance.GetType();
         const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;

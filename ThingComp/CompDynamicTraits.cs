@@ -107,7 +107,7 @@ public class CompDynamicTraits : ThingComp {
     public override string CompInspectStringExtra() {
         if (_installedTraits.NullOrEmpty()) return null;
 
-        return "WeaponTraits".Translate() + ": " + Traits
+        return "CWF_UI_WeaponModules".Translate() + ": " + Traits
             .Select(traitDef => traitDef.label).ToCommaList()
             .CapitalizeFirst();
     }
@@ -116,7 +116,7 @@ public class CompDynamicTraits : ThingComp {
         if (_installedTraits.NullOrEmpty()) yield break;
 
         var sb = new StringBuilder();
-        sb.AppendLine("Stat_ThingUniqueWeaponTrait_Desc".Translate());
+        sb.AppendLine("CWF_UI_WeaponModules_Desc".Translate());
         sb.AppendLine();
 
         var traitsList = Traits.ToList();
@@ -159,7 +159,7 @@ public class CompDynamicTraits : ThingComp {
 
         yield return new StatDrawEntry(
             parent.def.IsMeleeWeapon ? StatCategoryDefOf.Weapon_Melee : StatCategoryDefOf.Weapon_Ranged,
-            "Stat_ThingUniqueWeaponTrait_Label".Translate(),
+            "CWF_UI_WeaponModules".Translate(),
             traitsList.Select(x => x.label).ToCommaList().CapitalizeFirst(),
             sb.ToString(),
             1105

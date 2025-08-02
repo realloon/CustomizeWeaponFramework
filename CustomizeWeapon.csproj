@@ -65,13 +65,22 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="CompProperties\CompProperties_Colorable.cs" />
+        <Compile Include="CompProperties\CompProperties_CompTraitModule.cs" />
         <Compile Include="CompProperties\CompProperties_DynamicGraphic.cs" />
         <Compile Include="CompProperties\CompProperties_DynamicTraits.cs" />
         <Compile Include="CompProperties\CompProperties_Renamable.cs" />
         <Compile Include="Controllers\InteractionController.cs" />
         <Compile Include="Controllers\JobDispatcher.cs" />
         <Compile Include="CustomizeWeapon.cs" />
-        <Compile Include="CustomizeWeaponUtility.cs" />
+        <Compile Include="Data\SpecDatabase.cs" />
+        <Compile Include="Data\TraitModuleDatabase.cs" />
+        <Compile Include="Data\Types\AttachmentPointData.cs" />
+        <Compile Include="Data\Types\GraphicCase.cs" />
+        <Compile Include="Data\Types\ModificationData.cs" />
+        <Compile Include="Data\Types\ModuleGraphicData.cs" />
+        <Compile Include="Data\Types\Part.cs" />
+        <Compile Include="Data\Types\WeaponMatcher.cs" />
+        <Compile Include="Data\Types\WeaponSpecificOffset.cs" />
         <Compile Include="DefModExtension\TraitModuleExtension.cs" />
         <Compile Include="DefModExtension\UpgradeExtension.cs" />
         <Compile Include="HarmonyPatches\Postfix_CompColorable_ForceColor.cs" />
@@ -91,14 +100,7 @@
         <Compile Include="ThingComp\CompDynamicGraphic.cs" />
         <Compile Include="ThingComp\CompDynamicTraits.cs" />
         <Compile Include="ThingComp\CompRenamable.cs" />
-        <Compile Include="Types\AttachmentPointData.cs" />
-        <Compile Include="Types\GraphicCase.cs" />
-        <Compile Include="Types\ModificationData.cs" />
-        <Compile Include="Types\Part.cs" />
-        <Compile Include="Types\SpecDatabase.cs" />
-        <Compile Include="Types\ModuleGraphicData.cs" />
-        <Compile Include="Types\WeaponMatcher.cs" />
-        <Compile Include="Types\WeaponSpecificOffset.cs" />
+        <Compile Include="ThingComp\CompTraitModule.cs" />
         <Compile Include="Window\CustomizeWeaponWindow.cs" />
         <Compile Include="Window\Dialog_TextInput.cs" />
         <Compile Include="Window\ViewDrawers\AsideDrawer.cs" />

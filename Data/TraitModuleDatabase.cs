@@ -1,0 +1,113 @@
+using System.Collections.Generic;
+using System.Linq;
+using RimWorld;
+using Verse;
+
+namespace CustomizeWeapon;
+
+[StaticConstructorOnStartup]
+public static class TraitModuleDatabase {
+    private static readonly Dictionary<WeaponTraitDef, Part> TraitToPart = new();
+    private static readonly Dictionary<WeaponTraitDef, ThingDef> TraitToModule = new();
+    private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
+
+    public static IEnumerable<ThingDef> GetAllModuleDefs() => TraitToModule.Values;
+
+    static TraitModuleDatabase() {
+        foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
+            // fill weapon caches
+            if (thingDef.IsWeapon && !thingDef.weaponTags.NullOrEmpty() && thingDef.race == null &&
+                !thingDef.IsCorpse) {
+                foreach (var tag in thingDef.weaponTags) {
+                    if (!WeaponsByTag.ContainsKey(tag)) {
+                        WeaponsByTag[tag] = new List<ThingDef>();
+                    }
+
+                    WeaponsByTag[tag].Add(thingDef);
+                }
+            }
+
+            var ext = thingDef.GetModExtension<TraitModuleExtension>();
+            if (ext?.weaponTraitDef == null) continue;
+
+            // fill trait caches
+            if (TraitToPart.ContainsKey(ext.weaponTraitDef)) {
+                Log.Warning(
+                    $"[CWF] Cache building warning: WeaponTraitDef '{ext.weaponTraitDef.defName}' is defined by multiple TraitModules. " +
+                    $"The one in '{thingDef.defName}' will overwrite previous entries. This may cause unpredictable behavior when uninstalling parts.");
+            }
+
+            TraitToPart[ext.weaponTraitDef] = ext.part;
+            TraitToModule[ext.weaponTraitDef] = thingDef;
+        }
+
+        // inject hyperlinks
+        foreach (var moduleDef in TraitToModule.Values) {
+            if (!moduleDef.HasComp<CompTraitModule>()) continue;
+
+            var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
+            if (weaponDefs.NullOrEmpty()) continue;
+
+            moduleDef.descriptionHyperlinks ??= new List<DefHyperlink>();
+            foreach (var weaponDef in weaponDefs) {
+                if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;
+                moduleDef.descriptionHyperlinks.Add(new DefHyperlink(weaponDef));
+            }
+        }
+
+        Log.Message($"[CWF] Built Trait caches with {TraitToPart.Count} entries and injected hyperlinks.");
+    }
+
+    /// <summary>
+    /// Locates the Part that owns the specified WeaponTraitDef.
+    /// </summary>
+    public static bool TryGetPartForTrait(WeaponTraitDef traitDef, out Part part) {
+        return TraitToPart.TryGetValue(traitDef, out part);
+    }
+
+    /// <summary>
+    /// Looks up the ThingDef of the modular item that provides the specified WeaponTraitDef.
+    /// </summary>
+    public static ThingDef GetModuleDefFor(WeaponTraitDef traitDef) {
+        TraitToModule.TryGetValue(traitDef, out var moduleDef);
+        return moduleDef;
+    }
+
+    // Helper
+    private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        if (ext == null) yield break;
+
+        var results = new HashSet<ThingDef>();
+
+        if (!ext.requiredWeaponDefs.NullOrEmpty()) {
+            results.AddRange(ext.requiredWeaponDefs);
+        }
+
+        if (!ext.requiredWeaponTags.NullOrEmpty()) {
+            foreach (var tag in ext.requiredWeaponTags) {
+                if (WeaponsByTag.TryGetValue(tag, out var weapons)) {
+                    results.AddRange(weapons);
+                }
+            }
+        }
+
+        // if (ext.requiredWeaponDefs.NullOrEmpty() && ext.requiredWeaponTags.NullOrEmpty()) { }
+
+        if (!ext.excludeWeaponDefs.NullOrEmpty()) {
+            results.ExceptWith(ext.excludeWeaponDefs);
+        }
+
+        if (!ext.excludeWeaponTags.NullOrEmpty()) {
+            foreach (var tag in ext.excludeWeaponTags) {
+                if (WeaponsByTag.TryGetValue(tag, out var weaponsToExclude)) {
+                    results.ExceptWith(weaponsToExclude);
+                }
+            }
+        }
+
+        foreach (var weaponDef in results) {
+            yield return weaponDef;
+        }
+    }
+}

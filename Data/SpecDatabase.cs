@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using CustomizeWeapon.Controllers;
 using RimWorld;
 using Verse;
 
@@ -23,11 +21,13 @@ public class SpecDatabase {
     private Spec _ticksBetweenBurstShots;
 
     private readonly Thing _weapon;
+    private readonly CompDynamicTraits _compDynamicTraits;
 
     public bool IsMeleeWeapon => _weapon.def.IsMeleeWeapon;
 
     public SpecDatabase(Thing weapon) {
         _weapon = weapon;
+        _compDynamicTraits = _weapon.TryGetComp<CompDynamicTraits>();
 
         // Raw values
         // === Stat ===
@@ -71,7 +71,6 @@ public class SpecDatabase {
         AccuracyLong.Dynamic = _weapon.GetStatValue(StatDefOf.AccuracyLong);
 
         // === Verb ===
-        var compDynamicTraits = _weapon.TryGetComp<CompDynamicTraits>();
         var weaponVerb = _weapon.TryGetComp<CompEquippableAbilityReloadable>()?.PrimaryVerb
                          ?? _weapon.TryGetComp<CompEquippable>()?.PrimaryVerb;
 
@@ -85,12 +84,12 @@ public class SpecDatabase {
         if (weaponDefProjectile != null) {
             Damage.Dynamic = weaponDefProjectile.GetDamageAmount(_weapon);
             ArmorPenetration.Dynamic = weaponDefProjectile.GetArmorPenetration(_weapon);
-            StoppingPower.Dynamic = GetComputedStoppingPower(_weapon, compDynamicTraits); // harmony patched, but...
+            StoppingPower.Dynamic = GetComputedStoppingPower(); // harmony patched, but...
         }
 
         Dps.Dynamic = GetComputedDps();
 
-        Log.Message("[&CWF Dev]: Recalculated");
+        Log.Message("[CWF Dev]: Recalculated");
     }
 
     // === Helper ===
@@ -116,18 +115,19 @@ public class SpecDatabase {
         return totalDamage / totalCycleSec;
     }
 
-    private static float GetComputedStoppingPower(Thing weapon, CompDynamicTraits comp) {
-        var basePower = weapon.def.Verbs
+    private float GetComputedStoppingPower() {
+        var basePower = _weapon.def.Verbs
             .FirstOrFallback()?.defaultProjectile?.projectile.stoppingPower ?? 0.5f;
-        if (comp == null) return basePower;
 
         // CompUniqueWeapon
-        if (weapon.TryGetComp<CompUniqueWeapon>(out var uniqueComp)) {
-            basePower += uniqueComp.TraitsListForReading.Sum(trait => trait.additionalStoppingPower);
+        if (_weapon.TryGetComp<CompUniqueWeapon>(out var compUniqueWeapon)) {
+            basePower += compUniqueWeapon.TraitsListForReading.Sum(trait => trait.additionalStoppingPower);
         }
 
+        if (_compDynamicTraits == null) return basePower;
+
         // CompDynamicTraits
-        var additional = comp.Traits.Sum(traitDef => traitDef.additionalStoppingPower);
+        var additional = _compDynamicTraits.Traits.Sum(traitDef => traitDef.additionalStoppingPower);
 
         return basePower + additional;
     }

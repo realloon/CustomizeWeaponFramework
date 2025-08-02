@@ -188,7 +188,7 @@ public class CompDynamicTraits : ThingComp {
         if (defaultTraitsList.NullOrEmpty()) return;
 
         foreach (var traitDef in defaultTraitsList) {
-            if (CustomizeWeaponUtility.TryGetPartForTrait(traitDef, out var part)) {
+            if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
                 // Found the corresponding slot; now check whether the slot is already occupied (conflict check).
                 if (_installedTraits.TryGetValue(part, out var existingTrait)) {
                     Log.Error($"[CWF] Initialization Error for {parent.def.defName}: " +

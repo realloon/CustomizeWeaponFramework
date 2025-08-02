@@ -29,11 +29,8 @@ public class InteractionController {
         if (options.Any()) Find.WindowStack.Add(new FloatMenu(options));
     }
 
-    // === Helper ===
     private void Install(Part part, List<FloatMenuOption> options) {
-        var compatibleModuleDefs = new HashSet<ThingDef>(
-            CustomizeWeaponUtility.GetCompatibleModulesForPart(part, _weapon)
-        );
+        var compatibleModuleDefs = new HashSet<ThingDef>(GetCompatibleModuleDefsFor(part));
 
         var ownerPawn = _weapon.ParentHolder switch {
             Pawn_EquipmentTracker equipment => equipment.pawn,
@@ -61,7 +58,7 @@ public class InteractionController {
             var moduleDef = group.Key;
             var traitToInstall = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
 
-            options.Add(new FloatMenuOption(moduleDef.LabelCap, () => {
+            options.Add(new FloatMenuOption(traitToInstall.LabelCap, () => {
                 _compDynamicTraits.InstallTrait(part, traitToInstall);
                 SoundDefOf.Tick_High.PlayOneShotOnCamera();
                 OnDataChanged?.Invoke();
@@ -87,5 +84,45 @@ public class InteractionController {
             SoundDefOf.Tick_High.PlayOneShotOnCamera();
             OnDataChanged?.Invoke();
         }
+    }
+
+    // === Helper ===
+    private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
+        return TraitModuleDatabase.GetAllModuleDefs()
+            .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
+            .Where(IsCompatibleWith);
+    }
+
+    private bool IsCompatibleWith(ThingDef moduleDef) {
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        if (ext == null) return false;
+
+        var weaponDef = _weapon.def;
+
+        // exclude first 
+        if (ext.excludeWeaponDefs != null && ext.excludeWeaponDefs.Contains(weaponDef)) {
+            return false;
+        }
+
+        if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
+            if (ext.excludeWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag))) {
+                return false;
+            }
+        }
+
+        var hasRequiredDefs = !ext.requiredWeaponDefs.NullOrEmpty();
+        var hasRequiredTags = !ext.requiredWeaponTags.NullOrEmpty();
+
+        // defs
+        switch (hasRequiredDefs) {
+            case false when !hasRequiredTags:
+            case true when ext.requiredWeaponDefs.Contains(weaponDef):
+                return true;
+        }
+
+        // tags
+        if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
+
+        return ext.requiredWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag));
     }
 }

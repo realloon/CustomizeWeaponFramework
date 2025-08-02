@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using RimWorld;
 using Verse;
 
 namespace CustomizeWeapon;
@@ -29,9 +30,36 @@ public class CompDynamicGraphic : ThingComp {
         Notify_GraphicDirty();
     }
 
+    /// <summary>
+    /// Finds the most suitable graphic data for a given module trait when applied to a specific weapon.
+    /// It resolves the graphic based on the matching rules and priority defined in the module's TraitModuleExtension.
+    /// </summary>
+    public static ModuleGraphicData GetGraphicDataFor(Thing weapon, WeaponTraitDef traitDef) {
+        if (traitDef == null) return null;
+
+        var moduleDef = TraitModuleDatabase.GetModuleDefFor(traitDef);
+        if (moduleDef == null) return null;
+
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        if (ext?.graphicCases.NullOrEmpty() ?? true) return null;
+
+        var matchingCases = ext.graphicCases
+            .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(weapon.def))
+            .ToList();
+
+        if (!matchingCases.Any()) {
+            Log.Warning(
+                $"[CWF] No suitable 'graphicCases' found for module '{moduleDef.defName}' on weapon '{weapon.def.defName}'. Check the mod extension XML.");
+            return null;
+        }
+
+        var bestCase = matchingCases.MaxBy(c => c.priority);
+        return bestCase.graphicData;
+    }
+
     // === Helper ===
     private Graphic GenerateGraphic() {
-        Log.Message("[&CWF Dev] Graphic rendering...");
+        Log.Message("[CWF Dev] Graphic rendering...");
 
         var originalGraphicData = parent.def.graphicData;
         if (originalGraphicData == null) return BaseContent.BadGraphic;
@@ -51,7 +79,7 @@ public class CompDynamicGraphic : ThingComp {
 
                 ModuleGraphicData graphicToRender = null;
                 if (installedTrait != null) {
-                    graphicToRender = CustomizeWeaponUtility.GetGraphicDataFor(installedTrait, parent);
+                    graphicToRender = GetGraphicDataFor(parent, installedTrait);
                 }
 
                 graphicToRender ??= point.baseTexture;

@@ -111,14 +111,14 @@ public class JobDispatcher {
             if (initialTrait != null) {
                 changes.Add(new ModificationData {
                     Type = ModificationType.Uninstall, Part = part, Trait = initialTrait,
-                    ModuleDef = CustomizeWeaponUtility.GetModuleDefFor(initialTrait)
+                    ModuleDef = TraitModuleDatabase.GetModuleDefFor(initialTrait)
                 });
             }
 
             if (finalTrait != null) {
                 changes.Add(new ModificationData {
                     Type = ModificationType.Install, Part = part, Trait = finalTrait,
-                    ModuleDef = CustomizeWeaponUtility.GetModuleDefFor(finalTrait)
+                    ModuleDef = TraitModuleDatabase.GetModuleDefFor(finalTrait)
                 });
             }
         }

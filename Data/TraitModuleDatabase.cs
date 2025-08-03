@@ -42,7 +42,7 @@ public static class TraitModuleDatabase {
         }
 
         // inject hyperlinks
-        foreach (var moduleDef in TraitToModule.Values) {
+        foreach (var moduleDef in GetAllModuleDefs()) {
             if (!moduleDef.HasComp<CompTraitModule>()) continue;
 
             var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();

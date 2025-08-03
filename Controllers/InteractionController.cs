@@ -58,7 +58,7 @@ public class InteractionController {
             var moduleDef = group.Key;
             var traitToInstall = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
 
-            options.Add(new FloatMenuOption(traitToInstall.LabelCap, () => {
+            options.Add(new FloatMenuOption(moduleDef.LabelCap, () => {
                 _compDynamicTraits.InstallTrait(part, traitToInstall);
                 SoundDefOf.Tick_High.PlayOneShotOnCamera();
                 OnDataChanged?.Invoke();

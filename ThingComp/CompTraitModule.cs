@@ -19,10 +19,6 @@ public class CompTraitModule : ThingComp {
         }
     }
 
-    public override string TransformLabel(string label) {
-        return TraitDef?.LabelCap ?? base.TransformLabel(label);
-    }
-
     public override string GetDescriptionPart() {
         return TraitDef?.description;
     }

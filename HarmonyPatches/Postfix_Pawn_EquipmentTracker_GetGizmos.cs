@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using HarmonyLib;
 using Verse;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.GetGizmos))]
 public static class Postfix_Pawn_EquipmentTracker_GetGizmos {

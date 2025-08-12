@@ -1,11 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.Sound;
+using Find = Verse.Find;
+using FloatMenu = Verse.FloatMenu;
+using FloatMenuOption = Verse.FloatMenuOption;
+using Thing = Verse.Thing;
+using ThingDef = Verse.ThingDef;
 
-namespace CustomizeWeapon.Controllers;
+namespace CWF.Controllers;
 
 public class InteractionController {
     private readonly Thing _weapon;
@@ -26,7 +28,7 @@ public class InteractionController {
             Uninstall(part, options, installedTrait);
         }
 
-        if (options.Any()) Find.WindowStack.Add(new FloatMenu(options));
+        if (Enumerable.Any(options)) Find.WindowStack.Add(new FloatMenu(options));
     }
 
     private void Install(Part part, List<FloatMenuOption> options) {
@@ -38,7 +40,7 @@ public class InteractionController {
             _ => null
         };
 
-        if (!compatibleModuleDefs.Any()) {
+        if (!Enumerable.Any(compatibleModuleDefs)) {
             options.Add(new FloatMenuOption(FailureReason(), null));
             return;
         }
@@ -58,14 +60,14 @@ public class InteractionController {
             var moduleDef = group.Key;
             var traitToInstall = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
 
-            options.Add(new FloatMenuOption(moduleDef.LabelCap, () => {
+            options.Add(new FloatMenuOption(traitToInstall.LabelCap, () => {
                 _compDynamicTraits.InstallTrait(part, traitToInstall);
                 SoundDefOf.Tick_High.PlayOneShotOnCamera();
                 OnDataChanged?.Invoke();
             }));
         }
 
-        if (options.Any()) return;
+        if (Enumerable.Any(options)) return;
 
         options.Add(new FloatMenuOption(FailureReason(), null));
         return;
@@ -105,7 +107,7 @@ public class InteractionController {
         }
 
         if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
-            if (ext.excludeWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag))) {
+            if (Enumerable.Any(ext.excludeWeaponTags, tag => weaponDef.weaponTags.Contains(tag))) {
                 return false;
             }
         }
@@ -123,6 +125,6 @@ public class InteractionController {
         // tags
         if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
 
-        return ext.requiredWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag));
+        return Enumerable.Any(ext.requiredWeaponTags, tag => weaponDef.weaponTags.Contains(tag));
     }
 }

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class WeaponSpecificOffset {
     public ThingDef weaponDef;

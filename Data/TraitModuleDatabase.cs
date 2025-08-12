@@ -1,9 +1,7 @@
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 [StaticConstructorOnStartup]
 public static class TraitModuleDatabase {
@@ -41,13 +39,16 @@ public static class TraitModuleDatabase {
             TraitToModule[ext.weaponTraitDef] = thingDef;
         }
 
-        // inject hyperlinks
-        foreach (var moduleDef in GetAllModuleDefs()) {
-            if (!moduleDef.HasComp<CompTraitModule>()) continue;
+        foreach (var moduleDef in TraitToModule.Values) {
+            // inject description
+            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+            if (traitDef != null) {
+                moduleDef.description = traitDef.description;
+            }
 
+            // inject hyperlinks
             var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
             if (weaponDefs.NullOrEmpty()) continue;
-
             moduleDef.descriptionHyperlinks ??= new List<DefHyperlink>();
             foreach (var weaponDef in weaponDefs) {
                 if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;

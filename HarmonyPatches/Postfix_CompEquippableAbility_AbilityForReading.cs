@@ -2,7 +2,8 @@ using System.Reflection;
 using HarmonyLib;
 using RimWorld;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
+
 
 [HarmonyPatch(typeof(CompEquippableAbility), "get_AbilityForReading")]
 public static class Postfix_CompEquippableAbility_AbilityForReading {

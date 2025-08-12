@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class CompProperties_DynamicGraphic : CompProperties {
     public List<AttachmentPointData> attachmentPoints = new();

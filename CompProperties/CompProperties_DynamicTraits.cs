@@ -1,8 +1,7 @@
-using System.Collections.Generic;
 using RimWorld;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class CompProperties_DynamicTraits : CompProperties {
     public List<Part> supportParts = new();

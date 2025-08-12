@@ -1,6 +1,6 @@
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class CompProperties_Colorable : CompProperties {
     public CompProperties_Colorable() => compClass = typeof(CompColorable);

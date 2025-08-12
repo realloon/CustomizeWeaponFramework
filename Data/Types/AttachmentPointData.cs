@@ -1,6 +1,6 @@
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class AttachmentPointData {
     public Part part;

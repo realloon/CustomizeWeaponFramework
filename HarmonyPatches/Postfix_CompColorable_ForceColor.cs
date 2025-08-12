@@ -1,8 +1,9 @@
-using UnityEngine;
 using HarmonyLib;
+using UnityEngine;
 using Verse;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
+
 
 [HarmonyPatch(typeof(CompColorable), nameof(CompColorable.ForceColor))]
 public static class Postfix_CompColorable_ForceColor {

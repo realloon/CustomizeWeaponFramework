@@ -1,0 +1,21 @@
+// using RimWorld;
+using Verse;
+
+namespace CWF;
+
+public class CompTraitModule : ThingComp {
+    // private CompProperties_TraitModule Props => (CompProperties_TraitModule)props;
+
+    // private WeaponTraitDef _cachedTraitDef;
+    // private bool _isTraitDefCached;
+
+    // private WeaponTraitDef TraitDef {
+    //     get {
+    //         if (_isTraitDefCached) return _cachedTraitDef;
+    //
+    //         _cachedTraitDef = parent.def.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+    //         _isTraitDefCached = true;
+    //         return _cachedTraitDef;
+    //     }
+    // }
+}

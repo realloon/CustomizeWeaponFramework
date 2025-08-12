@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using RimWorld;
 using Verse;
 using Verse.AI;
 
-namespace CustomizeWeapon.Controllers;
+namespace CWF.Controllers;
 
 public class JobDispatcher {
     private readonly Thing _weapon;
@@ -14,15 +12,15 @@ public class JobDispatcher {
     public JobDispatcher(Thing weapon) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-        _initialTraitsState = _compDynamicTraits?.GetInstalledTraits() ?? new Dictionary<Part, WeaponTraitDef>();
+        _initialTraitsState = _compDynamicTraits?.InstalledTraits ?? new Dictionary<Part, WeaponTraitDef>();
     }
 
     public void CommitChangesAndDispatchJobs() {
-        var finalTraitsState = _compDynamicTraits.GetInstalledTraits();
-        _compDynamicTraits.SetInstalledTraits(_initialTraitsState); // revert traits state, before commit
+        var finalTraitsState = _compDynamicTraits.InstalledTraits;
+        _compDynamicTraits.InstalledTraits = _initialTraitsState; // revert traits state, before commit
 
         var netChanges = CalculateNetChanges(_initialTraitsState, finalTraitsState);
-        if (!netChanges.Any()) return;
+        if (!Enumerable.Any(netChanges)) return;
 
         var ownerPawn = _weapon.ParentHolder switch {
             Pawn_EquipmentTracker equipment => equipment.pawn,
@@ -79,7 +77,7 @@ public class JobDispatcher {
         var job = JobMaker.MakeJob(DefDatabase<JobDef>.GetNamed("CWF_ModifyWeaponHaul"), _weapon);
 
         // fill queue only when it needs haul
-        if (modulesToHaul.Any()) {
+        if (Enumerable.Any(modulesToHaul)) {
             job.targetQueueB = modulesToHaul.Select(t => new LocalTargetInfo(t)).ToList();
         }
 
@@ -101,7 +99,7 @@ public class JobDispatcher {
     private static List<ModificationData> CalculateNetChanges(Dictionary<Part, WeaponTraitDef> initial,
         Dictionary<Part, WeaponTraitDef> final) {
         var changes = new List<ModificationData>();
-        var allParts = System.Enum.GetValues(typeof(Part)).Cast<Part>();
+        var allParts = Enum.GetValues(typeof(Part)).Cast<Part>();
 
         foreach (var part in allParts) {
             initial.TryGetValue(part, out var initialTrait);

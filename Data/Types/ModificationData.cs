@@ -1,7 +1,7 @@
 using RimWorld;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class ModificationData : IExposable {
     public ModificationType Type;

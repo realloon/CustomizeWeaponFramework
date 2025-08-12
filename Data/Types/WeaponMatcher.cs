@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class WeaponMatcher {
     public List<ThingDef> weaponDefs;
@@ -14,6 +13,6 @@ public class WeaponMatcher {
 
         if (weaponTags.NullOrEmpty() || weaponDef.weaponTags.NullOrEmpty()) return false;
 
-        return weaponTags.Any(tag => weaponDef.weaponTags.Contains(tag));
+        return Enumerable.Any(weaponTags, tag => weaponDef.weaponTags.Contains(tag));
     }
 }

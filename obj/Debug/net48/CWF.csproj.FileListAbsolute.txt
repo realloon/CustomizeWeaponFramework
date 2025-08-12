@@ -1,0 +1,10 @@
+/Users/lizhen/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods/CustomizeWeapon/Assemblies/net48/CWF.dll
+/Users/lizhen/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods/CustomizeWeapon/Assemblies/net48/CWF.pdb
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.csproj.AssemblyReference.cache
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.GeneratedMSBuildEditorConfig.editorconfig
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.AssemblyInfoInputs.cache
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.AssemblyInfo.cs
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.csproj.CoreCompileInputs.cache
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.csproj.Up2Date
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.dll
+/Users/lizhen/Documents/Code/CWF/obj/Debug/net48/CWF.pdb

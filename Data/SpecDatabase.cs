@@ -1,8 +1,7 @@
-using System.Linq;
 using RimWorld;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class SpecDatabase {
     public Spec Range;

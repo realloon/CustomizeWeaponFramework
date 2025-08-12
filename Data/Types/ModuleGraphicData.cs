@@ -1,7 +1,7 @@
 using UnityEngine;
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class ModuleGraphicData {
     [NoTranslate] public string texturePath;

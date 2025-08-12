@@ -1,6 +1,6 @@
 using Verse;
 
-namespace CustomizeWeapon;
+namespace CWF;
 
 public class CompProperties_Renamable : CompProperties {
     public CompProperties_Renamable() => compClass = typeof(CompRenamable);

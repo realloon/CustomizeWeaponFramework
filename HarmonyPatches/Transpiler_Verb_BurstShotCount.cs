@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
-using Verse;
 using RimWorld;
+using Verse;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(Verb), nameof(Verb.BurstShotCount), MethodType.Getter)]
 public static class Transpiler_Verb_BurstShotCount {
@@ -35,7 +33,8 @@ public static class Transpiler_Verb_BurstShotCount {
             };
 
             codes.InsertRange(loopStartIndex, newInstructions);
-        } else {
+        }
+        else {
             Log.Error(
                 "[CWF] Transpiler for Verb.get_BurstShotCount failed. The mod may not function correctly with this version of RimWorld.");
         }

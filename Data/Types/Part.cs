@@ -1,4 +1,4 @@
-namespace CustomizeWeapon;
+namespace CWF;
 
 public enum Part {
     Muzzle,

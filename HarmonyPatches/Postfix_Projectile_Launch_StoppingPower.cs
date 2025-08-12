@@ -2,7 +2,7 @@ using HarmonyLib;
 using UnityEngine;
 using Verse;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(
     typeof(Projectile),

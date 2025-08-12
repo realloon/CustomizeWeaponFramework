@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
 using HarmonyLib;
-using Verse;
 using RimWorld;
+using Verse;
 
-namespace CustomizeWeapon.HarmonyPatches;
+namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(Verb), "get_TicksBetweenBurstShots")]
 public static class Transpiler_Verb_TicksBetweenBurstShots {
@@ -36,7 +34,8 @@ public static class Transpiler_Verb_TicksBetweenBurstShots {
             };
 
             codes.InsertRange(loopStartIndex, newInstructions);
-        } else {
+        }
+        else {
             Log.Error(
                 "[CWF] Transpiler for Verb.get_TicksBetweenBurstShots failed. The mod may not function correctly with this version of RimWorld.");
         }

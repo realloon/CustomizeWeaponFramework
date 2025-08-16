@@ -11,6 +11,19 @@ public class MainDrawer {
     private readonly HashSet<Part> _supportParts = new();
     private readonly Action<Part, WeaponTraitDef> _onSlotClick;
 
+    private const float SlotSize = 56f;
+    private const float SlotPadding = 12f;
+
+    private enum Direction {
+        Horizontal,
+        Vertical
+    }
+
+    private static readonly Part[] TopParts = { Part.Receiver, Part.Sight, Part.Barrel };
+    private static readonly Part[] LeftParts = { Part.Stock };
+    private static readonly Part[] RightParts = { Part.Muzzle, Part.Ammo };
+    private static readonly Part[] BottomParts = { Part.Grip, Part.Trigger, Part.Magazine, Part.Underbarrel };
+
     public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef> onSlotClick) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
@@ -23,17 +36,14 @@ public class MainDrawer {
     }
 
     public void Draw(Rect rect) {
-        const float slotSize = 56f;
-        const float slotPadding = 12f;
-
         // define gird row Height
-        const float topRowHeight = slotSize + slotPadding;
-        const float bottomRowHeight = slotSize + slotPadding;
+        const float topRowHeight = SlotSize + SlotPadding;
+        const float bottomRowHeight = SlotSize + SlotPadding;
         var middleRowHeight = rect.height - topRowHeight - bottomRowHeight;
 
         // define gird col with
-        const float leftColWidth = slotSize + slotPadding;
-        const float rightColWidth = slotSize + slotPadding;
+        const float leftColWidth = SlotSize + SlotPadding;
+        const float rightColWidth = SlotSize + SlotPadding;
         var middleColWidth = rect.width - leftColWidth - rightColWidth;
 
         if (middleRowHeight <= 0 || middleColWidth <= 0) return;
@@ -53,62 +63,92 @@ public class MainDrawer {
         var weaponAspect = weaponGraphic.drawSize.x / weaponGraphic.drawSize.y;
         var iconWidth = middleCenterRect.width;
         var iconHeight = middleCenterRect.height;
-        if (iconWidth / weaponAspect > iconHeight) {
-            iconWidth = iconHeight * weaponAspect;
-        } else {
-            iconHeight = iconWidth / weaponAspect;
-        }
+        iconWidth = iconWidth / weaponAspect > iconHeight ? iconHeight * weaponAspect : iconWidth / weaponAspect;
 
         // render weapon icon
         var weaponIconRect = new Rect(middleCenterRect.center.x - iconWidth / 2f,
             middleCenterRect.center.y - iconHeight / 2f, iconWidth, iconHeight);
         Widgets.ThingIcon(weaponIconRect, _weapon);
 
-        // top rects
-        const float topSlotTotalWidth = slotSize * 3 + slotPadding * 2;
-        var topStartX = topCenterRect.center.x - topSlotTotalWidth / 2f;
-        var receiverRect = new Rect(topStartX, topCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        var sightRect = new Rect(topStartX + slotSize + slotPadding, topCenterRect.center.y - slotSize / 2f,
-            slotSize,
-            slotSize);
-        var barrelRect = new Rect(topStartX + (slotSize + slotPadding) * 2, topCenterRect.center.y - slotSize / 2f,
-            slotSize, slotSize);
-        // left rect
-        var stockRect = new Rect(middleLeftRect.center.x - slotSize / 2f, middleLeftRect.center.y - slotSize / 2f,
-            slotSize, slotSize);
-        // right rects
-        var muzzleRect = new Rect(middleRightRect.center.x - slotSize / 2f,
-            middleRightRect.center.y - slotSize / 2f - (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
-        var ammoRect = new Rect(middleRightRect.center.x - slotSize / 2f,
-            middleRightRect.center.y - slotSize / 2f + (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
-        // bottom rects
-        const float bottomSlotTotalWidth = slotSize * 4 + slotPadding * 3;
-        var bottomStartX = bottomCenterRect.center.x - bottomSlotTotalWidth / 2f;
-        var gripRect = new Rect(bottomStartX, bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        var triggerRect = new Rect(bottomStartX + slotSize + slotPadding, bottomCenterRect.center.y - slotSize / 2f,
-            slotSize, slotSize);
-        var magazineRect = new Rect(bottomStartX + (slotSize + slotPadding) * 2,
-            bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        var underbarrelRect = new Rect(bottomStartX + (slotSize + slotPadding) * 3,
-            bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
+        DrawPartGroup(topCenterRect, TopParts, Direction.Horizontal);
+        DrawPartGroup(middleLeftRect, LeftParts, Direction.Horizontal);
+        DrawPartGroup(middleRightRect, RightParts, Direction.Vertical);
+        DrawPartGroup(bottomCenterRect, BottomParts, Direction.Horizontal);
 
-        // top
-        TryDrawSlot(Part.Receiver, receiverRect);
-        TryDrawSlot(Part.Sight, sightRect);
-        TryDrawSlot(Part.Barrel, barrelRect);
-        // left
-        TryDrawSlot(Part.Stock, stockRect);
-        // right
-        TryDrawSlot(Part.Muzzle, muzzleRect);
-        TryDrawSlot(Part.Ammo, ammoRect);
-        // bottom
-        TryDrawSlot(Part.Grip, gripRect);
-        TryDrawSlot(Part.Trigger, triggerRect);
-        TryDrawSlot(Part.Magazine, magazineRect);
-        TryDrawSlot(Part.Underbarrel, underbarrelRect);
+        // // top rects
+        // const float topSlotTotalWidth = slotSize * 3 + slotPadding * 2;
+        // var topStartX = topCenterRect.center.x - topSlotTotalWidth / 2f;
+        // var receiverRect = new Rect(topStartX, topCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
+        // var sightRect = new Rect(topStartX + slotSize + slotPadding, topCenterRect.center.y - slotSize / 2f,
+        //     slotSize,
+        //     slotSize);
+        // var barrelRect = new Rect(topStartX + (slotSize + slotPadding) * 2, topCenterRect.center.y - slotSize / 2f,
+        //     slotSize, slotSize);
+        // // left rect
+        // var stockRect = new Rect(middleLeftRect.center.x - slotSize / 2f, middleLeftRect.center.y - slotSize / 2f,
+        //     slotSize, slotSize);
+        // // right rects
+        // var muzzleRect = new Rect(middleRightRect.center.x - slotSize / 2f,
+        //     middleRightRect.center.y - slotSize / 2f - (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
+        // var ammoRect = new Rect(middleRightRect.center.x - slotSize / 2f,
+        //     middleRightRect.center.y - slotSize / 2f + (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
+        // // bottom rects
+        // const float bottomSlotTotalWidth = slotSize * 4 + slotPadding * 3;
+        // var bottomStartX = bottomCenterRect.center.x - bottomSlotTotalWidth / 2f;
+        // var gripRect = new Rect(bottomStartX, bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
+        // var triggerRect = new Rect(bottomStartX + slotSize + slotPadding, bottomCenterRect.center.y - slotSize / 2f,
+        //     slotSize, slotSize);
+        // var magazineRect = new Rect(bottomStartX + (slotSize + slotPadding) * 2,
+        //     bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
+        // var underbarrelRect = new Rect(bottomStartX + (slotSize + slotPadding) * 3,
+        //     bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
+        //
+        // // top
+        // TryDrawSlot(Part.Receiver, receiverRect);
+        // TryDrawSlot(Part.Sight, sightRect);
+        // TryDrawSlot(Part.Barrel, barrelRect);
+        // // left
+        // TryDrawSlot(Part.Stock, stockRect);
+        // // right
+        // TryDrawSlot(Part.Muzzle, muzzleRect);
+        // TryDrawSlot(Part.Ammo, ammoRect);
+        // // bottom
+        // TryDrawSlot(Part.Grip, gripRect);
+        // TryDrawSlot(Part.Trigger, triggerRect);
+        // TryDrawSlot(Part.Magazine, magazineRect);
+        // TryDrawSlot(Part.Underbarrel, underbarrelRect);
     }
 
     // === Helper ===
+    private void DrawPartGroup(Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
+        var supportedParts = groupParts.Where(p => _supportParts.Contains(p)).ToList();
+        if (supportedParts.Count == 0) return;
+
+        var count = supportedParts.Count;
+        if (direction == Direction.Horizontal) {
+            var totalWidth = (count * SlotSize) + (Math.Max(0, count - 1) * SlotPadding);
+            var startX = container.center.x - totalWidth / 2f;
+            var startY = container.center.y - SlotSize / 2f;
+
+            for (var i = 0; i < count; i++) {
+                var part = supportedParts[i];
+                var slotRect = new Rect(startX + i * (SlotSize + SlotPadding), startY, SlotSize, SlotSize);
+                TryDrawSlot(part, slotRect);
+            }
+        } else {
+            // Vertical
+            var totalHeight = (count * SlotSize) + (Math.Max(0, count - 1) * SlotPadding);
+            var startX = container.center.x - SlotSize / 2f;
+            var startY = container.center.y - totalHeight / 2f;
+
+            for (var i = 0; i < count; i++) {
+                var part = supportedParts[i];
+                var slotRect = new Rect(startX, startY + i * (SlotSize + SlotPadding), SlotSize, SlotSize);
+                TryDrawSlot(part, slotRect);
+            }
+        }
+    }
+
     private void TryDrawSlot(Part part, Rect rect) {
         if (!_supportParts.Contains(part)) return;
 
@@ -140,7 +180,6 @@ public class MainDrawer {
 
         if (clicked) _onSlotClick?.Invoke(part, installedTrait);
     }
-
 
     private static void DrawModuleTexture(Rect rect, ModuleGraphicData moduleGraphicData) {
         // Outline

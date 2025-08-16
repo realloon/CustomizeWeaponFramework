@@ -281,7 +281,10 @@ public class CompDynamicTraits : ThingComp {
                 var availableTraits = DefDatabase<WeaponTraitDef>.AllDefs
                     .Where(traitDef => {
                         if (!TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) return false;
-                        return !_installedTraits.ContainsKey(part);
+                        if (_installedTraits.ContainsKey(part)) return false;
+
+                        var moduleDef = TraitModuleDatabase.GetModuleDefFor(traitDef);
+                        return moduleDef != null && TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
                     })
                     .ToList();
 

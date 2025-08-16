@@ -74,6 +74,37 @@ public static class TraitModuleDatabase {
         return moduleDef;
     }
 
+    public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, ThingDef weaponDef) {
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        if (ext == null) return false;
+
+        // exclude first 
+        if (ext.excludeWeaponDefs != null && ext.excludeWeaponDefs.Contains(weaponDef)) {
+            return false;
+        }
+
+        if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
+            if (Enumerable.Any(ext.excludeWeaponTags, tag => weaponDef.weaponTags.Contains(tag))) {
+                return false;
+            }
+        }
+
+        var hasRequiredDefs = !ext.requiredWeaponDefs.NullOrEmpty();
+        var hasRequiredTags = !ext.requiredWeaponTags.NullOrEmpty();
+
+        // defs
+        switch (hasRequiredDefs) {
+            case false when !hasRequiredTags:
+            case true when ext.requiredWeaponDefs.Contains(weaponDef):
+                return true;
+        }
+
+        // tags
+        if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
+
+        return Enumerable.Any(ext.requiredWeaponTags, tag => weaponDef.weaponTags.Contains(tag));
+    }
+
     // Helper
     private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();

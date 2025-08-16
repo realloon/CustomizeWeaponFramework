@@ -92,39 +92,6 @@ public class InteractionController {
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
         return TraitModuleDatabase.GetAllModuleDefs()
             .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
-            .Where(IsCompatibleWith);
-    }
-
-    private bool IsCompatibleWith(ThingDef moduleDef) {
-        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
-        if (ext == null) return false;
-
-        var weaponDef = _weapon.def;
-
-        // exclude first 
-        if (ext.excludeWeaponDefs != null && ext.excludeWeaponDefs.Contains(weaponDef)) {
-            return false;
-        }
-
-        if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
-            if (Enumerable.Any(ext.excludeWeaponTags, tag => weaponDef.weaponTags.Contains(tag))) {
-                return false;
-            }
-        }
-
-        var hasRequiredDefs = !ext.requiredWeaponDefs.NullOrEmpty();
-        var hasRequiredTags = !ext.requiredWeaponTags.NullOrEmpty();
-
-        // defs
-        switch (hasRequiredDefs) {
-            case false when !hasRequiredTags:
-            case true when ext.requiredWeaponDefs.Contains(weaponDef):
-                return true;
-        }
-
-        // tags
-        if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
-
-        return Enumerable.Any(ext.requiredWeaponTags, tag => weaponDef.weaponTags.Contains(tag));
+            .Where(moduleDef => TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, _weapon.def));
     }
 }

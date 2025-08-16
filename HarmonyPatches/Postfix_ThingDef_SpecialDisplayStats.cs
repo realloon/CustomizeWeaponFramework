@@ -7,7 +7,7 @@ using Verse;
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(ThingDef), nameof(ThingDef.SpecialDisplayStats))]
-public static class Patch_ThingDef_SpecialDisplayStats {
+public static class Postfix_ThingDef_SpecialDisplayStats {
     public static IEnumerable<StatDrawEntry> Postfix(IEnumerable<StatDrawEntry> __result, ThingDef __instance,
         StatRequest req) {
         var resultList = __result.ToList();

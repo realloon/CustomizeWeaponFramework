@@ -273,6 +273,72 @@ public class CompDynamicTraits : ThingComp {
             // icon = ...
             action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
         };
+
+        if (!Prefs.DevMode) yield break;
+        var addTraitGizmo = new Command_Action {
+            defaultLabel = "Dev: + Add Trait",
+            action = () => {
+                var availableTraits = DefDatabase<WeaponTraitDef>.AllDefs
+                    .Where(traitDef => {
+                        if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
+                            return !_installedTraits.ContainsKey(part);
+                        }
+
+                        return false;
+                    })
+                    .ToList();
+
+                if (availableTraits.NullOrEmpty()) {
+                    Messages.Message("Debug: No available traits to install.", MessageTypeDefOf.NeutralEvent);
+                    return;
+                }
+
+                var options = new List<FloatMenuOption>();
+
+                foreach (var traitDef in availableTraits) {
+                    var localTraitDef = traitDef;
+
+                    var option = new FloatMenuOption(
+                        localTraitDef.LabelCap,
+                        () => {
+                            if (!TraitModuleDatabase.TryGetPartForTrait(localTraitDef, out var part)) return;
+                            InstallTrait(part, localTraitDef);
+                        }
+                    );
+                    options.Add(option);
+                }
+
+                Find.WindowStack.Add(new FloatMenu(options));
+            }
+        };
+        yield return addTraitGizmo;
+
+        var removeTraitGizmo = new Command_Action {
+            defaultLabel = "Dev: - Remove Trait",
+            action = () => {
+                var options = new List<FloatMenuOption>();
+
+                var availableTraits = Traits;
+
+                foreach (var traitDef in availableTraits) {
+                    var option = new FloatMenuOption(
+                        traitDef.LabelCap,
+                        () => {
+                            if (!TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) return;
+                            UninstallTrait(part);
+                        }
+                    );
+                    options.Add(option);
+                }
+
+                if (options.Count == 0) {
+                    options.Add((new FloatMenuOption("Nothing to remove", null)));
+                }
+
+                Find.WindowStack.Add(new FloatMenu(options));
+            }
+        };
+        yield return removeTraitGizmo;
     }
 
     public IEnumerable<Gizmo> GetWornGizmosExtra(Pawn owner) {

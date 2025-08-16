@@ -36,8 +36,8 @@ public class SpecDatabase {
         // Raw values
         // === Stat ===
         var weaponDef = weapon.def;
-        Mass = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.Mass));
-        Cooldown = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.RangedWeapon_Cooldown));
+        Mass = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.Mass), true);
+        Cooldown = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.RangedWeapon_Cooldown), true);
         AccuracyTouch = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.AccuracyTouch));
         AccuracyShort = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.AccuracyShort));
         AccuracyMedium = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.AccuracyMedium));
@@ -47,7 +47,7 @@ public class SpecDatabase {
         var weaponDefVerb = weaponDef.Verbs.FirstOrFallback();
         if (weaponDefVerb != null) {
             Range = new Spec(weaponDefVerb.range);
-            WarmupTime = new Spec(weaponDefVerb.warmupTime);
+            WarmupTime = new Spec(weaponDefVerb.warmupTime, true);
             BurstShotCount = new Spec(weaponDefVerb.burstShotCount);
             _ticksBetweenBurstShots = new Spec(weaponDefVerb.ticksBetweenBurstShots);
 
@@ -134,10 +134,11 @@ public class SpecDatabase {
 
 internal struct Spec {
     public readonly float Raw;
-    public float Dynamic;
+    public float Dynamic = 0f;
+    public bool IsLowerValueBetter { get; }
 
-    internal Spec(float raw) {
+    internal Spec(float raw, bool isLowerValueBetter = false) {
         Raw = raw;
-        Dynamic = 0f;
+        IsLowerValueBetter = isLowerValueBetter;
     }
 }

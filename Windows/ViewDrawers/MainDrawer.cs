@@ -74,49 +74,6 @@ public class MainDrawer {
         DrawPartGroup(middleLeftRect, LeftParts, Direction.Horizontal);
         DrawPartGroup(middleRightRect, RightParts, Direction.Vertical);
         DrawPartGroup(bottomCenterRect, BottomParts, Direction.Horizontal);
-
-        // // top rects
-        // const float topSlotTotalWidth = slotSize * 3 + slotPadding * 2;
-        // var topStartX = topCenterRect.center.x - topSlotTotalWidth / 2f;
-        // var receiverRect = new Rect(topStartX, topCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        // var sightRect = new Rect(topStartX + slotSize + slotPadding, topCenterRect.center.y - slotSize / 2f,
-        //     slotSize,
-        //     slotSize);
-        // var barrelRect = new Rect(topStartX + (slotSize + slotPadding) * 2, topCenterRect.center.y - slotSize / 2f,
-        //     slotSize, slotSize);
-        // // left rect
-        // var stockRect = new Rect(middleLeftRect.center.x - slotSize / 2f, middleLeftRect.center.y - slotSize / 2f,
-        //     slotSize, slotSize);
-        // // right rects
-        // var muzzleRect = new Rect(middleRightRect.center.x - slotSize / 2f,
-        //     middleRightRect.center.y - slotSize / 2f - (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
-        // var ammoRect = new Rect(middleRightRect.center.x - slotSize / 2f,
-        //     middleRightRect.center.y - slotSize / 2f + (slotSize / 2f + slotPadding / 2f), slotSize, slotSize);
-        // // bottom rects
-        // const float bottomSlotTotalWidth = slotSize * 4 + slotPadding * 3;
-        // var bottomStartX = bottomCenterRect.center.x - bottomSlotTotalWidth / 2f;
-        // var gripRect = new Rect(bottomStartX, bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        // var triggerRect = new Rect(bottomStartX + slotSize + slotPadding, bottomCenterRect.center.y - slotSize / 2f,
-        //     slotSize, slotSize);
-        // var magazineRect = new Rect(bottomStartX + (slotSize + slotPadding) * 2,
-        //     bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        // var underbarrelRect = new Rect(bottomStartX + (slotSize + slotPadding) * 3,
-        //     bottomCenterRect.center.y - slotSize / 2f, slotSize, slotSize);
-        //
-        // // top
-        // TryDrawSlot(Part.Receiver, receiverRect);
-        // TryDrawSlot(Part.Sight, sightRect);
-        // TryDrawSlot(Part.Barrel, barrelRect);
-        // // left
-        // TryDrawSlot(Part.Stock, stockRect);
-        // // right
-        // TryDrawSlot(Part.Muzzle, muzzleRect);
-        // TryDrawSlot(Part.Ammo, ammoRect);
-        // // bottom
-        // TryDrawSlot(Part.Grip, gripRect);
-        // TryDrawSlot(Part.Trigger, triggerRect);
-        // TryDrawSlot(Part.Magazine, magazineRect);
-        // TryDrawSlot(Part.Underbarrel, underbarrelRect);
     }
 
     // === Helper ===
@@ -163,15 +120,9 @@ public class MainDrawer {
 
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
                 DrawModuleTexture(rect, moduleGraphicData);
-            } else {
-                var originalAnchor = Text.Anchor;
-                var originalFont = Text.Font;
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Text.Font = GameFont.Tiny;
-                Widgets.Label(rect, installedTrait.LabelCap);
-                Text.Anchor = originalAnchor;
-                Text.Font = originalFont;
             }
+
+            TooltipHandler.TipRegion(rect, installedTrait.LabelCap + "\n" + (installedTrait.description ?? ""));
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {

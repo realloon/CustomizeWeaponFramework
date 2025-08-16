@@ -24,27 +24,27 @@ public class AsideDrawer {
         DrawStatRow(listing, "CWF_UI_Range".Translate(), _specDatabase.Range);
         DrawStatRow(listing, "CWF_UI_RangeDPS".Translate(), _specDatabase.Dps);
         DrawStatRow(listing, "CWF_UI_RangeBurstCount".Translate(), _specDatabase.BurstShotCount);
-        DrawStatRow(listing, "CWF_UI_RangeWarmupTime".Translate(), _specDatabase.WarmupTime, "F1", " s", true);
-        DrawStatRow(listing, "CWF_UI_RangeCooldown".Translate(), _specDatabase.Cooldown, "F1", " s", true);
+        DrawStatRow(listing, "CWF_UI_RangeWarmupTime".Translate(), _specDatabase.WarmupTime, "F1", " s");
+        DrawStatRow(listing, "CWF_UI_RangeCooldown".Translate(), _specDatabase.Cooldown, "F1", " s");
 
         // === Projectile Stats ===
         listing.GapLine();
         listing.Label($"<color=#999999><b>{"CWF_UI_Projectile".Translate()}</b></color>", 22f);
         DrawStatRow(listing, "CWF_UI_Damage".Translate(), _specDatabase.Damage);
-        DrawStatRow(listing, "CWF_UI_ArmorPenetration".Translate(), _specDatabase.ArmorPenetration, "N0", "%");
+        DrawStatRow(listing, "CWF_UI_ArmorPenetration".Translate(), _specDatabase.ArmorPenetration, unit: "%");
         DrawStatRow(listing, "CWF_UI_StoppingPower".Translate(), _specDatabase.StoppingPower, "F1");
 
         // === Accuracy Stats ===
         listing.GapLine();
         listing.Label($"<color=#999999><b>{"CWF_UI_Accuracy".Translate()}</b></color>", 22f);
-        DrawStatRow(listing, "CWF_UI_Touch".Translate(), _specDatabase.AccuracyTouch, "N0", "%");
-        DrawStatRow(listing, "CWF_UI_Short".Translate(), _specDatabase.AccuracyShort, "N0", "%");
-        DrawStatRow(listing, "CWF_UI_Medium".Translate(), _specDatabase.AccuracyMedium, "N0", "%");
-        DrawStatRow(listing, "CWF_UI_Long".Translate(), _specDatabase.AccuracyLong, "N0", "%");
+        DrawStatRow(listing, "CWF_UI_Touch".Translate(), _specDatabase.AccuracyTouch, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Short".Translate(), _specDatabase.AccuracyShort, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Medium".Translate(), _specDatabase.AccuracyMedium, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Long".Translate(), _specDatabase.AccuracyLong, unit: "%");
 
         // === Other Stats ===
         listing.GapLine();
-        DrawStatRow(listing, "CWF_UI_Mass".Translate(), _specDatabase.Mass, "F1", "Kg", true);
+        DrawStatRow(listing, "CWF_UI_Mass".Translate(), _specDatabase.Mass, "F1", "Kg");
 
         listing.End();
     }
@@ -52,10 +52,10 @@ public class AsideDrawer {
     // helper
     private static void DrawStatRow(
         Listing_Standard listing, string label, Spec spec,
-        string format = "N0", string unit = "", bool invertDeltaColor = false) {
+        string format = "N0", string unit = "") {
         var value = unit == "%" ? spec.Dynamic * 100 : spec.Dynamic;
         var valueString = value.ToString(format) + unit;
-        var delta = invertDeltaColor ? spec.Raw - spec.Dynamic : spec.Dynamic - spec.Raw;
+        var delta = spec.IsLowerValueBetter ? spec.Raw - spec.Dynamic : spec.Dynamic - spec.Raw;
 
         DrawLabelRow(listing.GetRect(22), label, valueString, delta);
     }

@@ -4,23 +4,28 @@ using Verse;
 namespace CWF;
 
 public class SpecDatabase {
-    public Spec Range;
-    public Spec BurstShotCount;
-    public Spec WarmupTime;
-    public Spec Cooldown;
-    public Spec Damage;
-    public Spec ArmorPenetration;
-    public Spec StoppingPower;
-    public Spec AccuracyTouch;
-    public Spec AccuracyShort;
-    public Spec AccuracyMedium;
-    public Spec AccuracyLong;
-    public Spec Mass;
-    public Spec Dps;
+    internal Spec Range;
+    internal Spec BurstShotCount;
+    internal Spec WarmupTime;
+    internal Spec Cooldown;
+    internal Spec Damage;
+    internal Spec ArmorPenetration;
+    internal Spec StoppingPower;
+    internal Spec AccuracyTouch;
+    internal Spec AccuracyShort;
+    internal Spec AccuracyMedium;
+    internal Spec AccuracyLong;
+    internal Spec Mass;
+    internal Spec Dps;
     private Spec _ticksBetweenBurstShots;
 
     private readonly Thing _weapon;
     private readonly CompDynamicTraits _compDynamicTraits;
+
+    private enum Mode {
+        Raw,
+        Dynamic
+    }
 
     public bool IsMeleeWeapon => _weapon.def.IsMeleeWeapon;
 
@@ -55,7 +60,7 @@ public class SpecDatabase {
             }
         }
 
-        Dps = new Spec(GetDps());
+        Dps = new Spec(CalculateDps(Mode.Raw));
 
         Recalculate(); // init calc
     }
@@ -83,35 +88,30 @@ public class SpecDatabase {
         if (weaponDefProjectile != null) {
             Damage.Dynamic = weaponDefProjectile.GetDamageAmount(_weapon);
             ArmorPenetration.Dynamic = weaponDefProjectile.GetArmorPenetration(_weapon);
-            StoppingPower.Dynamic = GetComputedStoppingPower(); // harmony patched, but...
+            StoppingPower.Dynamic = GetComputedStoppingPower(); // harmony patched
         }
 
-        Dps.Dynamic = GetComputedDps();
+        Dps.Dynamic = CalculateDps(Mode.Dynamic);
 
-        Log.Message("[CWF Dev]: Recalculated");
+        if (Prefs.DevMode) {
+            Log.Message("[CWF Dev]: Recalculated");
+        }
     }
 
     // === Helper ===
-    private float GetDps() {
-        var totalDamage = Damage.Raw * BurstShotCount.Raw;
+    private float CalculateDps(Mode mode) {
+        var damage = mode == Mode.Raw ? Damage.Raw : Damage.Dynamic;
+        var burstCount = mode == Mode.Raw ? BurstShotCount.Raw : BurstShotCount.Dynamic;
+        var ticksBetweenShots = mode == Mode.Raw
+            ? _ticksBetweenBurstShots.Raw
+            : _ticksBetweenBurstShots.Dynamic;
+        var warmup = mode == Mode.Raw ? WarmupTime.Raw : WarmupTime.Dynamic;
+        var cooldown = mode == Mode.Raw ? Cooldown.Raw : Cooldown.Dynamic;
 
-        var totalBurstSec = _ticksBetweenBurstShots.Raw * (BurstShotCount.Raw - 1) / 60f;
-        var totalCycleSec = WarmupTime.Raw + Cooldown.Raw + totalBurstSec;
-
-        if (totalCycleSec <= 0) return 0f;
-
-        return totalDamage / totalCycleSec;
-    }
-
-    private float GetComputedDps() {
-        var totalDamage = Damage.Dynamic * BurstShotCount.Dynamic;
-
-        var totalBurstSec = _ticksBetweenBurstShots.Dynamic * (BurstShotCount.Dynamic - 1) / 60f;
-        var totalCycleSec = WarmupTime.Dynamic + Cooldown.Dynamic + totalBurstSec;
-
-        if (totalCycleSec <= 0) return 0f;
-
-        return totalDamage / totalCycleSec;
+        var totalDamage = damage * burstCount;
+        var totalBurstSec = ticksBetweenShots * (burstCount - 1) / 60f;
+        var totalCycleSec = warmup + cooldown + totalBurstSec;
+        return totalCycleSec <= 0 ? 0f : totalDamage / totalCycleSec;
     }
 
     private float GetComputedStoppingPower() {
@@ -132,11 +132,11 @@ public class SpecDatabase {
     }
 }
 
-public struct Spec {
+internal struct Spec {
     public readonly float Raw;
     public float Dynamic;
 
-    public Spec(float raw) {
+    internal Spec(float raw) {
         Raw = raw;
         Dynamic = 0f;
     }

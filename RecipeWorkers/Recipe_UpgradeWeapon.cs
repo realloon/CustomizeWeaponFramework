@@ -33,7 +33,9 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
             }
         }
 
-        Log.Message($"[CWF Dev] Built weapon upgrade path cache with {_upgradePaths.Count} entries.");
+        if (Prefs.DevMode) {
+            Log.Message($"[CWF Dev] Built weapon upgrade path cache with {_upgradePaths.Count} entries.");
+        }
     }
 
     /// <summary>

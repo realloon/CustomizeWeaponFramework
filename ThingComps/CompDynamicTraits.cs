@@ -280,11 +280,8 @@ public class CompDynamicTraits : ThingComp {
             action = () => {
                 var availableTraits = DefDatabase<WeaponTraitDef>.AllDefs
                     .Where(traitDef => {
-                        if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
-                            return !_installedTraits.ContainsKey(part);
-                        }
-
-                        return false;
+                        if (!TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) return false;
+                        return !_installedTraits.ContainsKey(part);
                     })
                     .ToList();
 

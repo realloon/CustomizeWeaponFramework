@@ -120,6 +120,11 @@ public class MainDrawer {
 
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
                 DrawModuleTexture(rect, moduleGraphicData);
+            } else {
+                var originalAnchor = Text.Anchor;
+                Text.Anchor = TextAnchor.MiddleCenter;
+                Widgets.Label(rect, installedTrait.LabelCap);
+                Text.Anchor = originalAnchor;
             }
 
             TooltipHandler.TipRegion(rect, installedTrait.LabelCap + "\n" + (installedTrait.description ?? ""));

@@ -41,9 +41,13 @@ public static class TraitModuleDatabase {
 
         foreach (var moduleDef in TraitToModule.Values) {
             // inject description
-            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
-            if (traitDef != null) {
-                moduleDef.description = traitDef.description;
+            var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+            if (ext != null) {
+                string[] descriptionParts = {
+                    ext.weaponTraitDef.description ?? "",
+                    "CWF_UI_PartOf".Translate() + ": " + $"CWF_UI_{ext.part}".Translate()
+                };
+                moduleDef.description = string.Join("\n\n", descriptionParts);
             }
 
             // inject hyperlinks

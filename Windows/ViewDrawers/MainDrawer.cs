@@ -121,9 +121,12 @@ public class MainDrawer {
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
                 DrawModuleTexture(rect, moduleGraphicData);
             } else {
+                var originalFont = Text.Font;
                 var originalAnchor = Text.Anchor;
+                Text.Font = GameFont.Small;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(rect, installedTrait.LabelCap);
+                Text.Font = originalFont;
                 Text.Anchor = originalAnchor;
             }
 

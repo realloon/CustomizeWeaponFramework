@@ -79,7 +79,7 @@ public class SpecDatabase {
                          ?? _weapon.TryGetComp<CompEquippable>()?.PrimaryVerb;
 
         Range.Dynamic = Range.Raw * _weapon.GetStatValue(StatDefOf.RangedWeapon_RangeMultiplier);
-        WarmupTime.Dynamic = weaponVerb?.verbProps.warmupTime ?? -1;
+        WarmupTime.Dynamic = WarmupTime.Raw * _weapon.GetStatValue(StatDefOf.RangedWeapon_WarmupMultiplier);
         BurstShotCount.Dynamic = weaponVerb?.BurstShotCount ?? -1; // harmony patched
         _ticksBetweenBurstShots.Dynamic = weaponVerb?.TicksBetweenBurstShots ?? -1; // harmony patched
 

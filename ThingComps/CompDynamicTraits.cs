@@ -117,6 +117,7 @@ public class CompDynamicTraits : ThingComp {
             sb.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             sb.AppendLine(trait.description);
 
+            // offset
             if (!trait.statOffsets.NullOrEmpty()) {
                 var filteredOffsets = trait.statOffsets
                     .Where(mod => mod.stat != StatDefOf.MarketValue && mod.stat != StatDefOf.Mass);
@@ -127,6 +128,7 @@ public class CompDynamicTraits : ThingComp {
                 sb.AppendLine();
             }
 
+            // factor
             if (!trait.statFactors.NullOrEmpty()) {
                 sb.Append(trait.statFactors.Select(x =>
                         $" - {x.stat.LabelCap}: {x.stat.Worker.ValueToString(x.value, false, ToStringNumberSense.Factor)}")

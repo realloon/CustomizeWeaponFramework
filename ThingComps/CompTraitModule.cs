@@ -8,58 +8,18 @@ namespace CWF;
 public class CompTraitModule : ThingComp {
     // private CompProperties_TraitModule Props => (CompProperties_TraitModule)props;
 
-    private WeaponTraitDef _cachedTraitDef;
-    private bool _isTraitDefCached;
+    // private WeaponTraitDef _cachedTraitDef;
+    // private bool _isTraitDefCached;
 
-    private Part _cachedPart;
-    private bool _isPartCached;
-
-    private WeaponTraitDef TraitDef {
-        get {
-            if (_isTraitDefCached) return _cachedTraitDef;
-
-            _cachedTraitDef = parent.def.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
-            _isTraitDefCached = true;
-            return _cachedTraitDef;
-        }
-    }
-
-    private Part Part {
-        get {
-            if (_isPartCached) return _cachedPart;
-
-            _cachedPart = parent.def.GetModExtension<TraitModuleExtension>().part;
-            _isPartCached = true;
-            return _cachedPart;
-        }
-    }
-
-    public override IEnumerable<StatDrawEntry> SpecialDisplayStats() {
-        if (TraitDef == null) {
-            Log.Warning($"[CWF]: {parent.def.defName} no TraitModuleExtension or its weaponTraitDef is null.");
-            yield break;
-        }
-
-        var sb = new StringBuilder();
-        var effectLines = GetTraitEffectLines(TraitDef);
-
-        if (effectLines.Count > 0) {
-            sb.AppendLine($"CWF_UI_ModuleEffectsDesc".Translate(TraitDef.Named("MODULE")) + ":");
-            sb.AppendLine();
-            sb.AppendLine(string.Join("\n", effectLines));
-            sb.AppendLine();
-        }
-
-        sb.AppendLine("CWF_UI_PartOf".Translate() + ": " + $"CWF_UI_{Part}".Translate());
-
-        yield return new StatDrawEntry(
-            StatCategoryDefOf.BasicsImportant,
-            "CWF_UI_ModuleEffects".Translate(),
-            TraitDef.LabelCap,
-            sb.ToString().TrimEndNewlines(),
-            1000
-        );
-    }
+    // private WeaponTraitDef TraitDef {
+    //     get {
+    //         if (_isTraitDefCached) return _cachedTraitDef;
+    //
+    //         _cachedTraitDef = parent.def.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+    //         _isTraitDefCached = true;
+    //         return _cachedTraitDef;
+    //     }
+    // }
 
     public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
         if (traitDef == null) return new List<string>();

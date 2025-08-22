@@ -46,7 +46,7 @@ public class CompDynamicGraphic : ThingComp {
             .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent.def))
             .ToList();
 
-        if (!matchingCases.Any()) {
+        if (Prefs.DevMode && !matchingCases.Any()) {
             Log.Warning($"[CWF] No suitable 'graphicCases' found for module " +
                         $"'{moduleDef.defName}' on weapon '{parent.def.defName}'. Check the mod extension XML.");
             return null;
@@ -72,8 +72,8 @@ public class CompDynamicGraphic : ThingComp {
 
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
             Color color, Texture2D maskTexture)>();
-        var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
 
+        var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
         if (compDynamicTraits != null) {
             foreach (var point in Props.attachmentPoints) {
                 var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
@@ -91,11 +91,9 @@ public class CompDynamicGraphic : ThingComp {
                 var finalScale = graphicToRender.scale ?? point.baseTexture?.scale ?? 1f;
                 var baseSortOrder = point.layer * 10;
 
-                if (!string.IsNullOrEmpty(graphicToRender.outlinePath)) {
-                    var outlineTex = ContentFinder<Texture2D>.Get(graphicToRender.outlinePath, false);
-                    if (outlineTex != null) {
-                        layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white, null));
-                    }
+                var outlineTex = GetOutlineTexture(graphicToRender);
+                if (outlineTex != null) {
+                    layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white, null));
                 }
 
                 if (string.IsNullOrEmpty(graphicToRender.texturePath)) continue;
@@ -165,5 +163,18 @@ public class CompDynamicGraphic : ThingComp {
 
         graphic.Init(request);
         return graphic;
+    }
+
+    public static Texture2D GetOutlineTexture(ModuleGraphicData graphicData) {
+        if (graphicData == null) return null;
+
+        string outlinePathToLoad = null;
+        if (!string.IsNullOrEmpty(graphicData.outlinePath)) {
+            outlinePathToLoad = graphicData.outlinePath;
+        } else if (!string.IsNullOrEmpty(graphicData.texturePath)) {
+            outlinePathToLoad = graphicData.texturePath + "_o";
+        }
+
+        return outlinePathToLoad != null ? ContentFinder<Texture2D>.Get(outlinePathToLoad, false) : null;
     }
 }

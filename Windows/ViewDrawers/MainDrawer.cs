@@ -143,11 +143,9 @@ public class MainDrawer {
 
     private static void DrawModuleTexture(Rect rect, ModuleGraphicData moduleGraphicData) {
         // Outline
-        if (!string.IsNullOrEmpty(moduleGraphicData.outlinePath)) {
-            var outlineTexture = ContentFinder<Texture2D>.Get(moduleGraphicData.outlinePath, false);
-            if (outlineTexture != null) {
-                Widgets.DrawTextureFitted(rect, outlineTexture, 1f);
-            }
+        var outlineTexture = CompDynamicGraphic.GetOutlineTexture(moduleGraphicData);
+        if (outlineTexture != null) {
+            Widgets.DrawTextureFitted(rect, outlineTexture, 1f);
         }
 
         // module

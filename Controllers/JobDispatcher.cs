@@ -67,7 +67,7 @@ public class JobDispatcher {
                 modulesToHaul.Add(module);
             } else {
                 Messages.Message(
-                    "CWF_Message_CannotFindModuleForModification".Translate(change.ModuleDef.label),
+                    "CWF_Message_CannotFindModuleForModification".Translate(change.ModuleDef.Named("MODULE")),
                     MessageTypeDefOf.RejectInput, false);
                 return;
             }

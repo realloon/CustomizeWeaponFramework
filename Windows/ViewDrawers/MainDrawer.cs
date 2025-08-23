@@ -122,7 +122,7 @@ public class MainDrawer {
             } else {
                 var originalFont = Text.Font;
                 var originalAnchor = Text.Anchor;
-                Text.Font = GameFont.Small;
+                Text.Font = GameFont.Tiny;
                 Text.Anchor = TextAnchor.MiddleCenter;
                 Widgets.Label(rect, installedTrait.LabelCap);
                 Text.Font = originalFont;

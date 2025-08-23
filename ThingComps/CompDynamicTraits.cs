@@ -120,7 +120,7 @@ public class CompDynamicTraits : ThingComp {
             // offset
             if (!trait.statOffsets.NullOrEmpty()) {
                 var filteredOffsets = trait.statOffsets
-                    .Where(mod => mod.stat != StatDefOf.MarketValue && mod.stat != StatDefOf.Mass);
+                    .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass);
 
                 sb.Append(filteredOffsets.Select(x =>
                         $" - {x.stat.LabelCap}: {x.stat.Worker.ValueToString(x.value, false, ToStringNumberSense.Offset)}")

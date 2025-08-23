@@ -272,7 +272,7 @@ public class CompDynamicTraits : ThingComp {
         yield return new Command_Action {
             defaultLabel = "CWF_UI_WeaponPanel".Translate(),
             defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
-            // icon = ...
+            icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
             action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
         };
 
@@ -286,7 +286,8 @@ public class CompDynamicTraits : ThingComp {
                         if (_installedTraits.ContainsKey(part)) return false;
 
                         var moduleDef = TraitModuleDatabase.GetModuleDefFor(traitDef);
-                        return moduleDef != null && TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                        return moduleDef != null &&
+                               TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
                     })
                     .ToList();
 
@@ -349,7 +350,7 @@ public class CompDynamicTraits : ThingComp {
             yield return new Command_Action {
                 defaultLabel = "CWF_UI_WeaponPanel".Translate(),
                 defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
-                // icon = ...
+                icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
                 action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
             };
         }

@@ -97,17 +97,17 @@ public static class TraitModuleDatabase {
 
         if (!Mathf.Approximately(traitDef.burstShotCountMultiplier, 1f)) {
             effectLines.Add(
-                $" - {"CWF_BurstShotCountFactor".Translate()}: {traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+                $" - {"CWF_UI_BurstShotCountMultiplier".Translate()}: {traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
         }
 
         if (!Mathf.Approximately(traitDef.burstShotSpeedMultiplier, 1f)) {
             effectLines.Add(
-                $" - {"CWF_TicksBetweenBurstShotsFactor".Translate()}: {traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+                $" - {"CWF_UI_BurstShotSpeedMultiplier".Translate()}: {traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
         }
 
         if (!Mathf.Approximately(traitDef.additionalStoppingPower, 0.0f)) {
             effectLines.Add(
-                $" - {"StatsReport_AdditionalStoppingPower".Translate()} {traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
+                $" - {"CWF_UI_AdditionalStoppingPower".Translate()}: {traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
         }
 
         return effectLines;

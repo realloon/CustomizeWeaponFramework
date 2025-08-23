@@ -120,7 +120,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats {
 
         if (stringBuilder.Length == 0) return;
 
-        sb.AppendLine(whitespace + "StatsReport_WeaponTraits".Translate() + ":");
+        sb.AppendLine(whitespace + "CWF_UI_WeaponModules".Translate() + ":");
         sb.Append(stringBuilder);
     }
 }

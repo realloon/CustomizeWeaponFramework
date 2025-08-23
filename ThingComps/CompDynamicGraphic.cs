@@ -46,9 +46,11 @@ public class CompDynamicGraphic : ThingComp {
             .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent.def))
             .ToList();
 
-        if (Prefs.DevMode && !matchingCases.Any()) {
-            Log.Warning($"[CWF] No suitable 'graphicCases' found for module " +
-                        $"'{moduleDef.defName}' on weapon '{parent.def.defName}'. Check the mod extension XML.");
+        if (!matchingCases.Any()) {
+            if (Prefs.DevMode) {
+                Log.Warning($"[CWF] No suitable 'graphicCases' found for module '{moduleDef.defName}' " +
+                            $"on weapon '{parent.def.defName}'. Check the mod extension XML.");
+            }
             return null;
         }
 

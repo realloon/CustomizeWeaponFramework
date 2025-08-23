@@ -115,8 +115,7 @@ public class MainDrawer {
         if (installedTrait != null) {
             Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
-            var compDynamicGraphic = _weapon.TryGetComp<CompDynamicGraphic>();
-            var moduleGraphicData = compDynamicGraphic.GetGraphicDataFor(installedTrait);
+            var moduleGraphicData = _weapon.TryGetComp<CompDynamicGraphic>()?.GetGraphicDataFor(installedTrait);
 
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
                 DrawModuleTexture(rect, moduleGraphicData);

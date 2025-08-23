@@ -1,4 +1,5 @@
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace CWF;
@@ -74,6 +75,44 @@ public static class TraitModuleDatabase {
         return moduleDef;
     }
 
+    public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
+        if (traitDef == null) return new List<string>();
+
+        var effectLines = new List<string>();
+
+        // offset
+        if (!traitDef.statOffsets.NullOrEmpty()) {
+            effectLines.AddRange(traitDef.statOffsets
+                .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass)
+                .Select(m =>
+                    $" - {m.stat.LabelCap}: {m.stat.Worker.ValueToString(m.value, false, ToStringNumberSense.Offset)}"));
+        }
+
+        // factor
+        if (!traitDef.statFactors.NullOrEmpty()) {
+            effectLines.AddRange(traitDef.statFactors
+                .Select(m =>
+                    $" - {m.stat.LabelCap}: {m.stat.Worker.ValueToString(m.value, false, ToStringNumberSense.Factor)}"));
+        }
+
+        if (!Mathf.Approximately(traitDef.burstShotCountMultiplier, 1f)) {
+            effectLines.Add(
+                $" - {"CWF_BurstShotCountFactor".Translate()}: {traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+        }
+
+        if (!Mathf.Approximately(traitDef.burstShotSpeedMultiplier, 1f)) {
+            effectLines.Add(
+                $" - {"CWF_TicksBetweenBurstShotsFactor".Translate()}: {traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+        }
+
+        if (!Mathf.Approximately(traitDef.additionalStoppingPower, 0.0f)) {
+            effectLines.Add(
+                $" - {"StatsReport_AdditionalStoppingPower".Translate()} {traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
+        }
+
+        return effectLines;
+    }
+
     public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, ThingDef weaponDef) {
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) return false;
@@ -105,7 +144,7 @@ public static class TraitModuleDatabase {
         return Enumerable.Any(ext.requiredWeaponTags, tag => weaponDef.weaponTags.Contains(tag));
     }
 
-    // Helper
+    // Private helper
     private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) yield break;

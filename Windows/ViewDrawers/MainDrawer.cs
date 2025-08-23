@@ -130,8 +130,12 @@ public class MainDrawer {
                 Text.Anchor = originalAnchor;
             }
 
-            TooltipHandler.TipRegion(rect, $"{installedTrait.LabelCap}\n{installedTrait.description ?? ""}\n\n" +
-                                           string.Join("\n", CompTraitModule.GetTraitEffectLines(installedTrait)));
+            var tip =
+                $"<b>{installedTrait.LabelCap}</b>\n" +
+                (!installedTrait.description.NullOrEmpty() ? $"{installedTrait.description}\n\n" : "") +
+                string.Join("\n", TraitModuleDatabase.GetTraitEffectLines(installedTrait));
+
+            TooltipHandler.TipRegion(rect, tip);
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {

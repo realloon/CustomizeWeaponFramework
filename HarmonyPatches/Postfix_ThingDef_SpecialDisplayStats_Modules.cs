@@ -19,7 +19,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
         var part = ext.part;
 
         var sb = new StringBuilder();
-        var effectLines = CompTraitModule.GetTraitEffectLines(traitDef);
+        var effectLines = TraitModuleDatabase.GetTraitEffectLines(traitDef);
 
         if (effectLines.Count > 0) {
             sb.AppendLine($"CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");

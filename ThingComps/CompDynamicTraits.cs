@@ -117,38 +117,9 @@ public class CompDynamicTraits : ThingComp {
             sb.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             sb.AppendLine(trait.description);
 
-            // offset
-            if (!trait.statOffsets.NullOrEmpty()) {
-                var filteredOffsets = trait.statOffsets
-                    .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass);
-
-                sb.Append(filteredOffsets.Select(x =>
-                        $" - {x.stat.LabelCap}: {x.stat.Worker.ValueToString(x.value, false, ToStringNumberSense.Offset)}")
-                    .ToLineList());
-                sb.AppendLine();
-            }
-
-            // factor
-            if (!trait.statFactors.NullOrEmpty()) {
-                sb.Append(trait.statFactors.Select(x =>
-                        $" - {x.stat.LabelCap}: {x.stat.Worker.ValueToString(x.value, false, ToStringNumberSense.Factor)}")
-                    .ToLineList());
-                sb.AppendLine();
-            }
-
-            if (!Mathf.Approximately(trait.burstShotCountMultiplier, 1f)) {
-                sb.AppendLine(
-                    $" - {"StatsReport_BurstShotCountMultiplier".Translate()} {trait.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
-            }
-
-            if (!Mathf.Approximately(trait.burstShotSpeedMultiplier, 1f)) {
-                sb.AppendLine(
-                    $" - {"StatsReport_BurstShotSpeedMultiplier".Translate()} {trait.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
-            }
-
-            if (!Mathf.Approximately(trait.additionalStoppingPower, 0.0f)) {
-                sb.AppendLine(
-                    $" - {"StatsReport_AdditionalStoppingPower".Translate()} {trait.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
+            var effectLines = TraitModuleDatabase.GetTraitEffectLines(trait);
+            if (!effectLines.NullOrEmpty()) {
+                sb.AppendLine(effectLines.ToLineList());
             }
 
             if (i < traitsList.Count - 1) sb.AppendLine();

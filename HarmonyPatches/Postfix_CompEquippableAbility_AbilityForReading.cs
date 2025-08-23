@@ -4,7 +4,6 @@ using RimWorld;
 
 namespace CWF.HarmonyPatches;
 
-
 [HarmonyPatch(typeof(CompEquippableAbility), "get_AbilityForReading")]
 public static class Postfix_CompEquippableAbility_AbilityForReading {
     private static readonly FieldInfo abilityField = AccessTools.Field(typeof(CompEquippableAbility), "ability");

@@ -28,8 +28,10 @@ public class CompTraitModule : ThingComp {
 
         // offset
         if (!traitDef.statOffsets.NullOrEmpty()) {
-            effectLines.AddRange(traitDef.statOffsets.Select(offset =>
-                $" - {offset.stat.LabelCap}: {offset.stat.Worker.ValueToString(offset.value, false, ToStringNumberSense.Offset)}"));
+            effectLines.AddRange(traitDef.statOffsets
+                .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass)
+                .Select(offset =>
+                    $" - {offset.stat.LabelCap}: {offset.stat.Worker.ValueToString(offset.value, false, ToStringNumberSense.Offset)}"));
         }
 
         // factor

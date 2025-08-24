@@ -8,7 +8,6 @@ public class MainDrawer {
     // Data source
     private readonly Thing _weapon;
     private readonly CompDynamicTraits _compDynamicTraits;
-    private readonly HashSet<Part> _supportParts = new();
     private readonly Action<Part, WeaponTraitDef> _onSlotClick;
 
     private const float SlotSize = 56f;
@@ -27,11 +26,6 @@ public class MainDrawer {
     public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef> onSlotClick) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-
-        if (_compDynamicTraits?.props is CompProperties_DynamicTraits props && !props.supportParts.NullOrEmpty()) {
-            _supportParts = new HashSet<Part>(props.supportParts);
-        }
-
         _onSlotClick = onSlotClick;
     }
 
@@ -78,7 +72,7 @@ public class MainDrawer {
 
     // === Helper ===
     private void DrawPartGroup(Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
-        var supportedParts = groupParts.Where(p => _supportParts.Contains(p)).ToList();
+        var supportedParts = groupParts.Where(p => _compDynamicTraits.AvailableParts.Contains(p)).ToList();
         if (supportedParts.Count == 0) return;
 
         var count = supportedParts.Count;
@@ -107,7 +101,7 @@ public class MainDrawer {
     }
 
     private void TryDrawSlot(Part part, Rect rect) {
-        if (!_supportParts.Contains(part)) return;
+        if (!_compDynamicTraits.AvailableParts.Contains(part)) return;
 
         var installedTrait = _compDynamicTraits?.GetInstalledTraitFor(part);
         bool clicked;

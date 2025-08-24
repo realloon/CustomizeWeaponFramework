@@ -10,6 +10,8 @@ public class CompDynamicTraits : ThingComp {
 
     private Dictionary<Part, WeaponTraitDef> _installedTraits = new();
 
+    private HashSet<Part> _availableParts = new();
+
     /// <summary>
     /// Gets a copy of the dictionary containing all currently installed Traits,
     /// or sets a new dictionary of Traits, completely overwriting the old one.
@@ -26,6 +28,8 @@ public class CompDynamicTraits : ThingComp {
     }
 
     public IReadOnlyCollection<WeaponTraitDef> Traits => _installedTraits.Values;
+
+    public IReadOnlyCollection<Part> AvailableParts => _availableParts;
 
     public void InstallTrait(Part part, WeaponTraitDef traitDef) {
         if (!_installedTraits.TryAdd(part, traitDef)) {
@@ -49,11 +53,6 @@ public class CompDynamicTraits : ThingComp {
         OnTraitsChanged();
     }
 
-    public WeaponTraitDef GetInstalledTraitFor(Part part) {
-        _installedTraits.TryGetValue(part, out var traitDef);
-        return traitDef;
-    }
-
     // === Stat ===
     public override float GetStatOffset(StatDef stat) {
         return Traits
@@ -68,12 +67,13 @@ public class CompDynamicTraits : ThingComp {
 
     // === Display ===
     public override void GetStatsExplanation(StatDef stat, StringBuilder sb, string whitespace = "") {
-        var stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = null;
 
         foreach (var weaponTraitDef in Traits) {
             // offset
             var statOffsetFromList = weaponTraitDef.statOffsets.GetStatOffsetFromList(stat);
             if (!Mathf.Approximately(statOffsetFromList, 0.0f)) {
+                stringBuilder ??= new StringBuilder();
                 stringBuilder.AppendLine(
                     whitespace + " - " +
                     weaponTraitDef.LabelCap + ": " +
@@ -83,6 +83,7 @@ public class CompDynamicTraits : ThingComp {
             // factor
             var statFactorFromList = weaponTraitDef.statFactors.GetStatFactorFromList(stat);
             if (!Mathf.Approximately(statFactorFromList, 1f)) {
+                stringBuilder ??= new StringBuilder();
                 stringBuilder.AppendLine(
                     whitespace + "- " +
                     weaponTraitDef.LabelCap + ": " +
@@ -90,7 +91,7 @@ public class CompDynamicTraits : ThingComp {
             }
         }
 
-        if (stringBuilder.Length == 0) return;
+        if (stringBuilder == null) return;
 
         sb.AppendLine(whitespace + "CWF_UI_WeaponModules".Translate() + ":");
         sb.Append(stringBuilder);
@@ -138,6 +139,7 @@ public class CompDynamicTraits : ThingComp {
     public override void PostPostMake() {
         base.PostPostMake();
         InitializeTraits();
+        RecalculateAvailableParts();
     }
 
     public override void PostExposeData() {
@@ -147,89 +149,8 @@ public class CompDynamicTraits : ThingComp {
         if (Scribe.mode != LoadSaveMode.PostLoadInit) return;
 
         _installedTraits ??= new Dictionary<Part, WeaponTraitDef>(); // for legacy saves
+        RecalculateAvailableParts();
         SetupAbility(true);
-    }
-
-    // === Helper ===
-    private void InitializeTraits() {
-        var defaultTraitsList = Props.defaultWeaponTraitDefs;
-        if (defaultTraitsList.NullOrEmpty()) return;
-
-        foreach (var traitDef in defaultTraitsList) {
-            if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
-                // Found the corresponding slot; now check whether the slot is already occupied (conflict check).
-                if (_installedTraits.TryGetValue(part, out var existingTrait)) {
-                    Log.Error($"[CWF] Initialization Error for {parent.def.defName}: " +
-                              $"Both '{traitDef.defName}' and '{existingTrait.defName}' are configured as default traits for the same part slot '{part}'. " +
-                              $"Ignoring the latter: '{traitDef.defName}'.");
-                } else {
-                    // No conflict—install this default trait into the corresponding slot.
-                    _installedTraits.Add(part, traitDef);
-                }
-            } else {
-                // If no corresponding module definition is found, skip it.
-                Log.Warning($"[CWF] Initialization Warning for {parent.def.defName}: " +
-                            $"Default trait '{traitDef.defName}' has no corresponding TraitModule with a Part defined. It will be ignored.");
-            }
-        }
-    }
-
-    private void SetupAbility(bool isPostLoad) {
-        var abilityComp = parent.TryGetComp<CompEquippableAbilityReloadable>();
-        if (abilityComp == null) return;
-
-        // only the first ability is applied
-        var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
-
-        if (traitWithAbility != null) {
-            abilityComp.props = traitWithAbility.abilityProps;
-        } else {
-            abilityComp.props = parent.def.comps
-                .OfType<CompProperties_EquippableAbilityReloadable>()
-                .FirstOrFallback();
-        }
-
-        if (isPostLoad) return;
-
-        abilityComp.Notify_PropsChanged();
-
-        // refresh gizmo
-        var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
-            ? equipmentTracker.pawn
-            : null;
-        holder?.abilities.Notify_TemporaryAbilitiesChanged();
-    }
-
-    private void ClearAllCaches() {
-        // === Stats ===
-        foreach (var statDef in DefDatabase<StatDef>.AllDefs) {
-            statDef.Worker.ClearCacheForThing(parent);
-        }
-
-        // === verbs ===
-        var verb = parent.TryGetComp<CompEquippableAbilityReloadable>()?.PrimaryVerb ??
-                   parent.TryGetComp<CompEquippable>()?.PrimaryVerb;
-        if (verb == null) return;
-
-        Helpers.Reflect.Set(verb, "cachedBurstShotCount", null);
-        Helpers.Reflect.Set(verb, "cachedTicksBetweenBurstShots", null);
-    }
-
-    private void OnTraitsChanged() {
-        SetupAbility(false);
-        ClearAllCaches();
-
-        // graphic dirty
-        var compDynamicGraphic = parent.TryGetComp<CompDynamicGraphic>();
-        if (compDynamicGraphic == null) return;
-        compDynamicGraphic.Notify_GraphicDirty();
-        if (parent.Map != null) {
-            // ground graphic dirty
-            parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlagDefOf.Things);
-        } else if (parent.ParentHolder is Pawn_EquipmentTracker { pawn: not null } equipmentTracker) {
-            // equipment graphic dirty
-            equipmentTracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
-        }
     }
 
     // === Gizmos ===
@@ -325,5 +246,122 @@ public class CompDynamicTraits : ThingComp {
                 action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
             };
         }
+    }
+
+    // Public Helper
+    public WeaponTraitDef GetInstalledTraitFor(Part part) {
+        _installedTraits.TryGetValue(part, out var traitDef);
+        return traitDef;
+    }
+
+    // === Private Helper ===
+    private void InitializeTraits() {
+        var defaultTraitsList = Props.defaultWeaponTraitDefs;
+        if (defaultTraitsList.NullOrEmpty()) return;
+
+        foreach (var traitDef in defaultTraitsList) {
+            if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
+                // Found the corresponding slot; now check whether the slot is already occupied (conflict check).
+                if (_installedTraits.TryGetValue(part, out var existingTrait)) {
+                    Log.Error($"[CWF] Initialization Error for {parent.def.defName}: " +
+                              $"Both '{traitDef.defName}' and '{existingTrait.defName}' are configured as default traits for the same part slot '{part}'. " +
+                              $"Ignoring the latter: '{traitDef.defName}'.");
+                } else {
+                    // No conflict—install this default trait into the corresponding slot.
+                    _installedTraits.Add(part, traitDef);
+                }
+            } else {
+                // If no corresponding module definition is found, skip it.
+                Log.Warning($"[CWF] Initialization Warning for {parent.def.defName}: " +
+                            $"Default trait '{traitDef.defName}' has no corresponding TraitModule with a Part defined. It will be ignored.");
+            }
+        }
+    }
+
+    private void OnTraitsChanged() {
+        RecalculateAvailableParts();
+        SetupAbility(false);
+        ClearAllCaches();
+
+        // graphic dirty
+        var compDynamicGraphic = parent.TryGetComp<CompDynamicGraphic>();
+        if (compDynamicGraphic == null) return;
+        compDynamicGraphic.Notify_GraphicDirty();
+        if (parent.Map != null) {
+            // ground graphic dirty
+            parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlagDefOf.Things);
+        } else if (parent.ParentHolder is Pawn_EquipmentTracker { pawn: not null } equipmentTracker) {
+            // equipment graphic dirty
+            equipmentTracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
+        }
+    }
+
+    private void RecalculateAvailableParts() {
+        _availableParts = new HashSet<Part>(Props.supportParts);
+
+        foreach (var traitDef in Traits) {
+            var modifiers = TraitModuleDatabase.GetModuleDefFor(traitDef)?
+                .GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
+            if (modifiers == null) continue;
+
+            foreach (var rule in modifiers) {
+                if (rule.matcher == null || !rule.matcher.IsMatch(parent.def)) continue;
+
+                if (!rule.enablesParts.NullOrEmpty()) {
+                    _availableParts.UnionWith(rule.enablesParts);
+                }
+
+                if (!rule.disablesParts.NullOrEmpty()) {
+                    _availableParts.ExceptWith(rule.disablesParts);
+                }
+            }
+        }
+
+        // temporary old save check mechanism
+        foreach (var installedPart in _installedTraits.Keys) {
+            if (_availableParts.Contains(installedPart)) continue;
+            Log.Warning($"[CWF] Part '{installedPart}' on weapon '{parent.LabelCap}' is no longer available.");
+        }
+    }
+
+    private void SetupAbility(bool isPostLoad) {
+        var abilityComp = parent.TryGetComp<CompEquippableAbilityReloadable>();
+        if (abilityComp == null) return;
+
+        // only the first ability is applied
+        var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
+
+        if (traitWithAbility != null) {
+            abilityComp.props = traitWithAbility.abilityProps;
+        } else {
+            abilityComp.props = parent.def.comps
+                .OfType<CompProperties_EquippableAbilityReloadable>()
+                .FirstOrFallback();
+        }
+
+        if (isPostLoad) return;
+
+        abilityComp.Notify_PropsChanged();
+
+        // refresh gizmo
+        var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
+            ? equipmentTracker.pawn
+            : null;
+        holder?.abilities.Notify_TemporaryAbilitiesChanged();
+    }
+
+    private void ClearAllCaches() {
+        // === Stats ===
+        foreach (var statDef in DefDatabase<StatDef>.AllDefs) {
+            statDef.Worker.ClearCacheForThing(parent);
+        }
+
+        // === verbs ===
+        var verb = parent.TryGetComp<CompEquippableAbilityReloadable>()?.PrimaryVerb ??
+                   parent.TryGetComp<CompEquippable>()?.PrimaryVerb;
+        if (verb == null) return;
+
+        Helpers.Reflect.Set(verb, "cachedBurstShotCount", null);
+        Helpers.Reflect.Set(verb, "cachedTicksBetweenBurstShots", null);
     }
 }

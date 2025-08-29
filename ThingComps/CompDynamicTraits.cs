@@ -361,7 +361,7 @@ public class CompDynamicTraits : ThingComp {
                    parent.TryGetComp<CompEquippable>()?.PrimaryVerb;
         if (verb == null) return;
 
-        Helpers.Reflect.Set(verb, "cachedBurstShotCount", null);
-        Helpers.Reflect.Set(verb, "cachedTicksBetweenBurstShots", null);
+        AccessTools.Field(typeof(Verb), "cachedBurstShotCount").SetValue(verb, null);
+        AccessTools.Field(typeof(Verb), "cachedTicksBetweenBurstShots").SetValue(verb, null);
     }
 }

@@ -16,6 +16,7 @@ public class SpecDatabase {
     internal Spec AccuracyMedium;
     internal Spec AccuracyLong;
     internal Spec Mass;
+    internal Spec MarketValue;
     internal Spec Dps;
     private Spec _ticksBetweenBurstShots;
 
@@ -37,6 +38,7 @@ public class SpecDatabase {
         // === Stat ===
         var weaponDef = weapon.def;
         Mass = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.Mass), true);
+        MarketValue = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.MarketValue));
         Cooldown = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.RangedWeapon_Cooldown), true);
         AccuracyTouch = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.AccuracyTouch));
         AccuracyShort = new Spec(weaponDef.GetStatValueAbstract(StatDefOf.AccuracyShort));
@@ -68,6 +70,7 @@ public class SpecDatabase {
     public void Recalculate() {
         // === Stat ===
         Mass.Dynamic = _weapon.GetStatValue(StatDefOf.Mass);
+        MarketValue.Dynamic = _weapon.GetStatValue(StatDefOf.MarketValue);
         Cooldown.Dynamic = _weapon.GetStatValue(StatDefOf.RangedWeapon_Cooldown);
         AccuracyTouch.Dynamic = _weapon.GetStatValue(StatDefOf.AccuracyTouch);
         AccuracyShort.Dynamic = _weapon.GetStatValue(StatDefOf.AccuracyShort);

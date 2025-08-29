@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using Verse;
 
 namespace CWF.ViewDrawers;
@@ -44,7 +45,8 @@ public class AsideDrawer {
 
         // === Other Stats ===
         listing.GapLine();
-        DrawStatRow(listing, "CWF_UI_Mass".Translate(), _specDatabase.Mass, "F1", "Kg");
+        DrawStatRow(listing, "Mass".Translate(), _specDatabase.Mass, "F1", "Kg");
+        DrawStatRow(listing, "MarketValueTip".Translate(), _specDatabase.MarketValue);
 
         listing.End();
     }

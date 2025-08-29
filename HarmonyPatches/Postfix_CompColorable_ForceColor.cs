@@ -4,7 +4,6 @@ using Verse;
 
 namespace CWF.HarmonyPatches;
 
-
 [HarmonyPatch(typeof(CompColorable), nameof(CompColorable.ForceColor))]
 public static class Postfix_CompColorable_ForceColor {
     [HarmonyPostfix]

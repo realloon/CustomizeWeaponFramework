@@ -1,4 +1,5 @@
 using System.Text;
+using HarmonyLib;
 using UnityEngine;
 using RimWorld;
 using Verse;
@@ -325,29 +326,42 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void SetupAbility(bool isPostLoad) {
-        var abilityComp = parent.TryGetComp<CompEquippableAbilityReloadable>();
-        if (abilityComp == null) return;
+        var abilityProvider = parent.TryGetComp<CompAbilityProvider>();
 
-        // only the first ability is applied
-        var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
+        if (abilityProvider != null) {
+            // === Enhancement ===
+            var propsList = Traits
+                .Where(trait => trait.abilityProps != null)
+                .Select(trait => trait.abilityProps)
+                .ToList();
 
-        if (traitWithAbility != null) {
-            abilityComp.props = traitWithAbility.abilityProps;
+            abilityProvider.SetOrUpdateAbilities(propsList, isPostLoad);
         } else {
-            abilityComp.props = parent.def.comps
-                .OfType<CompProperties_EquippableAbilityReloadable>()
-                .FirstOrFallback();
+            // === Degradation ===
+            var abilityComp = parent.TryGetComp<CompEquippableAbilityReloadable>();
+            if (abilityComp == null) return;
+
+            // only the first ability is applied
+            var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
+
+            if (traitWithAbility != null) {
+                abilityComp.props = traitWithAbility.abilityProps;
+            } else {
+                abilityComp.props = parent.def.comps
+                    .OfType<CompProperties_EquippableAbilityReloadable>()
+                    .FirstOrFallback();
+            }
+
+            if (isPostLoad) return;
+
+            abilityComp.Notify_PropsChanged();
+
+            // refresh gizmo
+            var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
+                ? equipmentTracker.pawn
+                : null;
+            holder?.abilities.Notify_TemporaryAbilitiesChanged();
         }
-
-        if (isPostLoad) return;
-
-        abilityComp.Notify_PropsChanged();
-
-        // refresh gizmo
-        var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
-            ? equipmentTracker.pawn
-            : null;
-        holder?.abilities.Notify_TemporaryAbilitiesChanged();
     }
 
     private void ClearAllCaches() {

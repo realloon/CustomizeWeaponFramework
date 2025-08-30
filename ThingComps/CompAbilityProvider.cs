@@ -31,7 +31,8 @@ public class CompAbilityProvider : ThingComp {
         ApplyAbilityChanges(false);
     }
 
-    public void OnUnequipped(Pawn pawn) { // todo
+    public void OnUnequipped(Pawn pawn) {
+        // todo
         if (_holder is null) return;
 
         foreach (var ability in _managedAbilities.Keys) {

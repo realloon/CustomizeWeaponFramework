@@ -342,7 +342,7 @@ public class CompDynamicTraits : ThingComp {
             if (abilityComp == null) return;
 
             // only the first ability is applied
-            var traitWithAbility = Traits.FirstOrDefault(trait => trait.abilityProps != null);
+            var traitWithAbility = Traits.FirstOrFallback(trait => trait.abilityProps != null);
 
             if (traitWithAbility != null) {
                 abilityComp.props = traitWithAbility.abilityProps;

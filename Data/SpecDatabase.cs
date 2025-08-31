@@ -21,7 +21,7 @@ public class SpecDatabase {
     private Spec _ticksBetweenBurstShots;
 
     private readonly Thing _weapon;
-    private readonly CompDynamicTraits _compDynamicTraits;
+    private readonly CompDynamicTraits? _compDynamicTraits;
 
     private enum Mode {
         Raw,
@@ -96,9 +96,9 @@ public class SpecDatabase {
 
         Dps.Dynamic = CalculateDps(Mode.Dynamic);
 
-#if DEBUG
+        #if DEBUG
         Log.Message("[CWF Dev]: Recalculated");
-#endif
+        #endif
     }
 
     // === Helper ===
@@ -126,10 +126,8 @@ public class SpecDatabase {
             basePower += compUniqueWeapon.TraitsListForReading.Sum(trait => trait.additionalStoppingPower);
         }
 
-        if (_compDynamicTraits == null) return basePower;
-
         // CompDynamicTraits
-        var additional = _compDynamicTraits.Traits.Sum(traitDef => traitDef.additionalStoppingPower);
+        var additional = _compDynamicTraits?.Traits.Sum(traitDef => traitDef.additionalStoppingPower) ?? 0;
 
         return basePower + additional;
     }

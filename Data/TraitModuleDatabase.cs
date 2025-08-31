@@ -57,9 +57,9 @@ public static class TraitModuleDatabase {
             }
         }
 
-#if DEBUG
+        #if DEBUG
         Log.Message($"[CWF] Built Trait caches with {TraitToPart.Count} entries and injected hyperlinks.");
-#endif
+        #endif
     }
 
     /// <summary>

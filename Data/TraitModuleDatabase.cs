@@ -1,6 +1,7 @@
-using RimWorld;
 using UnityEngine;
+using RimWorld;
 using Verse;
+using CWF.Extensions;
 
 namespace CWF;
 
@@ -15,7 +16,7 @@ public static class TraitModuleDatabase {
     static TraitModuleDatabase() {
         foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
             // fill weapon caches
-            if (thingDef.IsWeapon && !thingDef.weaponTags.NullOrEmpty() && thingDef.race == null &&
+            if (thingDef.IsWeapon && !thingDef.weaponTags.IsNullOrEmpty() && thingDef.race == null &&
                 !thingDef.IsCorpse) {
                 foreach (var tag in thingDef.weaponTags) {
                     if (!WeaponsByTag.ContainsKey(tag)) {
@@ -42,14 +43,14 @@ public static class TraitModuleDatabase {
 
         foreach (var moduleDef in TraitToModule.Values) {
             // inject description
-            var description = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef?.description;
+            var description = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef.description;
             if (description != null) {
                 moduleDef.description = description;
             }
 
             // inject hyperlinks
             var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
-            if (weaponDefs.NullOrEmpty()) continue;
+            if (weaponDefs.IsNullOrEmpty()) continue;
             moduleDef.descriptionHyperlinks ??= new List<DefHyperlink>();
             foreach (var weaponDef in weaponDefs) {
                 if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;
@@ -72,18 +73,16 @@ public static class TraitModuleDatabase {
     /// <summary>
     /// Looks up the ThingDef of the modular item that provides the specified WeaponTraitDef.
     /// </summary>
-    public static ThingDef GetModuleDefFor(WeaponTraitDef traitDef) {
+    public static ThingDef? GetModuleDefFor(WeaponTraitDef traitDef) {
         TraitToModule.TryGetValue(traitDef, out var moduleDef);
         return moduleDef;
     }
 
     public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
-        if (traitDef == null) return new List<string>();
-
         var effectLines = new List<string>();
 
         // offset
-        if (!traitDef.statOffsets.NullOrEmpty()) {
+        if (!traitDef.statOffsets.IsNullOrEmpty()) {
             effectLines.AddRange(traitDef.statOffsets
                 .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass)
                 .Select(m =>
@@ -91,7 +90,7 @@ public static class TraitModuleDatabase {
         }
 
         // factor
-        if (!traitDef.statFactors.NullOrEmpty()) {
+        if (!traitDef.statFactors.IsNullOrEmpty()) {
             effectLines.AddRange(traitDef.statFactors
                 .Select(m =>
                     $" - {m.stat.LabelCap}: {m.stat.Worker.ValueToString(m.value, false, ToStringNumberSense.Factor)}"));
@@ -124,26 +123,23 @@ public static class TraitModuleDatabase {
             return false;
         }
 
-        if (!ext.excludeWeaponTags.NullOrEmpty() && !weaponDef.weaponTags.NullOrEmpty()) {
-            if (Enumerable.Any(ext.excludeWeaponTags, tag => weaponDef.weaponTags.Contains(tag))) {
-                return false;
-            }
+        if (!ext.excludeWeaponTags.IsNullOrEmpty() && !weaponDef.weaponTags.IsNullOrEmpty() &&
+            ext.excludeWeaponTags.Any(t => weaponDef.weaponTags.Contains(t))) {
+            return false;
         }
 
-        var hasRequiredDefs = !ext.requiredWeaponDefs.NullOrEmpty();
-        var hasRequiredTags = !ext.requiredWeaponTags.NullOrEmpty();
-
         // defs
-        switch (hasRequiredDefs) {
-            case false when !hasRequiredTags:
-            case true when ext.requiredWeaponDefs.Contains(weaponDef):
-                return true;
+        if (!ext.requiredWeaponDefs.IsNullOrEmpty() && ext.requiredWeaponDefs.Contains(weaponDef)) {
+            return true;
         }
 
         // tags
-        if (!hasRequiredTags || weaponDef.weaponTags.NullOrEmpty()) return false;
+        if (!ext.requiredWeaponTags.IsNullOrEmpty() && !weaponDef.weaponTags.IsNullOrEmpty() &&
+            ext.requiredWeaponTags.Any(tag => weaponDef.weaponTags.Contains(tag))) {
+            return true;
+        }
 
-        return Enumerable.Any(ext.requiredWeaponTags, tag => weaponDef.weaponTags.Contains(tag));
+        return ext.requiredWeaponDefs.IsNullOrEmpty() && ext.requiredWeaponTags.IsNullOrEmpty();
     }
 
     // Private helper
@@ -153,11 +149,11 @@ public static class TraitModuleDatabase {
 
         var results = new HashSet<ThingDef>();
 
-        if (!ext.requiredWeaponDefs.NullOrEmpty()) {
+        if (!ext.requiredWeaponDefs.IsNullOrEmpty()) {
             results.AddRange(ext.requiredWeaponDefs);
         }
 
-        if (!ext.requiredWeaponTags.NullOrEmpty()) {
+        if (!ext.requiredWeaponTags.IsNullOrEmpty()) {
             foreach (var tag in ext.requiredWeaponTags) {
                 if (WeaponsByTag.TryGetValue(tag, out var weapons)) {
                     results.AddRange(weapons);
@@ -165,13 +161,11 @@ public static class TraitModuleDatabase {
             }
         }
 
-        // if (ext.requiredWeaponDefs.NullOrEmpty() && ext.requiredWeaponTags.NullOrEmpty()) { }
-
-        if (!ext.excludeWeaponDefs.NullOrEmpty()) {
+        if (!ext.excludeWeaponDefs.IsNullOrEmpty()) {
             results.ExceptWith(ext.excludeWeaponDefs);
         }
 
-        if (!ext.excludeWeaponTags.NullOrEmpty()) {
+        if (!ext.excludeWeaponTags.IsNullOrEmpty()) {
             foreach (var tag in ext.excludeWeaponTags) {
                 if (WeaponsByTag.TryGetValue(tag, out var weaponsToExclude)) {
                     results.ExceptWith(weaponsToExclude);

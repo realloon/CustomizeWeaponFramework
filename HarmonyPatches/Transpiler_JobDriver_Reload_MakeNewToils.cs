@@ -67,7 +67,6 @@ public static class Transpiler_JobDriver_Reload_MakeNewToils {
                 AccessTools.Method(typeof(Transpiler_JobDriver_Reload_MakeNewToils), nameof(FindCustomReloadable)))
         );
 
-        Log.Message("[CWF] JobDriver_Reload's state machine (MoveNext) was successfully patched!");
         return codeMatcher.InstructionEnumeration();
     }
 

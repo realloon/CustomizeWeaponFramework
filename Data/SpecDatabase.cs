@@ -96,9 +96,9 @@ public class SpecDatabase {
 
         Dps.Dynamic = CalculateDps(Mode.Dynamic);
 
-        if (Prefs.DevMode) {
-            Log.Message("[CWF Dev]: Recalculated");
-        }
+#if DEBUG
+        Log.Message("[CWF Dev]: Recalculated");
+#endif
     }
 
     // === Helper ===

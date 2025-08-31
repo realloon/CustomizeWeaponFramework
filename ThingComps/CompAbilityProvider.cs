@@ -42,15 +42,11 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
     }
 
     public bool NeedsReload(bool allowForcedReload) {
-        // var ability = FirstReloadableAbility;
-        // if (ability == null || AmmoDef == null) return false;
-        // if (allowForcedReload) return ability.RemainingCharges < ability.maxCharges;
-        // return ability.RemainingCharges <= 0;
-
         return _managedAbilities.Keys.Any(a => {
             if (_managedAbilities[a] is not CompProperties_EquippableAbilityReloadable) return false;
-            if (allowForcedReload) return a.RemainingCharges < a.maxCharges;
-            return a.RemainingCharges <= 0;
+            return allowForcedReload
+                ? a.RemainingCharges < a.maxCharges
+                : a.RemainingCharges <= 0;
         });
     }
 
@@ -60,7 +56,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
             return targetProps?.ammoDef == ammo.def && a.RemainingCharges < a.maxCharges;
         });
 
-        if (abilityToReload is null) return;
+        if (abilityToReload == null) return;
         if (_managedAbilities[abilityToReload] is not CompProperties_EquippableAbilityReloadable abilityProps) return;
 
         var chargesToRefill = abilityToReload.maxCharges - abilityToReload.RemainingCharges;
@@ -128,13 +124,13 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
             .Cast<CompProperties_EquippableAbility>()
             .ToList();
 
-        if (_holder is null) return;
+        if (_holder == null) return;
 
         ApplyAbilityChanges(isPostLoad);
     }
 
     public void OnEquipped(Pawn pawn) {
-        if (pawn is null) return;
+        if (pawn == null) return;
 
         _holder = pawn;
         _managedAbilities = new Dictionary<Ability, CompProperties_EquippableAbility>();
@@ -142,8 +138,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
     }
 
     public void OnUnequipped(Pawn pawn) {
-        // todo
-        if (_holder is null) return;
+        if (_holder == null) return;
 
         foreach (var ability in _managedAbilities.Keys) {
             _holder.abilities.RemoveAbility(ability.def);
@@ -156,7 +151,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
     }
 
     private void ApplyAbilityChanges(bool isPostLoad) {
-        if (_holder is null) return;
+        if (_holder == null) return;
 
         var propsToAdd = new List<CompProperties_EquippableAbility>(_abilityPropsToManage);
         var abilitiesToRemove = new List<Ability>();
@@ -177,7 +172,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
         foreach (var abilityProps in propsToAdd) {
             _holder.abilities.GainAbility(abilityProps.abilityDef);
             var newAbility = _holder.abilities.GetAbility(abilityProps.abilityDef);
-            if (newAbility is null) continue;
+            if (newAbility == null) continue;
 
             _managedAbilities.Add(newAbility, abilityProps);
 
@@ -187,7 +182,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
             var savedState = _savedAbilityStates?
                 .FirstOrFallback(s => s.defName == newAbility.def.defName);
 
-            if (savedState is not null) {
+            if (savedState != null) {
                 newAbility.RemainingCharges = savedState.remainingCharges;
 
                 if (savedState.cooldownTicksRemaining > 0) {
@@ -228,12 +223,12 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
         if (Scribe.mode is LoadSaveMode.LoadingVars) {
             List<string> defNameList = null;
             Scribe_Collections.Look(ref defNameList, "abilityPropsToManageDefNames", LookMode.Value);
-            if (defNameList is not null) {
+            if (defNameList != null) {
                 _abilityPropsToManage = new List<CompProperties_EquippableAbility>();
                 foreach (var defName in defNameList) {
                     var trait = DefDatabase<WeaponTraitDef>.AllDefs.FirstOrFallback(t =>
                         t.abilityProps?.abilityDef.defName == defName);
-                    if (trait is not null) {
+                    if (trait != null) {
                         _abilityPropsToManage.Add(trait.abilityProps);
                     }
                 }

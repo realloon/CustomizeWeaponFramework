@@ -54,9 +54,9 @@ public class CompDynamicGraphic : ThingComp {
 
     // === Helper ===
     private Graphic GenerateGraphic() {
-#if DEBUG
+        #if DEBUG
         Log.Message("[CWF Dev] Graphic rendering...");
-#endif
+        #endif
 
         var originalGraphicData = parent.def.graphicData;
         if (originalGraphicData == null) return BaseContent.BadGraphic;

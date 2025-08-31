@@ -1,6 +1,7 @@
 namespace CWF;
 
 public enum Part {
+    None = 0,
     Muzzle,
     Barrel,
     Receiver,

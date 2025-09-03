@@ -10,10 +10,13 @@ namespace CWF.HarmonyPatches;
 [HarmonyPatch]
 public static class Transpiler_JobDriver_Reload_MakeNewToils {
     [HarmonyTargetMethod]
-    public static MethodBase TargetMethod() {
+    public static MethodBase? TargetMethod() {
         var stateMachineType = AccessTools
             .FirstInner(typeof(JobDriver_Reload), t => t.Name.Contains("MakeNewToils"));
-        if (stateMachineType is not null) return AccessTools.Method(stateMachineType, "MoveNext");
+
+        if (stateMachineType is not null) {
+            return AccessTools.Method(stateMachineType, "MoveNext");
+        }
 
         Log.Error("[CWF] Could not find the state machine type for JobDriver_Reload.MakeNewToils.");
         return null;
@@ -70,7 +73,7 @@ public static class Transpiler_JobDriver_Reload_MakeNewToils {
         return codeMatcher.InstructionEnumeration();
     }
 
-    public static IReloadableComp FindCustomReloadable(IReloadableComp originalResult, Thing gear) {
+    public static IReloadableComp? FindCustomReloadable(IReloadableComp? originalResult, Thing? gear) {
         return originalResult ?? gear?.TryGetComp<CompAbilityProvider>();
     }
 }

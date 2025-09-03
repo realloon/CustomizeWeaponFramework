@@ -1,6 +1,8 @@
 using HarmonyLib;
 using Verse;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(Pawn_EquipmentTracker), nameof(Pawn_EquipmentTracker.GetGizmos))]

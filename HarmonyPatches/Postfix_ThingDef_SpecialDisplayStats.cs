@@ -4,6 +4,8 @@ using RimWorld;
 using UnityEngine;
 using Verse;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(ThingDef), nameof(ThingDef.SpecialDisplayStats))]

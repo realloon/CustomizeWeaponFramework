@@ -1,13 +1,14 @@
 using UnityEngine;
 using RimWorld;
 using Verse;
+using CWF.Extensions;
 
 namespace CWF;
 
 public class CompDynamicGraphic : ThingComp {
     private CompProperties_DynamicGraphic Props => (CompProperties_DynamicGraphic)props;
 
-    private Graphic _cachedGraphic;
+    private Graphic? _cachedGraphic;
 
     private bool _isDirty = true;
 
@@ -33,14 +34,11 @@ public class CompDynamicGraphic : ThingComp {
     /// Finds the most suitable graphic data for a given module trait when applied to a specific weapon.
     /// It resolves the graphic based on the matching rules and priority defined in the module's TraitModuleExtension.
     /// </summary>
-    public ModuleGraphicData GetGraphicDataFor(WeaponTraitDef traitDef) {
-        if (traitDef == null) return null;
-
-        var moduleDef = TraitModuleDatabase.GetModuleDefFor(traitDef);
-        if (moduleDef == null) return null;
+    public ModuleGraphicData? GetGraphicDataFor(WeaponTraitDef traitDef) {
+        if (!traitDef.TryGetModuleDef(out var moduleDef)) return null;
 
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
-        if (ext?.graphicCases.NullOrEmpty() ?? true) return null;
+        if (ext?.graphicCases.IsNullOrEmpty() ?? true) return null;
 
         var matchingCases = ext.graphicCases
             .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent.def))
@@ -67,14 +65,14 @@ public class CompDynamicGraphic : ThingComp {
         var renderTexture = RenderTexture.GetTemporary(sizeReference.width, sizeReference.height, 0);
 
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
-            Color color, Texture2D maskTexture)>();
+            Color color, Texture2D? maskTexture)>();
 
         var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
         if (compDynamicTraits != null) {
             foreach (var point in Props.attachmentPoints) {
                 var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
 
-                ModuleGraphicData graphicToRender = null;
+                ModuleGraphicData? graphicToRender = null;
                 if (installedTrait != null) {
                     graphicToRender = GetGraphicDataFor(installedTrait);
                 }
@@ -87,25 +85,22 @@ public class CompDynamicGraphic : ThingComp {
                 var finalScale = graphicToRender.scale ?? point.baseTexture?.scale ?? 1f;
                 var baseSortOrder = point.layer * 10;
 
+                // outline
                 var outlineTex = GetOutlineTexture(graphicToRender);
                 if (outlineTex != null) {
                     layersToDraw.Add((outlineTex, finalOffset, finalScale, baseSortOrder - 999, Color.white, null));
                 }
 
+                // module
                 if (string.IsNullOrEmpty(graphicToRender.texturePath)) continue;
-                var moduleTexture = ContentFinder<Texture2D>.Get(graphicToRender.texturePath);
+                var moduleTexture = ContentFinder<Texture2D>.Get(graphicToRender.texturePath, false);
                 if (moduleTexture == null) continue;
 
                 var color = point.receivesColor
                     ? parent.TryGetComp<CompColorable>()?.ColorDef?.color ?? originalGraphicData.color
                     : Color.white;
 
-                var mask = point.receivesColor
-                    ? ContentFinder<Texture2D>.Get(
-                        originalGraphicData.maskPath.NullOrEmpty()
-                            ? originalGraphicData.texPath + "_m"
-                            : originalGraphicData.maskPath, false)
-                    : null;
+                var mask = GetMaskTexture(originalGraphicData, point);
 
                 layersToDraw.Add((moduleTexture, finalOffset, finalScale, baseSortOrder, color, mask));
             }
@@ -161,13 +156,22 @@ public class CompDynamicGraphic : ThingComp {
         return graphic;
     }
 
-    public static Texture2D GetOutlineTexture(ModuleGraphicData graphicData) {
-        if (graphicData == null) return null;
+    private static Texture2D? GetMaskTexture(GraphicData graphicData, AttachmentPointData point) {
+        var maskPathToLoad = graphicData.maskPath.NullOrEmpty()
+            ? graphicData.texPath + "_m"
+            : graphicData.maskPath;
 
-        string outlinePathToLoad = null;
-        if (!string.IsNullOrEmpty(graphicData.outlinePath)) {
+        return point.receivesColor
+            ? ContentFinder<Texture2D>.Get(maskPathToLoad, false)
+            : null;
+    }
+
+    public static Texture2D? GetOutlineTexture(ModuleGraphicData graphicData) {
+        string? outlinePathToLoad = null;
+
+        if (!graphicData.outlinePath.NullOrEmpty()) {
             outlinePathToLoad = graphicData.outlinePath;
-        } else if (!string.IsNullOrEmpty(graphicData.texturePath)) {
+        } else if (!graphicData.texturePath.NullOrEmpty()) {
             outlinePathToLoad = graphicData.texturePath + "_o";
         }
 

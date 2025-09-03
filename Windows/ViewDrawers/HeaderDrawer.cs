@@ -6,7 +6,7 @@ namespace CWF.ViewDrawers;
 
 public class HeaderDrawer {
     private readonly Thing _weapon;
-    private readonly CompRenamable _compRenamable;
+    private readonly CompRenamable? _compRenamable;
 
     public HeaderDrawer(Thing weapon) {
         _weapon = weapon;

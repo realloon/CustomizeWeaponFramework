@@ -8,7 +8,7 @@ namespace CWF;
 public class JobDriver_ModifyWeaponSelf : JobDriver {
     private Thing Weapon => TargetA.Thing;
 
-    private ModificationData ModData => (job.source as JobGiver_ModifyWeapon)?.ModDataList.FirstOrFallback();
+    private ModificationData? ModData => (job.source as JobGiver_ModifyWeapon)?.ModDataList.FirstOrFallback();
 
     public override bool TryMakePreToilReservations(bool errorOnFailed) => true;
 
@@ -24,22 +24,21 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
         modifyToil.WithProgressBarToilDelay(TargetIndex.A);
         modifyToil.defaultCompleteMode = ToilCompleteMode.Delay;
 
-        modifyToil.initAction = () => {
-            // callback: do something at init
-        };
-        modifyToil.tickAction = () => {
-            // callback: do something in the process
-        };
+        // modifyToil.initAction = () => {
+        //     // callback: do something at init
+        // };
+        // modifyToil.tickAction = () => {
+        //     // callback: do something in the process
+        // };
 
         // finished progress
         modifyToil.AddFinishAction(() => {
-            var comp = Weapon.TryGetComp<CompDynamicTraits>();
-            if (comp == null) return;
+            if (!Weapon.TryGetComp<CompDynamicTraits>(out var compDynamicTraits)) return;
 
             if (ModData.Type == ModificationType.Install) {
-                DoInstall(comp);
+                DoInstall(compDynamicTraits, ModData);
             } else {
-                DoUninstall(comp);
+                DoUninstall(compDynamicTraits, ModData);
             }
         });
 
@@ -47,10 +46,10 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
     }
 
     // === Helper ===
-    private void DoInstall(CompDynamicTraits comp) {
-        var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == ModData.ModuleDef);
+    private void DoInstall(CompDynamicTraits comp, ModificationData modData) {
+        var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == modData.ModuleDef);
         if (moduleToUse != null) {
-            comp.InstallTrait(ModData.Part, ModData.Trait);
+            comp.InstallTrait(modData.Part, modData.Trait);
             moduleToUse.Destroy();
             SoundDefOf.Replant_Complete.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
         } else {
@@ -58,9 +57,9 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
         }
     }
 
-    private void DoUninstall(CompDynamicTraits comp) {
-        comp.UninstallTrait(ModData.Part);
-        var moduleThing = ThingMaker.MakeThing(ModData.ModuleDef);
+    private void DoUninstall(CompDynamicTraits comp, ModificationData modData) {
+        comp.UninstallTrait(modData.Part);
+        var moduleThing = ThingMaker.MakeThing(modData.ModuleDef);
         if (!pawn.inventory.innerContainer.TryAdd(moduleThing)) {
             GenPlace.TryPlaceThing(moduleThing, pawn.Position, pawn.Map, ThingPlaceMode.Near);
         }

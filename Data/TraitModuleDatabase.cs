@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 using RimWorld;
 using Verse;
@@ -63,19 +64,12 @@ public static class TraitModuleDatabase {
         #endif
     }
 
-    /// <summary>
-    /// Locates the Part that owns the specified WeaponTraitDef.
-    /// </summary>
-    public static bool TryGetPartForTrait(WeaponTraitDef traitDef, out Part part) {
+    internal static bool TryGetPart(this WeaponTraitDef traitDef, out Part part) {
         return TraitToPart.TryGetValue(traitDef, out part);
     }
 
-    /// <summary>
-    /// Looks up the ThingDef of the modular item that provides the specified WeaponTraitDef.
-    /// </summary>
-    public static ThingDef? GetModuleDefFor(WeaponTraitDef traitDef) {
-        TraitToModule.TryGetValue(traitDef, out var moduleDef);
-        return moduleDef;
+    internal static bool TryGetModuleDef(this WeaponTraitDef traitDef, [NotNullWhen(true)] out ThingDef? moduleDef) {
+        return TraitToModule.TryGetValue(traitDef, out moduleDef);
     }
 
     public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {

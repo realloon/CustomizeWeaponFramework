@@ -12,7 +12,7 @@ public class JobDispatcher {
     public JobDispatcher(Thing weapon) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-        _initialTraitsState = _compDynamicTraits?.InstalledTraits ?? new Dictionary<Part, WeaponTraitDef>();
+        _initialTraitsState = _compDynamicTraits.InstalledTraits;
     }
 
     public void CommitChangesAndDispatchJobs() {
@@ -106,17 +106,21 @@ public class JobDispatcher {
             final.TryGetValue(part, out var finalTrait);
             if (initialTrait == finalTrait) continue;
 
-            if (initialTrait != null) {
+            if (initialTrait != null && initialTrait.TryGetModuleDef(out var uninstallModule)) {
                 changes.Add(new ModificationData {
-                    Type = ModificationType.Uninstall, Part = part, Trait = initialTrait,
-                    ModuleDef = TraitModuleDatabase.GetModuleDefFor(initialTrait)
+                    Type = ModificationType.Uninstall,
+                    Part = part,
+                    Trait = initialTrait,
+                    ModuleDef = uninstallModule
                 });
             }
 
-            if (finalTrait != null) {
+            if (finalTrait != null && finalTrait.TryGetModuleDef(out var installModule)) {
                 changes.Add(new ModificationData {
-                    Type = ModificationType.Install, Part = part, Trait = finalTrait,
-                    ModuleDef = TraitModuleDatabase.GetModuleDefFor(finalTrait)
+                    Type = ModificationType.Install,
+                    Part = part,
+                    Trait = finalTrait,
+                    ModuleDef = installModule
                 });
             }
         }
@@ -124,8 +128,8 @@ public class JobDispatcher {
         return changes.OrderBy(c => c.Type).ToList();
     }
 
-    private Thing FindBestAvailableModuleFor(ModificationData change, Pawn pawn) {
-        if (change.Type != ModificationType.Install || change.ModuleDef == null) return null;
+    private Thing? FindBestAvailableModuleFor(ModificationData change, Pawn pawn) {
+        if (change.Type != ModificationType.Install) return null;
 
         return GenClosest.ClosestThingReachable(
             _weapon.Position,
@@ -137,11 +141,11 @@ public class JobDispatcher {
         );
     }
 
-    private static Pawn FindBestPawnForJob(IntVec3 jobLocation, Map map) {
+    private static Pawn? FindBestPawnForJob(IntVec3 jobLocation, Map map) {
         return map.mapPawns.FreeColonistsSpawned
             .Where(p => !p.Downed && !p.Drafted && p.workSettings.WorkIsActive(WorkTypeDefOf.Crafting) &&
                         p.health.capacities.CanBeAwake)
             .OrderBy(p => p.Position.DistanceToSquared(jobLocation))
-            .FirstOrDefault();
+            .FirstOrFallback();
     }
 }

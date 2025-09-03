@@ -1,20 +1,25 @@
 using RimWorld;
 using Verse;
 using Verse.Sound;
+using CWF.Extensions;
 
 namespace CWF.Controllers;
 
 public class InteractionController {
     private readonly Thing _weapon;
     private readonly CompDynamicTraits _compDynamicTraits;
-    public event Action OnDataChanged;
+    public event Action OnDataChanged = delegate { };
 
     public InteractionController(Thing weapon) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
     }
 
-    public void HandleSlotClick(Part part, WeaponTraitDef installedTrait) {
+    /// <summary>
+    /// Opens a float-menu for the clicked slot.  
+    /// If installedTrait is null, lists traits to install; otherwise offers to uninstall the installed trait.
+    /// </summary>
+    public void HandleSlotClick(Part part, WeaponTraitDef? installedTrait) {
         var options = new List<FloatMenuOption>();
 
         if (installedTrait == null) {
@@ -70,7 +75,7 @@ public class InteractionController {
                         ),
                         () => {
                             foreach (var conflictTrait in analysis.ModulesToRemove) {
-                                if (TraitModuleDatabase.TryGetPartForTrait(conflictTrait, out var conflictPart)) {
+                                if (conflictTrait.TryGetPart(out var conflictPart)) {
                                     DoUninstall(conflictPart);
                                 }
                             }
@@ -108,7 +113,7 @@ public class InteractionController {
                     ),
                     () => {
                         foreach (var dependencyTrait in analysis.ModulesToRemove) {
-                            if (TraitModuleDatabase.TryGetPartForTrait(dependencyTrait, out var dependencyPart)) {
+                            if (dependencyTrait.TryGetPart(out var dependencyPart)) {
                                 DoUninstall(dependencyPart);
                             }
                         }
@@ -123,18 +128,17 @@ public class InteractionController {
     private void DoInstall(Part part, WeaponTraitDef traitToInstall) {
         _compDynamicTraits.InstallTrait(part, traitToInstall);
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
-        OnDataChanged?.Invoke();
+        OnDataChanged();
     }
 
     private void DoUninstall(Part part) {
         _compDynamicTraits.UninstallTrait(part);
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
-        OnDataChanged?.Invoke();
+        OnDataChanged();
     }
 
-    #region Helpers
+    #region Consequence Analysis
 
-    // === Consequence Analysis ===
     private ConflictAnalysisResult AnalyzeInstallConflict(ThingDef moduleToInstall) {
         var result = new ConflictAnalysisResult();
         var ext = moduleToInstall.GetModExtension<TraitModuleExtension>();
@@ -142,7 +146,7 @@ public class InteractionController {
 
         var partsToDisable = new HashSet<Part>();
         foreach (var rule in ext.conditionalPartModifiers) {
-            if (rule.matcher != null && rule.matcher.IsMatch(_weapon.def) && !rule.disablesParts.NullOrEmpty()) {
+            if (rule.matcher != null && rule.matcher.IsMatch(_weapon.def) && !rule.disablesParts.IsNullOrEmpty()) {
                 partsToDisable.UnionWith(rule.disablesParts);
             }
         }
@@ -181,17 +185,19 @@ public class InteractionController {
         var availableParts = new HashSet<Part>(props.supportParts);
 
         foreach (var traitDef in futureTraits) {
-            var ext = TraitModuleDatabase.GetModuleDefFor(traitDef)?.GetModExtension<TraitModuleExtension>();
+            if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
+
+            var ext = moduleDef.GetModExtension<TraitModuleExtension>();
             if (ext?.conditionalPartModifiers == null) continue;
 
             foreach (var rule in ext.conditionalPartModifiers) {
                 if (rule.matcher == null || !rule.matcher.IsMatch(_weapon.def)) continue;
 
-                if (!rule.enablesParts.NullOrEmpty()) {
+                if (!rule.enablesParts.IsNullOrEmpty()) {
                     availableParts.UnionWith(rule.enablesParts);
                 }
 
-                if (!rule.disablesParts.NullOrEmpty()) {
+                if (!rule.disablesParts.IsNullOrEmpty()) {
                     availableParts.ExceptWith(rule.disablesParts);
                 }
             }
@@ -200,7 +206,10 @@ public class InteractionController {
         return availableParts;
     }
 
-    // === UI & Compatibility ===
+    #endregion
+
+    #region UI & Compatibility
+
     private static void ShowConfirmationDialog(string title, string text, Action onConfirm) {
         var dialog = new Dialog_MessageBox(
             text,

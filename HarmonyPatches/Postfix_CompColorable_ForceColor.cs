@@ -2,6 +2,8 @@ using HarmonyLib;
 using UnityEngine;
 using Verse;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(CompColorable), nameof(CompColorable.ForceColor))]

@@ -15,10 +15,10 @@ public class Dialog_TextInput : Window {
     public Dialog_TextInput(
         string initialValue,
         Action<string> onConfirm,
-        string title,
-        string confirmButtonText = null,
-        string cancelButtonText = null) {
-        _currentValue = initialValue ?? "";
+        string? title = null,
+        string? confirmButtonText = null,
+        string? cancelButtonText = null) {
+        _currentValue = initialValue;
         _onConfirm = onConfirm;
         _title = title ?? "CWF_UI_InputTitle".Translate();
         _confirmButtonText = confirmButtonText ?? "CWF_UI_Confirm".Translate();
@@ -81,6 +81,6 @@ public class Dialog_TextInput : Window {
         base.PreClose();
         if (!_shouldExecuteOnClose) return;
 
-        _onConfirm?.Invoke(_currentValue);
+        _onConfirm.Invoke(_currentValue);
     }
 }

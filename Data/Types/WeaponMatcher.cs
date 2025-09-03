@@ -1,18 +1,20 @@
 using Verse;
+using CWF.Extensions;
+
+// ReSharper disable UnassignedField.Global
 
 namespace CWF;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class WeaponMatcher {
-    public List<ThingDef> weaponDefs;
-    public List<string> weaponTags;
+    public List<ThingDef>? weaponDefs;
+    public List<string>? weaponTags;
 
     public bool IsMatch(ThingDef weaponDef) {
-        if (weaponDef == null) return false;
+        if (!weaponDefs.IsNullOrEmpty() && weaponDefs.Contains(weaponDef)) return true;
 
-        if (!weaponDefs.NullOrEmpty() && weaponDefs.Contains(weaponDef)) return true;
+        if (weaponTags.IsNullOrEmpty() || weaponDef.weaponTags.NullOrEmpty()) return false;
 
-        if (weaponTags.NullOrEmpty() || weaponDef.weaponTags.NullOrEmpty()) return false;
-
-        return Enumerable.Any(weaponTags, tag => weaponDef.weaponTags.Contains(tag));
+        return weaponTags.Any(tag => weaponDef.weaponTags.Contains(tag));
     }
 }

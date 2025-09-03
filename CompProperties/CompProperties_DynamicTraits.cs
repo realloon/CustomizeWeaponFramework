@@ -3,9 +3,11 @@ using Verse;
 
 namespace CWF;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class CompProperties_DynamicTraits : CompProperties {
-    public List<Part> supportParts = new();
-    public List<WeaponTraitDef> defaultWeaponTraitDefs = new();
+    // ReSharper disable once CollectionNeverUpdated.Global
+    public readonly List<Part> supportParts = new();
+    public readonly List<WeaponTraitDef> defaultWeaponTraitDefs = new();
 
     public CompProperties_DynamicTraits() => compClass = typeof(CompDynamicTraits);
 }

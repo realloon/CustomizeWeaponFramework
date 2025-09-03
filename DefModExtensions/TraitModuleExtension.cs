@@ -1,10 +1,13 @@
 using RimWorld;
 using Verse;
 
+// ReSharper disable UnassignedField.Global
+
 namespace CWF;
 
+// ReSharper disable once ClassNeverInstantiated.Global
 public class TraitModuleExtension : DefModExtension {
-    public WeaponTraitDef weaponTraitDef = new();
+    public readonly WeaponTraitDef weaponTraitDef = new();
     public Part part;
 
     public List<ConditionalPartModifier>? conditionalPartModifiers;

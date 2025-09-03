@@ -12,7 +12,8 @@ namespace CWF.HarmonyPatches;
     }
 )]
 public static class Postfix_Projectile_Launch_StoppingPower {
-    public static void Postfix(Projectile __instance, Thing equipment) {
+    // ReSharper disable once InconsistentNaming
+    public static void Postfix(Projectile __instance, Thing? equipment) {
         if (equipment == null || !equipment.TryGetComp<CompDynamicTraits>(out var comp)) return;
 
         foreach (var trait in comp.Traits) {

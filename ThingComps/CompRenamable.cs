@@ -1,24 +1,25 @@
+using RimWorld;
 using Verse;
+using CWF.Extensions;
 
 namespace CWF;
 
 public class CompRenamable : ThingComp {
-    private string _nickname;
+    private string? _nickname;
 
-    public string Nickname {
+    public string? Nickname {
         get => _nickname;
         set {
-            if (!string.IsNullOrEmpty(value)) _nickname = value;
+            if (!value.NullOrEmpty()) _nickname = value;
 
-            var artComp = parent.TryGetComp<RimWorld.CompArt>();
-            if (artComp != null) {
-                artComp.Title = value;
+            if (parent.TryGetComp<CompArt>(out var compArt)) {
+                compArt.Title = value;
             }
         }
     }
 
     public override string TransformLabel(string label) {
-        return !Nickname.NullOrEmpty() ? Nickname : label;
+        return !Nickname.IsNullOrEmpty() ? Nickname : label;
     }
 
     public override void PostExposeData() {
@@ -28,8 +29,9 @@ public class CompRenamable : ThingComp {
 
     // debug
     public override IEnumerable<Gizmo> CompGetGizmosExtra() {
-        foreach (var g in base.CompGetGizmosExtra())
+        foreach (var g in base.CompGetGizmosExtra()) {
             yield return g;
+        }
 
         if (!Prefs.DevMode) yield break;
 

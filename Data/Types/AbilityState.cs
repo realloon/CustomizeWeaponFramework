@@ -4,7 +4,7 @@ using Verse;
 namespace CWF;
 
 public class AbilityState : IExposable {
-    public string defName;
+    public string? defName;
     public int remainingCharges;
     public int cooldownTicksRemaining;
     public int cooldownTicksTotal;

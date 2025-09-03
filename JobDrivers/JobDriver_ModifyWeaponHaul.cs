@@ -11,7 +11,7 @@ public class JobDriver_ModifyWeaponHaul : JobDriver {
     private const int TicksPerModification = 60;
 
     private Thing Weapon => job.GetTarget(WeaponInd).Thing;
-    private List<ModificationData> ModDataList => (job.source as JobGiver_ModifyWeapon)?.ModDataList;
+    private List<ModificationData>? ModDataList => (job.source as JobGiver_ModifyWeapon)?.ModDataList;
 
     public override bool TryMakePreToilReservations(bool errorOnFailed) {
         // reserve weapon

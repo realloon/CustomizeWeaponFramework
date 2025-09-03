@@ -1,12 +1,12 @@
-using RimWorld;
 using UnityEngine;
+using RimWorld;
 using Verse;
 
 namespace CWF;
 
 public class Recipe_UpgradeWeapon : RecipeWorker {
-    // Cache: Key is the base weapon Def, Value is the custom weapon Def.
-    private static Dictionary<ThingDef, ThingDef> _upgradePaths;
+    // Cache: Key is the base weaponDef, Value is the custom weaponDef.
+    private static Dictionary<ThingDef, ThingDef> _upgradePaths = new();
 
     // Static constructor, runs once when the game loads.
     static Recipe_UpgradeWeapon() {
@@ -18,7 +18,7 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
     /// </summary>
     private static void BuildUpgradePathsCache() {
         _upgradePaths = new Dictionary<ThingDef, ThingDef>();
-        var allThingDefs = Verse.DefDatabase<ThingDef>.AllDefs;
+        var allThingDefs = DefDatabase<ThingDef>.AllDefs;
 
         foreach (var thingDef in allThingDefs) {
             var ext = thingDef.GetModExtension<UpgradeExtension>();
@@ -41,9 +41,7 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
     /// <summary>
     /// Called by the bill menu to check if a given 'thing' is a valid ingredient.
     /// </summary>
-    public override AcceptanceReport AvailableReport(Thing thing, BodyPartRecord part = null) {
-        if (thing == null) return false;
-
+    public override AcceptanceReport AvailableReport(Thing thing, BodyPartRecord? _ = null) {
         return _upgradePaths.ContainsKey(thing.def)
             ? AcceptanceReport.WasAccepted
             : new AcceptanceReport("CWF_Message_WeaponCannotBeUpgraded".Translate(thing.LabelShortCap));
@@ -55,18 +53,18 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
     public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients) {
         base.Notify_IterationCompleted(billDoer, ingredients);
 
-        // 1. Find the base weapon from the ingredients list.
+        // Find the base weapon from the ingredients list.
         var baseWeapon = Enumerable.FirstOrDefault(ingredients, ing => _upgradePaths.ContainsKey(ing.def));
         if (baseWeapon == null) {
-            Log.Error(
-                "[CWF] Recipe_UpgradeWeapon's Notify_IterationCompleted was called, but no valid base weapon was found in ingredients.");
+            Log.Error("[CWF] Recipe_UpgradeWeapon's Notify_IterationCompleted was called, " +
+                      "but no valid base weapon was found in ingredients.");
             return;
         }
 
-        // 2. Get the ThingDef for the custom weapon to be created.
+        // Get the ThingDef for the custom weapon to be created.
         var customWeaponDef = _upgradePaths[baseWeapon.def];
 
-        // 3. Read the quality and durability from the original weapon.
+        // Read the quality and durability from the original weapon.
         var hasQuality = baseWeapon.TryGetComp<CompQuality>(out var qualityComp);
         var quality = hasQuality ? qualityComp.Quality : QualityCategory.Good;
 
@@ -74,10 +72,10 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
         // This is the direct, simplified way to get the current durability.
         var currentHitPoints = baseWeapon.HitPoints;
 
-        // 4. Create the new custom weapon instance.
+        // Create the new custom weapon instance.
         var customWeapon = ThingMaker.MakeThing(customWeaponDef);
 
-        // 5. Apply the saved quality and durability to the new weapon.
+        // Apply the saved quality and durability to the new weapon.
         customWeapon.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
 
         // Calculate the health percentage.
@@ -88,7 +86,7 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
         // Set the final hit points, using RoundRandom and ensuring it's at least 1.
         customWeapon.HitPoints = Mathf.Max(1, GenMath.RoundRandom(newHitPoints));
 
-        // 6. Spawn the newly created weapon near the crafter.
+        // Spawn the newly created weapon near the crafter.
         GenPlace.TryPlaceThing(customWeapon, billDoer.Position, billDoer.Map, ThingPlaceMode.Near);
     }
 }

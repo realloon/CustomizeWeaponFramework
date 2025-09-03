@@ -7,8 +7,8 @@ namespace CWF.ViewDrawers;
 public class MainDrawer {
     // Data source
     private readonly Thing _weapon;
-    private readonly CompDynamicTraits _compDynamicTraits;
-    private readonly Action<Part, WeaponTraitDef> _onSlotClick;
+    private readonly CompDynamicTraits? _compDynamicTraits;
+    private readonly Action<Part, WeaponTraitDef?> _onSlotClick;
 
     private const float SlotSize = 56f;
     private const float SlotPadding = 12f;
@@ -23,7 +23,7 @@ public class MainDrawer {
     private static readonly Part[] RightParts = { Part.Muzzle, Part.Ammo };
     private static readonly Part[] BottomParts = { Part.Grip, Part.Trigger, Part.Magazine, Part.Underbarrel };
 
-    public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef> onSlotClick) {
+    public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
         _onSlotClick = onSlotClick;
@@ -72,6 +72,8 @@ public class MainDrawer {
 
     // === Helper ===
     private void DrawPartGroup(Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
+        if (_compDynamicTraits == null) return;
+
         var supportedParts = groupParts.Where(p => _compDynamicTraits.AvailableParts.Contains(p)).ToList();
         if (supportedParts.Count == 0) return;
 
@@ -101,9 +103,9 @@ public class MainDrawer {
     }
 
     private void TryDrawSlot(Part part, Rect rect) {
-        if (!_compDynamicTraits.AvailableParts.Contains(part)) return;
+        if (_compDynamicTraits == null || !_compDynamicTraits.AvailableParts.Contains(part)) return;
 
-        var installedTrait = _compDynamicTraits?.GetInstalledTraitFor(part);
+        var installedTrait = _compDynamicTraits.GetInstalledTraitFor(part);
         bool clicked;
 
         if (installedTrait != null) {
@@ -135,7 +137,7 @@ public class MainDrawer {
             clicked = DrawPartSlot(rect, $"CWF_UI_{part.ToString()}".Translate());
         }
 
-        if (clicked) _onSlotClick?.Invoke(part, installedTrait);
+        if (clicked) _onSlotClick.Invoke(part, installedTrait);
     }
 
     private static void DrawModuleTexture(Rect rect, ModuleGraphicData moduleGraphicData) {

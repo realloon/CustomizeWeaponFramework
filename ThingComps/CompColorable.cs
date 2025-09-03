@@ -5,11 +5,11 @@ using Verse;
 namespace CWF;
 
 public class CompColorable : ThingComp {
-    private ColorDef _colorDef;
+    private ColorDef? _colorDef;
 
-    public ColorDef ColorDef {
+    public ColorDef? ColorDef {
         get => _colorDef;
-        set {
+        private set {
             if (_colorDef == value) return;
 
             _colorDef = value;
@@ -17,7 +17,7 @@ public class CompColorable : ThingComp {
         }
     }
 
-    public void RandomizeColor() {
+    private void RandomizeColor() {
         var randomColor = DefDatabase<ColorDef>.AllDefs
             .Where(c => c.colorType == ColorType.Weapon && c.randomlyPickable)
             .RandomElementWithFallback();
@@ -47,8 +47,9 @@ public class CompColorable : ThingComp {
 
     // debug
     public override IEnumerable<Gizmo> CompGetGizmosExtra() {
-        foreach (var g in base.CompGetGizmosExtra())
+        foreach (var g in base.CompGetGizmosExtra()) {
             yield return g;
+        }
 
         if (!Prefs.DevMode) yield break;
 

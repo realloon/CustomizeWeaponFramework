@@ -3,6 +3,7 @@ using HarmonyLib;
 using UnityEngine;
 using RimWorld;
 using Verse;
+using CWF.Extensions;
 
 namespace CWF;
 
@@ -20,10 +21,7 @@ public class CompDynamicTraits : ThingComp {
     public Dictionary<Part, WeaponTraitDef> InstalledTraits {
         get => new(_installedTraits);
         set {
-            _installedTraits = value != null
-                ? new Dictionary<Part, WeaponTraitDef>(value)
-                : new Dictionary<Part, WeaponTraitDef>();
-
+            _installedTraits = new Dictionary<Part, WeaponTraitDef>(value);
             OnTraitsChanged();
         }
     }
@@ -48,11 +46,11 @@ public class CompDynamicTraits : ThingComp {
         OnTraitsChanged();
     }
 
-    public void ClearTraits() {
-        _installedTraits.Clear();
-
-        OnTraitsChanged();
-    }
+    // public void ClearTraits() {
+    //     _installedTraits.Clear();
+    //
+    //     OnTraitsChanged();
+    // }
 
     // === Stat ===
     public override float GetStatOffset(StatDef stat) {
@@ -68,7 +66,7 @@ public class CompDynamicTraits : ThingComp {
 
     // === Display ===
     public override void GetStatsExplanation(StatDef stat, StringBuilder sb, string whitespace = "") {
-        StringBuilder stringBuilder = null;
+        StringBuilder? stringBuilder = null;
 
         foreach (var weaponTraitDef in Traits) {
             // offset
@@ -98,8 +96,8 @@ public class CompDynamicTraits : ThingComp {
         sb.Append(stringBuilder);
     }
 
-    public override string CompInspectStringExtra() {
-        if (_installedTraits.NullOrEmpty()) return null;
+    public override string? CompInspectStringExtra() {
+        if (_installedTraits.IsNullOrEmpty()) return null;
 
         return "CWF_UI_WeaponModules".Translate() + ": " + Traits
             .Select(traitDef => traitDef.label).ToCommaList()
@@ -107,7 +105,7 @@ public class CompDynamicTraits : ThingComp {
     }
 
     public override IEnumerable<StatDrawEntry> SpecialDisplayStats() {
-        if (_installedTraits.NullOrEmpty()) yield break;
+        if (_installedTraits.IsNullOrEmpty()) yield break;
 
         var sb = new StringBuilder();
         sb.AppendLine("CWF_UI_WeaponModules_Desc".Translate());
@@ -120,7 +118,7 @@ public class CompDynamicTraits : ThingComp {
             sb.AppendLine(trait.description);
 
             var effectLines = TraitModuleDatabase.GetTraitEffectLines(trait);
-            if (!effectLines.NullOrEmpty()) {
+            if (!effectLines.IsNullOrEmpty()) {
                 sb.AppendLine(effectLines.ToLineList());
             }
 
@@ -175,16 +173,15 @@ public class CompDynamicTraits : ThingComp {
             action = () => {
                 var availableTraits = DefDatabase<WeaponTraitDef>.AllDefs
                     .Where(traitDef => {
-                        if (!TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) return false;
+                        if (!traitDef.TryGetPart(out var part)) return false;
                         if (_installedTraits.ContainsKey(part)) return false;
 
-                        var moduleDef = TraitModuleDatabase.GetModuleDefFor(traitDef);
-                        return moduleDef != null &&
+                        return traitDef.TryGetModuleDef(out var moduleDef) &&
                                TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
                     })
                     .ToList();
 
-                if (availableTraits.NullOrEmpty()) {
+                if (availableTraits.IsNullOrEmpty()) {
                     Messages.Message("Debug: No available traits to install.", MessageTypeDefOf.NeutralEvent);
                     return;
                 }
@@ -197,7 +194,7 @@ public class CompDynamicTraits : ThingComp {
                     var option = new FloatMenuOption(
                         localTraitDef.LabelCap,
                         () => {
-                            if (!TraitModuleDatabase.TryGetPartForTrait(localTraitDef, out var part)) return;
+                            if (!localTraitDef.TryGetPart(out var part)) return;
                             InstallTrait(part, localTraitDef);
                         }
                     );
@@ -220,7 +217,7 @@ public class CompDynamicTraits : ThingComp {
                     var option = new FloatMenuOption(
                         traitDef.LabelCap,
                         () => {
-                            if (!TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) return;
+                            if (!traitDef.TryGetPart(out var part)) return;
                             UninstallTrait(part);
                         }
                     );
@@ -239,7 +236,7 @@ public class CompDynamicTraits : ThingComp {
 
     public IEnumerable<Gizmo> GetWornGizmosExtra(Pawn owner) {
         // harmony patched
-        if (owner != null && owner.Faction == Faction.OfPlayer) {
+        if (owner.Faction == Faction.OfPlayer) {
             yield return new Command_Action {
                 defaultLabel = "CWF_UI_WeaponPanel".Translate(),
                 defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
@@ -250,7 +247,7 @@ public class CompDynamicTraits : ThingComp {
     }
 
     // Public Helper
-    public WeaponTraitDef GetInstalledTraitFor(Part part) {
+    public WeaponTraitDef? GetInstalledTraitFor(Part part) {
         _installedTraits.TryGetValue(part, out var traitDef);
         return traitDef;
     }
@@ -258,10 +255,10 @@ public class CompDynamicTraits : ThingComp {
     // === Private Helper ===
     private void InitializeTraits() {
         var defaultTraitsList = Props.defaultWeaponTraitDefs;
-        if (defaultTraitsList.NullOrEmpty()) return;
+        if (defaultTraitsList.IsNullOrEmpty()) return;
 
         foreach (var traitDef in defaultTraitsList) {
-            if (TraitModuleDatabase.TryGetPartForTrait(traitDef, out var part)) {
+            if (traitDef.TryGetPart(out var part)) {
                 // Found the corresponding slot; now check whether the slot is already occupied (conflict check).
                 if (_installedTraits.TryGetValue(part, out var existingTrait)) {
                     Log.Error($"[CWF] Initialization Error for {parent.def.defName}: " +
@@ -301,18 +298,19 @@ public class CompDynamicTraits : ThingComp {
         _availableParts = new HashSet<Part>(Props.supportParts);
 
         foreach (var traitDef in Traits) {
-            var modifiers = TraitModuleDatabase.GetModuleDefFor(traitDef)?
-                .GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
+            if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
+
+            var modifiers = moduleDef.GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
             if (modifiers == null) continue;
 
             foreach (var rule in modifiers) {
                 if (rule.matcher == null || !rule.matcher.IsMatch(parent.def)) continue;
 
-                if (!rule.enablesParts.NullOrEmpty()) {
+                if (!rule.enablesParts.IsNullOrEmpty()) {
                     _availableParts.UnionWith(rule.enablesParts);
                 }
 
-                if (!rule.disablesParts.NullOrEmpty()) {
+                if (!rule.disablesParts.IsNullOrEmpty()) {
                     _availableParts.ExceptWith(rule.disablesParts);
                 }
             }
@@ -342,7 +340,7 @@ public class CompDynamicTraits : ThingComp {
             if (abilityComp == null) return;
 
             // only the first ability is applied
-            var traitWithAbility = Traits.FirstOrFallback(trait => trait.abilityProps != null);
+            var traitWithAbility = Traits.FirstOrFallback(trait => trait?.abilityProps != null);
 
             if (traitWithAbility != null) {
                 abilityComp.props = traitWithAbility.abilityProps;

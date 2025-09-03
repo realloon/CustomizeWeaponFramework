@@ -6,8 +6,8 @@ namespace CWF;
 public class ModificationData : IExposable {
     public ModificationType Type;
     public Part Part;
-    public WeaponTraitDef Trait;
-    public ThingDef ModuleDef;
+    public WeaponTraitDef Trait = null!;
+    public ThingDef ModuleDef = null!;
 
     public void ExposeData() {
         Scribe_Values.Look(ref Type, "type");

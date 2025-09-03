@@ -8,10 +8,10 @@ using Verse.Sound;
 namespace CWF;
 
 public class CompAbilityProvider : ThingComp, IReloadableComp {
-    private Pawn _holder;
+    private Pawn? _holder;
     private List<CompProperties_EquippableAbility> _abilityPropsToManage = new();
     private Dictionary<Ability, CompProperties_EquippableAbility> _managedAbilities = new();
-    private List<AbilityState> _savedAbilityStates = new();
+    private List<AbilityState>? _savedAbilityStates = new();
 
     public void SetOrUpdateAbilities(List<CompProperties_EquippableAbilityReloadable> newPropsList, bool isPostLoad) {
         _abilityPropsToManage = newPropsList
@@ -23,7 +23,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
         }
     }
 
-    public void OnEquipped(Pawn pawn) {
+    public void OnEquipped(Pawn? pawn) {
         if (pawn == null) return;
 
         _holder = pawn;
@@ -74,7 +74,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
 
             newAbility.maxCharges = reloadableProps.maxCharges;
             var savedState = _savedAbilityStates?
-                .FirstOrFallback(s => s.defName == newAbility.def.defName);
+                .FirstOrFallback(s => s?.defName == newAbility.def.defName);
 
             if (savedState != null) {
                 newAbility.RemainingCharges = savedState.remainingCharges;
@@ -89,7 +89,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
                     cooldownDurationField.SetValue(newAbility, savedState.cooldownTicksTotal);
                 }
 
-                _savedAbilityStates.Remove(savedState);
+                _savedAbilityStates?.Remove(savedState);
             } else if (!isPostLoad) {
                 newAbility.RemainingCharges = newAbility.maxCharges;
             }
@@ -115,13 +115,13 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
         }
 
         if (Scribe.mode is LoadSaveMode.LoadingVars) {
-            List<string> defNameList = null;
+            List<string>? defNameList = null;
             Scribe_Collections.Look(ref defNameList, "abilityPropsToManageDefNames", LookMode.Value);
             if (defNameList != null) {
                 _abilityPropsToManage = new List<CompProperties_EquippableAbility>();
                 foreach (var defName in defNameList) {
                     var trait = DefDatabase<WeaponTraitDef>.AllDefs.FirstOrFallback(t =>
-                        t.abilityProps?.abilityDef.defName == defName);
+                        t?.abilityProps?.abilityDef.defName == defName);
                     if (trait != null) {
                         _abilityPropsToManage.Add(trait.abilityProps);
                     }
@@ -141,21 +141,21 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
 
     #region impl IReloadableComp
 
-    private Ability FirstReloadableAbility =>
-        _managedAbilities.Keys.FirstOrFallback(a =>
+    private Ability? FirstReloadableAbility =>
+        _managedAbilities.Keys.FirstOrDefault(a =>
             a.UsesCharges && _managedAbilities[a] is CompProperties_EquippableAbilityReloadable);
 
-    private CompProperties_EquippableAbilityReloadable ReloadableProps =>
+    private CompProperties_EquippableAbilityReloadable? ReloadableProps =>
         _managedAbilities.Values.OfType<CompProperties_EquippableAbilityReloadable>().FirstOrFallback();
 
     public Thing ReloadableThing => parent;
-    public ThingDef AmmoDef => ReloadableProps?.ammoDef;
+    public ThingDef? AmmoDef => ReloadableProps?.ammoDef;
     public int BaseReloadTicks => ReloadableProps?.baseReloadTicks ?? 60;
     public int RemainingCharges => FirstReloadableAbility?.RemainingCharges ?? 0;
     public int MaxCharges => FirstReloadableAbility?.maxCharges ?? 0;
     public string LabelRemaining => $"{RemainingCharges} / {MaxCharges}";
 
-    public bool CanBeUsed(out string reason) {
+    public bool CanBeUsed(out string? reason) {
         reason = null;
         var ability = FirstReloadableAbility;
         if (ability == null || ability.RemainingCharges > 0) return true;
@@ -173,7 +173,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
     }
 
     public void ReloadFrom(Thing ammo) {
-        var abilityToReload = _managedAbilities.Keys.FirstOrFallback(a => {
+        var abilityToReload = _managedAbilities.Keys.FirstOrDefault(a => {
             var targetProps = _managedAbilities[a] as CompProperties_EquippableAbilityReloadable;
             return targetProps?.ammoDef == ammo.def && a.RemainingCharges < a.maxCharges;
         });
@@ -199,7 +199,7 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
     public int MinAmmoNeeded(bool allowForcedReload) {
         if (!NeedsReload(allowForcedReload)) return 0;
 
-        var ability = _managedAbilities.Keys.FirstOrFallback(a => a.RemainingCharges < a.maxCharges);
+        var ability = _managedAbilities.Keys.FirstOrDefault(a => a.RemainingCharges < a.maxCharges);
         var abilityProps = ability != null
             ? _managedAbilities[ability] as CompProperties_EquippableAbilityReloadable
             : null;
@@ -234,8 +234,9 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
 
     public string DisabledReason(int minNeeded, int maxNeeded) {
         return AmmoDef == null
-            ? "CommandReload_NoCharges".Translate(ReloadableProps.ChargeNounArgument)
-            : "CommandReload_NoAmmo".Translate(ReloadableProps.ChargeNounArgument, AmmoDef.Named("AMMO"),
+            // Caller guarantees non-null context by checking FirstReloadableAbility first.
+            ? "CommandReload_NoCharges".Translate(ReloadableProps!.ChargeNounArgument)
+            : "CommandReload_NoAmmo".Translate(ReloadableProps!.ChargeNounArgument, AmmoDef.Named("AMMO"),
                 minNeeded.Named("COUNT"));
     }
 

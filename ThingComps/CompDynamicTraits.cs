@@ -282,8 +282,7 @@ public class CompDynamicTraits : ThingComp {
         ClearAllCaches();
 
         // graphic dirty
-        var compDynamicGraphic = parent.TryGetComp<CompDynamicGraphic>();
-        if (compDynamicGraphic == null) return;
+        if (!parent.TryGetComp<CompDynamicGraphic>(out var compDynamicGraphic)) return;
         compDynamicGraphic.Notify_GraphicDirty();
         if (parent.Map != null) {
             // ground graphic dirty

@@ -324,41 +324,14 @@ public class CompDynamicTraits : ThingComp {
 
     private void SetupAbility(bool isPostLoad) {
         var abilityProvider = parent.TryGetComp<CompAbilityProvider>();
+        if (abilityProvider == null) return;
 
-        if (abilityProvider != null) {
-            // === Enhancement ===
-            var propsList = Traits
-                .Where(trait => trait.abilityProps != null)
-                .Select(trait => trait.abilityProps)
-                .ToList();
+        var propsList = Traits
+            .Where(trait => trait.abilityProps != null)
+            .Select(trait => trait.abilityProps)
+            .ToList();
 
-            abilityProvider.SetOrUpdateAbilities(propsList, isPostLoad);
-        } else {
-            // === Degradation ===
-            var abilityComp = parent.TryGetComp<CompEquippableAbilityReloadable>();
-            if (abilityComp == null) return;
-
-            // only the first ability is applied
-            var traitWithAbility = Traits.FirstOrFallback(trait => trait?.abilityProps != null);
-
-            if (traitWithAbility != null) {
-                abilityComp.props = traitWithAbility.abilityProps;
-            } else {
-                abilityComp.props = parent.def.comps
-                    .OfType<CompProperties_EquippableAbilityReloadable>()
-                    .FirstOrFallback();
-            }
-
-            if (isPostLoad) return;
-
-            abilityComp.Notify_PropsChanged();
-
-            // refresh gizmo
-            var holder = parent.ParentHolder is Pawn_EquipmentTracker equipmentTracker
-                ? equipmentTracker.pawn
-                : null;
-            holder?.abilities.Notify_TemporaryAbilitiesChanged();
-        }
+        abilityProvider.SetOrUpdateAbilities(propsList, isPostLoad);
     }
 
     private void ClearAllCaches() {

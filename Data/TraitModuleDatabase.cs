@@ -136,7 +136,8 @@ public static class TraitModuleDatabase {
         return ext.requiredWeaponDefs.IsNullOrEmpty() && ext.requiredWeaponTags.IsNullOrEmpty();
     }
 
-    // Private helper
+    #region Helpers
+
     private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) yield break;
@@ -171,4 +172,6 @@ public static class TraitModuleDatabase {
             yield return weaponDef;
         }
     }
+
+    #endregion
 }

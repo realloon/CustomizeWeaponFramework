@@ -10,6 +10,12 @@ public class InteractionController {
     private readonly CompDynamicTraits _compDynamicTraits;
     public event Action OnDataChanged = delegate { };
 
+    private readonly List<WeaponTraitDef> _stagedUninstalls = new();
+
+    private string FailureReason => _weapon.ParentHolder is Pawn
+        ? "CWF_UI_NoCompatiblePartsInInventory".Translate()
+        : "CWF_UI_NoCompatiblePartsOnMap".Translate();
+
     public InteractionController(Thing weapon) {
         _weapon = weapon;
         _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
@@ -28,10 +34,14 @@ public class InteractionController {
             BuildUninstallOption(part, options, installedTrait);
         }
 
-        if (Enumerable.Any(options)) Find.WindowStack.Add(new FloatMenu(options));
+        if (Enumerable.Any(options)) {
+            Find.WindowStack.Add(new FloatMenu(options));
+        }
     }
 
     private void BuildInstallOptions(Part part, List<FloatMenuOption> options) {
+        var installCandidates = new Dictionary<WeaponTraitDef, ThingDef>();
+
         var compatibleModuleDefs = new HashSet<ThingDef>(GetCompatibleModuleDefsFor(part));
 
         var ownerPawn = _weapon.ParentHolder switch {
@@ -40,62 +50,43 @@ public class InteractionController {
             _ => null
         };
 
-        if (!Enumerable.Any(compatibleModuleDefs)) {
-            options.Add(new FloatMenuOption(FailureReason(), null));
+        // from inventory or map
+        if (compatibleModuleDefs.Any()) {
+            var searchScope = ownerPawn != null
+                ? ownerPawn.inventory.innerContainer
+                : _weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
+
+            var availableModules = searchScope.Where(t =>
+                compatibleModuleDefs.Contains(t.def) &&
+                (ownerPawn != null || !t.IsForbidden(Faction.OfPlayer))
+            );
+
+            foreach (var module in availableModules) {
+                var trait = module.def.GetModExtension<TraitModuleExtension>().weaponTraitDef;
+                installCandidates.TryAdd(trait, module.def);
+            }
+        }
+
+        // from stack
+        var stagedCompatibleTraits = _stagedUninstalls
+            .Where(trait => trait.TryGetPart(out var p) && p == part);
+        foreach (var trait in stagedCompatibleTraits) {
+            if (trait.TryGetModuleDef(out var moduleDef)) {
+                installCandidates.TryAdd(trait, moduleDef);
+            }
+        }
+
+        if (!installCandidates.Any()) {
+            options.Add(new FloatMenuOption(FailureReason, null));
             return;
         }
 
-        var searchScope = ownerPawn != null
-            ? ownerPawn.inventory.innerContainer
-            : _weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
-
-        var availableModules = searchScope.Where(t =>
-            compatibleModuleDefs.Contains(t.def) &&
-            (ownerPawn != null || !t.IsForbidden(Faction.OfPlayer))
-        );
-
-        var groupedModules = availableModules.GroupBy(t => t.def);
-
-        foreach (var group in groupedModules) {
-            var moduleDef = group.Key;
-            var traitToInstall = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
-
-            options.Add(new FloatMenuOption(traitToInstall.LabelCap, () => {
-                var analysis = AnalyzeInstallConflict(moduleDef);
-                if (!analysis.HasConflict) {
-                    DoInstall(part, traitToInstall);
-                } else {
-                    ShowConfirmationDialog(
-                        "CWF_UI_ConfirmInstallTitle".Translate(),
-                        "CWF_UI_ConfirmInstallBody".Translate(
-                            traitToInstall.LabelCap.Named("MODULE"),
-                            string.Join("\n", analysis.ModulesToRemove
-                                    .Select(t => " - " + t.LabelCap.ToString()))
-                                .Named("CONFLICTS")
-                        ),
-                        () => {
-                            foreach (var conflictTrait in analysis.ModulesToRemove) {
-                                if (conflictTrait.TryGetPart(out var conflictPart)) {
-                                    DoUninstall(conflictPart);
-                                }
-                            }
-
-                            DoInstall(part, traitToInstall);
-                        }
-                    );
-                }
-            }));
+        foreach (var (traitToInstall, _) in installCandidates) {
+            var installAction = CreateInstallAction(part, traitToInstall);
+            options.Add(new FloatMenuOption(traitToInstall.LabelCap, installAction));
         }
-
-        if (Enumerable.Any(options)) return;
-
-        options.Add(new FloatMenuOption(FailureReason(), null));
-        return;
-
-        TaggedString FailureReason() => ownerPawn != null
-            ? "CWF_UI_NoCompatiblePartsInInventory".Translate()
-            : "CWF_UI_NoCompatiblePartsOnMap".Translate();
     }
+
 
     private void BuildUninstallOption(Part part, List<FloatMenuOption> options, WeaponTraitDef installedTrait) {
         options.Add(new FloatMenuOption("CWF_UI_Uninstall".Translate(installedTrait.LabelCap), () => {
@@ -126,18 +117,59 @@ public class InteractionController {
     }
 
     private void DoInstall(Part part, WeaponTraitDef traitToInstall) {
+        _stagedUninstalls.Remove(traitToInstall);
+
         _compDynamicTraits.InstallTrait(part, traitToInstall);
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
         OnDataChanged();
     }
 
     private void DoUninstall(Part part) {
+        var traitToUninstall = _compDynamicTraits.GetInstalledTraitFor(part);
+        if (traitToUninstall != null) {
+            _stagedUninstalls.Add(traitToUninstall);
+        }
+
         _compDynamicTraits.UninstallTrait(part);
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
         OnDataChanged();
     }
 
-    #region Consequence Analysis
+    #region Helpers
+
+    private Action CreateInstallAction(Part part, WeaponTraitDef traitToInstall) {
+        return () => {
+            if (!traitToInstall.TryGetModuleDef(out var moduleDef)) {
+                DoInstall(part, traitToInstall);
+                return;
+            }
+
+            var analysis = AnalyzeInstallConflict(moduleDef);
+            if (!analysis.HasConflict) {
+                DoInstall(part, traitToInstall);
+                return;
+            }
+
+            ShowConfirmationDialog(
+                "CWF_UI_ConfirmInstallTitle".Translate(),
+                "CWF_UI_ConfirmInstallBody".Translate(
+                    traitToInstall.LabelCap.Named("MODULE"),
+                    string.Join("\n", analysis.ModulesToRemove
+                            .Select(t => " - " + t.LabelCap.ToString()))
+                        .Named("CONFLICTS")
+                ),
+                () => {
+                    foreach (var conflictTrait in analysis.ModulesToRemove) {
+                        if (conflictTrait.TryGetPart(out var conflictPart)) {
+                            DoUninstall(conflictPart);
+                        }
+                    }
+
+                    DoInstall(part, traitToInstall);
+                }
+            );
+        };
+    }
 
     private ConflictAnalysisResult AnalyzeInstallConflict(ThingDef moduleToInstall) {
         var result = new ConflictAnalysisResult();
@@ -205,10 +237,6 @@ public class InteractionController {
 
         return availableParts;
     }
-
-    #endregion
-
-    #region UI & Compatibility
 
     private static void ShowConfirmationDialog(string title, string text, Action onConfirm) {
         var dialog = new Dialog_MessageBox(

@@ -164,7 +164,7 @@ public class CompDynamicTraits : ThingComp {
             defaultLabel = "CWF_UI_WeaponPanel".Translate(),
             defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
             icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
-            action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
+            action = () => { Find.WindowStack.Add(new WeaponWindow(parent)); }
         };
 
         if (!Prefs.DevMode) yield break;
@@ -241,7 +241,7 @@ public class CompDynamicTraits : ThingComp {
                 defaultLabel = "CWF_UI_WeaponPanel".Translate(),
                 defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
                 icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
-                action = () => { Find.WindowStack.Add(new CustomizeWeaponWindow(parent)); }
+                action = () => { Find.WindowStack.Add(new WeaponWindow(parent)); }
             };
         }
     }

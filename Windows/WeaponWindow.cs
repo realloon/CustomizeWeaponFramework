@@ -5,7 +5,7 @@ using CWF.ViewDrawers;
 
 namespace CWF;
 
-public class CustomizeWeaponWindow : Window {
+public class WeaponWindow : Window {
     private readonly HeaderDrawer _headerDrawer;
     private readonly AsideDrawer _asideDrawer;
     private readonly MainDrawer _mainDrawer;
@@ -13,7 +13,7 @@ public class CustomizeWeaponWindow : Window {
     private readonly InteractionController _interactionController;
     private readonly JobDispatcher _jobDispatcher;
 
-    public CustomizeWeaponWindow(Thing weapon) {
+    public WeaponWindow(Thing weapon) {
         // === UI configs ===
         doCloseX = true;
         closeOnClickedOutside = false;

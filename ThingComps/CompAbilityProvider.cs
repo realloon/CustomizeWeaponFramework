@@ -9,9 +9,9 @@ namespace CWF;
 
 public class CompAbilityProvider : ThingComp, IReloadableComp {
     private Pawn? _holder;
-    private List<CompProperties_EquippableAbility> _abilityPropsToManage = new();
+    private List<CompProperties_EquippableAbility> _abilityPropsToManage = [];
     private Dictionary<Ability, CompProperties_EquippableAbility> _managedAbilities = new();
-    private List<AbilityState>? _savedAbilityStates = new();
+    private List<AbilityState>? _savedAbilityStates = [];
 
     public void SetOrUpdateAbilities(List<CompProperties_EquippableAbilityReloadable> newPropsList, bool isPostLoad) {
         _abilityPropsToManage = newPropsList

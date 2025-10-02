@@ -33,7 +33,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats {
 
         var statCat = __instance.IsMeleeWeapon ? StatCategoryDefOf.Weapon_Melee : StatCategoryDefOf.Weapon_Ranged;
 
-        if (verb.showBurstShotStats && verb.burstShotCount > 1) {
+        if (verb is { showBurstShotStats: true, burstShotCount: > 1 }) {
             // === BurstShotCount ===
             resultList.RemoveAll(entry => entry.DisplayPriorityWithinCategory == 5391);
             var baseBurstCount = (float)verb.burstShotCount;

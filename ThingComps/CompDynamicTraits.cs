@@ -12,7 +12,7 @@ public class CompDynamicTraits : ThingComp {
 
     private Dictionary<Part, WeaponTraitDef> _installedTraits = new();
 
-    private HashSet<Part> _availableParts = new();
+    private HashSet<Part> _availableParts = [];
 
     /// <summary>
     /// Gets a copy of the dictionary containing all currently installed Traits,

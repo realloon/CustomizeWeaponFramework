@@ -3,49 +3,43 @@ using Verse;
 
 namespace CWF.ViewDrawers;
 
-public class AsideDrawer {
-    private readonly SpecDatabase _specDatabase;
-
-    public AsideDrawer(SpecDatabase specDatabase) {
-        _specDatabase = specDatabase;
-    }
-
+public class AsideDrawer(SpecDatabase specDatabase) {
     public void Draw(in Rect rect) {
         var listing = new Listing_Standard();
         listing.Begin(rect);
 
-        if (_specDatabase.IsMeleeWeapon) {
+        if (specDatabase.IsMeleeWeapon) {
             listing.Label("CWF_UI_NotRanged".Translate());
             listing.End();
             return;
         }
 
         // === Weapon Stats ===
-        DrawStatRow(listing, "CWF_UI_Range".Translate(), _specDatabase.Range);
-        DrawStatRow(listing, "CWF_UI_RangeDPS".Translate(), _specDatabase.Dps);
-        DrawStatRow(listing, "CWF_UI_RangeBurstCount".Translate(), _specDatabase.BurstShotCount);
-        DrawStatRow(listing, "CWF_UI_RangeWarmupTime".Translate(), _specDatabase.WarmupTime, "F1", " s");
-        DrawStatRow(listing, "CWF_UI_RangeCooldown".Translate(), _specDatabase.Cooldown, "F1", " s");
+        DrawStatRow(listing, "CWF_UI_Range".Translate(), specDatabase.Range);
+        DrawStatRow(listing, "CWF_UI_RangeDPS".Translate(), specDatabase.Dps);
+        DrawStatRow(listing, "CWF_UI_RangeBurstCount".Translate(), specDatabase.BurstShotCount);
+        DrawStatRow(listing, "CWF_UI_RangeWarmupTime".Translate(), specDatabase.WarmupTime, "F1", " s");
+        DrawStatRow(listing, "CWF_UI_RangeCooldown".Translate(), specDatabase.Cooldown, "F1", " s");
 
         // === Projectile Stats ===
         listing.GapLine();
         listing.Label($"<color=#999999><b>{"CWF_UI_Projectile".Translate()}</b></color>", 22f);
-        DrawStatRow(listing, "CWF_UI_Damage".Translate(), _specDatabase.Damage);
-        DrawStatRow(listing, "CWF_UI_ArmorPenetration".Translate(), _specDatabase.ArmorPenetration, unit: "%");
-        DrawStatRow(listing, "CWF_UI_StoppingPower".Translate(), _specDatabase.StoppingPower, "F1");
+        DrawStatRow(listing, "CWF_UI_Damage".Translate(), specDatabase.Damage);
+        DrawStatRow(listing, "CWF_UI_ArmorPenetration".Translate(), specDatabase.ArmorPenetration, unit: "%");
+        DrawStatRow(listing, "CWF_UI_StoppingPower".Translate(), specDatabase.StoppingPower, "F1");
 
         // === Accuracy Stats ===
         listing.GapLine();
         listing.Label($"<color=#999999><b>{"CWF_UI_Accuracy".Translate()}</b></color>", 22f);
-        DrawStatRow(listing, "CWF_UI_Touch".Translate(), _specDatabase.AccuracyTouch, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Short".Translate(), _specDatabase.AccuracyShort, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Medium".Translate(), _specDatabase.AccuracyMedium, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Long".Translate(), _specDatabase.AccuracyLong, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Touch".Translate(), specDatabase.AccuracyTouch, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Short".Translate(), specDatabase.AccuracyShort, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Medium".Translate(), specDatabase.AccuracyMedium, unit: "%");
+        DrawStatRow(listing, "CWF_UI_Long".Translate(), specDatabase.AccuracyLong, unit: "%");
 
         // === Other Stats ===
         listing.GapLine();
-        DrawStatRow(listing, "Mass".Translate(), _specDatabase.Mass, "F1", "Kg");
-        DrawStatRow(listing, "MarketValueTip".Translate(), _specDatabase.MarketValue);
+        DrawStatRow(listing, "Mass".Translate(), specDatabase.Mass, "F1", "Kg");
+        DrawStatRow(listing, "MarketValueTip".Translate(), specDatabase.MarketValue);
 
         listing.End();
     }

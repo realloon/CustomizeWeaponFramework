@@ -4,7 +4,7 @@ using Verse;
 namespace CWF;
 
 public class ConflictAnalysisResult {
-    public List<WeaponTraitDef> ModulesToRemove { get; } = new();
+    public List<WeaponTraitDef> ModulesToRemove { get; } = [];
 
     public bool HasConflict => !ModulesToRemove.NullOrEmpty();
 }

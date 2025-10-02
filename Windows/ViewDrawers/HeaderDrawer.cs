@@ -13,7 +13,7 @@ public class HeaderDrawer {
         _compRenamable = weapon.TryGetComp<CompRenamable>();
     }
 
-    public void Draw(Rect rect) {
+    public void Draw(in Rect rect) {
         const float iconSize = 40f;
         const float buttonSize = 32f;
         const float gap = 8f;

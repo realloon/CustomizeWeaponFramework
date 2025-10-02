@@ -4,11 +4,9 @@ using Verse;
 
 namespace CWF.ViewDrawers;
 
-public class MainDrawer {
+public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick) {
     // Data source
-    private readonly Thing _weapon;
-    private readonly CompDynamicTraits? _compDynamicTraits;
-    private readonly Action<Part, WeaponTraitDef?> _onSlotClick;
+    private readonly CompDynamicTraits? _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
 
     private const float SlotSize = 56f;
     private const float SlotPadding = 12f;
@@ -18,16 +16,10 @@ public class MainDrawer {
         Vertical
     }
 
-    private static readonly Part[] TopParts = { Part.Receiver, Part.Sight, Part.Barrel };
-    private static readonly Part[] LeftParts = { Part.Stock };
-    private static readonly Part[] RightParts = { Part.Muzzle, Part.Ammo };
-    private static readonly Part[] BottomParts = { Part.Grip, Part.Trigger, Part.Magazine, Part.Underbarrel };
-
-    public MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick) {
-        _weapon = weapon;
-        _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-        _onSlotClick = onSlotClick;
-    }
+    private static readonly Part[] TopParts = [Part.Receiver, Part.Sight, Part.Barrel];
+    private static readonly Part[] LeftParts = [Part.Stock];
+    private static readonly Part[] RightParts = [Part.Muzzle, Part.Ammo];
+    private static readonly Part[] BottomParts = [Part.Grip, Part.Trigger, Part.Magazine, Part.Underbarrel];
 
     public void Draw(in Rect rect) {
         // define gird row Height
@@ -53,7 +45,7 @@ public class MainDrawer {
             middleColWidth, bottomRowHeight);
 
         // define weapon icon
-        var weaponGraphic = _weapon.Graphic;
+        var weaponGraphic = weapon.Graphic;
         var weaponAspect = weaponGraphic.drawSize.x / weaponGraphic.drawSize.y;
         var iconWidth = middleCenterRect.width;
         var iconHeight = middleCenterRect.height;
@@ -62,7 +54,7 @@ public class MainDrawer {
         // render weapon icon
         var weaponIconRect = new Rect(middleCenterRect.center.x - iconWidth / 2f,
             middleCenterRect.center.y - iconHeight / 2f, iconWidth, iconHeight);
-        Widgets.ThingIcon(weaponIconRect, _weapon);
+        Widgets.ThingIcon(weaponIconRect, weapon);
 
         DrawPartGroup(in topCenterRect, TopParts, Direction.Horizontal);
         DrawPartGroup(in middleLeftRect, LeftParts, Direction.Horizontal);
@@ -111,7 +103,7 @@ public class MainDrawer {
         if (installedTrait != null) {
             Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
-            var moduleGraphicData = _weapon.TryGetComp<CompDynamicGraphic>()?.GetGraphicDataFor(installedTrait);
+            var moduleGraphicData = weapon.TryGetComp<CompDynamicGraphic>()?.GetGraphicDataFor(installedTrait);
 
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
                 DrawModuleTexture(in rect, moduleGraphicData);
@@ -137,7 +129,7 @@ public class MainDrawer {
             clicked = DrawPartSlot(in rect, $"CWF_UI_{part.ToString()}".Translate());
         }
 
-        if (clicked) _onSlotClick.Invoke(part, installedTrait);
+        if (clicked) onSlotClick.Invoke(part, installedTrait);
     }
 
     private static void DrawModuleTexture(in Rect rect, ModuleGraphicData moduleGraphicData) {

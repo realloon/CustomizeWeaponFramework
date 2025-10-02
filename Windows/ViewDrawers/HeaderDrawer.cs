@@ -4,14 +4,8 @@ using Verse;
 
 namespace CWF.ViewDrawers;
 
-public class HeaderDrawer {
-    private readonly Thing _weapon;
-    private readonly CompRenamable? _compRenamable;
-
-    public HeaderDrawer(Thing weapon) {
-        _weapon = weapon;
-        _compRenamable = weapon.TryGetComp<CompRenamable>();
-    }
+public class HeaderDrawer(Thing weapon) {
+    private readonly CompRenamable? _compRenamable = weapon.TryGetComp<CompRenamable>();
 
     public void Draw(in Rect rect) {
         const float iconSize = 40f;
@@ -20,7 +14,7 @@ public class HeaderDrawer {
 
         // Render Icon
         var iconRect = new Rect(rect.x, rect.y + (rect.height - iconSize) / 2f, iconSize, iconSize);
-        Widgets.ThingIcon(iconRect, _weapon);
+        Widgets.ThingIcon(iconRect, weapon);
 
         // Reserve space
         var labelRect = new Rect(iconRect.xMax + gap, rect.y,
@@ -32,7 +26,7 @@ public class HeaderDrawer {
         var originalFont = Text.Font;
         Text.Anchor = TextAnchor.MiddleLeft;
         Text.Font = GameFont.Medium;
-        var displayName = _compRenamable?.Nickname ?? _weapon.LabelCap;
+        var displayName = _compRenamable?.Nickname ?? weapon.LabelCap;
         Widgets.Label(labelRect, displayName);
         Text.Anchor = originalAnchor;
         Text.Font = originalFont;

@@ -41,7 +41,7 @@ public class JobDispatcher {
     private void DispatchFieldModificationJobs(Pawn ownerPawn, List<ModificationData> netChanges) {
         foreach (var change in netChanges) {
             var job = JobMaker.MakeJob(DefDatabase<JobDef>.GetNamed("CWF_ModifyWeaponSelf"), _weapon);
-            job.source = new JobGiver_ModifyWeapon { ModDataList = new List<ModificationData> { change } };
+            job.source = new JobGiver_ModifyWeapon { ModDataList = [change] };
             ownerPawn.jobs.jobQueue.EnqueueLast(job, JobTag.Misc);
         }
 

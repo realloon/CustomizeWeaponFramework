@@ -5,21 +5,16 @@ using CWF.Extensions;
 
 namespace CWF.Controllers;
 
-public class InteractionController {
-    private readonly Thing _weapon;
-    private readonly CompDynamicTraits _compDynamicTraits;
+public class InteractionController(Thing weapon) {
+    private readonly CompDynamicTraits _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
+
+    private readonly List<WeaponTraitDef> _stagedUninstalls = [];
+
     public event Action OnDataChanged = delegate { };
 
-    private readonly List<WeaponTraitDef> _stagedUninstalls = new();
-
-    private string FailureReason => _weapon.ParentHolder is Pawn
+    private string FailureReason => weapon.ParentHolder is Pawn
         ? "CWF_UI_NoCompatiblePartsInInventory".Translate()
         : "CWF_UI_NoCompatiblePartsOnMap".Translate();
-
-    public InteractionController(Thing weapon) {
-        _weapon = weapon;
-        _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
-    }
 
     /// <summary>
     /// Opens a float-menu for the clicked slot.  
@@ -44,7 +39,7 @@ public class InteractionController {
 
         var compatibleModuleDefs = new HashSet<ThingDef>(GetCompatibleModuleDefsFor(part));
 
-        var ownerPawn = _weapon.ParentHolder switch {
+        var ownerPawn = weapon.ParentHolder switch {
             Pawn_EquipmentTracker equipment => equipment.pawn,
             Pawn_InventoryTracker inventory => inventory.pawn,
             _ => null
@@ -54,7 +49,7 @@ public class InteractionController {
         if (compatibleModuleDefs.Any()) {
             var searchScope = ownerPawn != null
                 ? ownerPawn.inventory.innerContainer
-                : _weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
+                : weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
 
             var availableModules = searchScope.Where(t =>
                 compatibleModuleDefs.Contains(t.def) &&
@@ -178,7 +173,7 @@ public class InteractionController {
 
         var partsToDisable = new HashSet<Part>();
         foreach (var rule in ext.conditionalPartModifiers) {
-            if (rule.matcher != null && rule.matcher.IsMatch(_weapon.def) && !rule.disablesParts.IsNullOrEmpty()) {
+            if (rule.matcher != null && rule.matcher.IsMatch(weapon.def) && !rule.disablesParts.IsNullOrEmpty()) {
                 partsToDisable.UnionWith(rule.disablesParts);
             }
         }
@@ -211,7 +206,7 @@ public class InteractionController {
     }
 
     private HashSet<Part> CalculateFutureAvailableParts(IEnumerable<WeaponTraitDef> futureTraits) {
-        var props = _weapon.TryGetComp<CompDynamicTraits>()?.props as CompProperties_DynamicTraits;
+        var props = weapon.TryGetComp<CompDynamicTraits>()?.props as CompProperties_DynamicTraits;
         if (props == null) return new HashSet<Part>();
 
         var availableParts = new HashSet<Part>(props.supportParts);
@@ -223,7 +218,7 @@ public class InteractionController {
             if (ext?.conditionalPartModifiers == null) continue;
 
             foreach (var rule in ext.conditionalPartModifiers) {
-                if (rule.matcher == null || !rule.matcher.IsMatch(_weapon.def)) continue;
+                if (rule.matcher == null || !rule.matcher.IsMatch(weapon.def)) continue;
 
                 if (!rule.enablesParts.IsNullOrEmpty()) {
                     availableParts.UnionWith(rule.enablesParts);
@@ -252,7 +247,7 @@ public class InteractionController {
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
         return TraitModuleDatabase.GetAllModuleDefs()
             .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
-            .Where(moduleDef => TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, _weapon.def));
+            .Where(moduleDef => TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
     }
 
     #endregion

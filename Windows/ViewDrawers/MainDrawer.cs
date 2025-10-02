@@ -29,7 +29,7 @@ public class MainDrawer {
         _onSlotClick = onSlotClick;
     }
 
-    public void Draw(Rect rect) {
+    public void Draw(in Rect rect) {
         // define gird row Height
         const float topRowHeight = SlotSize + SlotPadding;
         const float bottomRowHeight = SlotSize + SlotPadding;
@@ -64,14 +64,14 @@ public class MainDrawer {
             middleCenterRect.center.y - iconHeight / 2f, iconWidth, iconHeight);
         Widgets.ThingIcon(weaponIconRect, _weapon);
 
-        DrawPartGroup(topCenterRect, TopParts, Direction.Horizontal);
-        DrawPartGroup(middleLeftRect, LeftParts, Direction.Horizontal);
-        DrawPartGroup(middleRightRect, RightParts, Direction.Vertical);
-        DrawPartGroup(bottomCenterRect, BottomParts, Direction.Horizontal);
+        DrawPartGroup(in topCenterRect, TopParts, Direction.Horizontal);
+        DrawPartGroup(in middleLeftRect, LeftParts, Direction.Horizontal);
+        DrawPartGroup(in middleRightRect, RightParts, Direction.Vertical);
+        DrawPartGroup(in bottomCenterRect, BottomParts, Direction.Horizontal);
     }
 
     // === Helper ===
-    private void DrawPartGroup(Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
+    private void DrawPartGroup(in Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
         if (_compDynamicTraits == null) return;
 
         var supportedParts = groupParts.Where(p => _compDynamicTraits.AvailableParts.Contains(p)).ToList();
@@ -86,7 +86,7 @@ public class MainDrawer {
             for (var i = 0; i < count; i++) {
                 var part = supportedParts[i];
                 var slotRect = new Rect(startX + i * (SlotSize + SlotPadding), startY, SlotSize, SlotSize);
-                TryDrawSlot(part, slotRect);
+                TryDrawSlot(part, in slotRect);
             }
         } else {
             // Vertical
@@ -97,12 +97,12 @@ public class MainDrawer {
             for (var i = 0; i < count; i++) {
                 var part = supportedParts[i];
                 var slotRect = new Rect(startX, startY + i * (SlotSize + SlotPadding), SlotSize, SlotSize);
-                TryDrawSlot(part, slotRect);
+                TryDrawSlot(part, in slotRect);
             }
         }
     }
 
-    private void TryDrawSlot(Part part, Rect rect) {
+    private void TryDrawSlot(Part part, in Rect rect) {
         if (_compDynamicTraits == null || !_compDynamicTraits.AvailableParts.Contains(part)) return;
 
         var installedTrait = _compDynamicTraits.GetInstalledTraitFor(part);
@@ -114,7 +114,7 @@ public class MainDrawer {
             var moduleGraphicData = _weapon.TryGetComp<CompDynamicGraphic>()?.GetGraphicDataFor(installedTrait);
 
             if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
-                DrawModuleTexture(rect, moduleGraphicData);
+                DrawModuleTexture(in rect, moduleGraphicData);
             } else {
                 var originalFont = Text.Font;
                 var originalAnchor = Text.Anchor;
@@ -134,13 +134,13 @@ public class MainDrawer {
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {
-            clicked = DrawPartSlot(rect, $"CWF_UI_{part.ToString()}".Translate());
+            clicked = DrawPartSlot(in rect, $"CWF_UI_{part.ToString()}".Translate());
         }
 
         if (clicked) _onSlotClick.Invoke(part, installedTrait);
     }
 
-    private static void DrawModuleTexture(Rect rect, ModuleGraphicData moduleGraphicData) {
+    private static void DrawModuleTexture(in Rect rect, ModuleGraphicData moduleGraphicData) {
         // Outline
         var outlineTexture = CompDynamicGraphic.GetOutlineTexture(moduleGraphicData);
         if (outlineTexture != null) {
@@ -154,8 +154,8 @@ public class MainDrawer {
         }
     }
 
-    // Returns a boolean indicating whether the element was clicked.
-    private static bool DrawPartSlot(Rect rect, string label) {
+    /// Returns a boolean indicating whether the element was clicked.
+    private static bool DrawPartSlot(in Rect rect, string label) {
         Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
         var originalAnchor = Text.Anchor;

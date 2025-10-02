@@ -10,7 +10,7 @@ public class AsideDrawer {
         _specDatabase = specDatabase;
     }
 
-    public void Draw(Rect rect) {
+    public void Draw(in Rect rect) {
         var listing = new Listing_Standard();
         listing.Begin(rect);
 
@@ -61,7 +61,7 @@ public class AsideDrawer {
         DrawLabelRow(listing.GetRect(22), label, valueString, delta);
     }
 
-    private static void DrawLabelRow(Rect rect, string label, string value, float deltaValue = 0f) {
+    private static void DrawLabelRow(in Rect rect, string label, string value, float deltaValue = 0f) {
         var originalAnchor = Text.Anchor;
         var originalColor = GUI.color;
 

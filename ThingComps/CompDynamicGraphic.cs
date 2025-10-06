@@ -12,6 +12,13 @@ public class CompDynamicGraphic : ThingComp {
 
     private bool _isDirty = true;
 
+    private CompDynamicTraits? _compDynamicTraits;
+
+    public override void Initialize(CompProperties properties) {
+        base.Initialize(properties);
+        _compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
+    }
+
     public Graphic GetDynamicGraphic() {
         if (!_isDirty && _cachedGraphic != null) return _cachedGraphic;
 
@@ -67,10 +74,9 @@ public class CompDynamicGraphic : ThingComp {
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
             Color color, Texture2D? maskTexture)>();
 
-        var compDynamicTraits = parent.TryGetComp<CompDynamicTraits>();
-        if (compDynamicTraits != null) {
+        if (_compDynamicTraits != null) {
             foreach (var point in Props.attachmentPoints) {
-                var installedTrait = compDynamicTraits.GetInstalledTraitFor(point.part);
+                var installedTrait = _compDynamicTraits.GetInstalledTraitFor(point.part);
 
                 ModuleGraphicData? graphicToRender = null;
                 if (installedTrait != null) {

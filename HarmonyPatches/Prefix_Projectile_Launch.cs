@@ -16,11 +16,10 @@ public static class Prefix_Projectile_Launch {
                 __instance.damageDefOverride = trait.damageDefOverride;
             }
 
-            if (!trait.extraDamages.NullOrEmpty()) {
-                __instance.extraDamages ??= new List<ExtraDamage>();
+            if (trait.extraDamages.NullOrEmpty()) continue;
 
-                __instance.extraDamages.AddRange(trait.extraDamages);
-            }
+            __instance.extraDamages ??= [];
+            __instance.extraDamages.AddRange(trait.extraDamages);
         }
     }
 }

@@ -14,7 +14,7 @@ public static class Postfix_Pawn_EquipmentTracker_GetGizmos {
 
         if (__instance.Primary?.TryGetComp<CompDynamicTraits>() is not { } comp) yield break;
 
-        foreach (var extraGizmo in comp.GetWornGizmosExtra(__instance.pawn)) {
+        foreach (var extraGizmo in comp.CompGetEquippedGizmosExtra(__instance.pawn)) {
             yield return extraGizmo;
         }
     }

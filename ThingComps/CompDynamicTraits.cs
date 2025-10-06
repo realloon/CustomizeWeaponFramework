@@ -234,7 +234,7 @@ public class CompDynamicTraits : ThingComp {
         yield return removeTraitGizmo;
     }
 
-    public IEnumerable<Gizmo> GetWornGizmosExtra(Pawn owner) {
+    public IEnumerable<Gizmo> CompGetEquippedGizmosExtra(Pawn owner) {
         // harmony patched
         if (owner.Faction == Faction.OfPlayer) {
             yield return new Command_Action {

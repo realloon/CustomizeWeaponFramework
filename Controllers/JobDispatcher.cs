@@ -45,9 +45,9 @@ public class JobDispatcher {
             ownerPawn.jobs.jobQueue.EnqueueLast(job, JobTag.Misc);
         }
 
-        if (ownerPawn.CurJob != null) {
-            ownerPawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
-        }
+        if (ownerPawn.CurJob == null) return;
+
+        ownerPawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
     }
 
     private void DispatchHaulModificationJob(List<ModificationData> netChanges) {
@@ -61,16 +61,17 @@ public class JobDispatcher {
         var installChanges = netChanges
             .Where(c => c.Type == ModificationType.Install)
             .ToList();
+
         foreach (var change in installChanges) {
             var module = FindBestAvailableModuleFor(change, bestPawn);
-            if (module != null) {
-                modulesToHaul.Add(module);
-            } else {
-                Messages.Message(
-                    "CWF_Message_CannotFindModuleForModification".Translate(change.ModuleDef.Named("MODULE")),
+            if (module == null) {
+                Messages.Message("CWF_Message_CannotFindModuleForModification"
+                        .Translate(change.ModuleDef.Named("MODULE")),
                     MessageTypeDefOf.RejectInput, false);
                 return;
             }
+
+            modulesToHaul.Add(module);
         }
 
         // create a big job merged all modification
@@ -91,8 +92,8 @@ public class JobDispatcher {
             bestPawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
         }
 
-        Messages.Message(
-            "CWF_Message_ModificationJobDispatched".Translate(bestPawn.Named("PAWN"), _weapon.Named("WEAPON")),
+        Messages.Message("CWF_Message_ModificationJobDispatched"
+                .Translate(bestPawn.Named("PAWN"), _weapon.Named("WEAPON")),
             new LookTargets(bestPawn, _weapon), MessageTypeDefOf.PositiveEvent);
     }
 

@@ -21,7 +21,7 @@ public static class TraitModuleDatabase {
                 !thingDef.IsCorpse) {
                 foreach (var tag in thingDef.weaponTags) {
                     if (!WeaponsByTag.ContainsKey(tag)) {
-                        WeaponsByTag[tag] = new List<ThingDef>();
+                        WeaponsByTag[tag] = [];
                     }
 
                     WeaponsByTag[tag].Add(thingDef);
@@ -52,9 +52,11 @@ public static class TraitModuleDatabase {
             // inject hyperlinks
             var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
             if (weaponDefs.IsNullOrEmpty()) continue;
-            moduleDef.descriptionHyperlinks ??= new List<DefHyperlink>();
+
+            moduleDef.descriptionHyperlinks ??= [];
             foreach (var weaponDef in weaponDefs) {
                 if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;
+
                 moduleDef.descriptionHyperlinks.Add(new DefHyperlink(weaponDef));
             }
         }

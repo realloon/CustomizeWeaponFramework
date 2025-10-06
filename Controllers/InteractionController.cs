@@ -197,17 +197,16 @@ public class InteractionController(Thing weapon) {
         var futureAvailableParts = CalculateFutureAvailableParts(currentTraits.Values);
 
         foreach (var (part, trait) in currentTraits) {
-            if (!futureAvailableParts.Contains(part)) {
-                result.ModulesToRemove.Add(trait);
-            }
+            if (futureAvailableParts.Contains(part)) continue;
+
+            result.ModulesToRemove.Add(trait);
         }
 
         return result;
     }
 
     private HashSet<Part> CalculateFutureAvailableParts(IEnumerable<WeaponTraitDef> futureTraits) {
-        var props = weapon.TryGetComp<CompDynamicTraits>()?.props as CompProperties_DynamicTraits;
-        if (props == null) return new HashSet<Part>();
+        if (weapon.TryGetComp<CompDynamicTraits>()?.props is not CompProperties_DynamicTraits props) return [];
 
         var availableParts = new HashSet<Part>(props.supportParts);
 

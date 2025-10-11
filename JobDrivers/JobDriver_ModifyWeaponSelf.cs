@@ -22,7 +22,14 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
         // wait and show progress
         var modifyToil = Toils_General.Wait(60);
         modifyToil.WithProgressBarToilDelay(TargetIndex.A);
-        modifyToil.defaultCompleteMode = ToilCompleteMode.Delay;
+
+        modifyToil.AddEndCondition(() => {
+            if (ModData.Type != ModificationType.Install) return JobCondition.Ongoing;
+
+            var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == ModData.ModuleDef);
+
+            return moduleToUse != null ? JobCondition.Ongoing : JobCondition.Incompletable;
+        });
 
         // modifyToil.initAction = () => {
         //     // callback: do something at init
@@ -33,6 +40,8 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
 
         // finished progress
         modifyToil.AddFinishAction(() => {
+            if (ended) return;
+
             if (!Weapon.TryGetComp<CompDynamicTraits>(out var compDynamicTraits)) return;
 
             if (ModData.Type == ModificationType.Install) {
@@ -50,10 +59,10 @@ public class JobDriver_ModifyWeaponSelf : JobDriver {
         var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == modData.ModuleDef);
         if (moduleToUse != null) {
             comp.InstallTrait(modData.Part, modData.Trait);
-            moduleToUse.Destroy();
+            moduleToUse.SplitOff(1).Destroy();
             SoundDefOf.Replant_Complete.PlayOneShot(new TargetInfo(pawn.Position, pawn.Map));
         } else {
-            pawn.jobs.EndCurrentJob(JobCondition.Incompletable);
+            Log.Error($"[CWF] '{modData.ModuleDef.defName}' missing in FinishAction despite passing EndCondition.");
         }
     }
 

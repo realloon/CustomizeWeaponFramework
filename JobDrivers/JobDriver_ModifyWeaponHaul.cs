@@ -2,6 +2,7 @@ using RimWorld;
 using Verse;
 using Verse.AI;
 using Verse.Sound;
+using CWF.Extensions;
 
 namespace CWF;
 
@@ -88,17 +89,24 @@ public class JobDriver_ModifyWeaponHaul : JobDriver {
         var finalToil = Toils_General.WaitWith(WeaponInd, TicksPerModification * (ModDataList?.Count ?? 1), true, true);
         finalToil.FailOnCannotTouch(WeaponInd, PathEndMode.Touch);
 
+        finalToil.AddEndCondition(() => {
+            if (ModDataList.IsNullOrEmpty()) return JobCondition.Ongoing;
+
+            return ModDataList
+                .Where(modData => modData.Type == ModificationType.Install)
+                .Any(modData => pawn.inventory.innerContainer
+                    .All(t => t.def != modData.ModuleDef))
+                ? JobCondition.Incompletable
+                : JobCondition.Ongoing;
+        });
+
         finalToil.AddFinishAction(() => {
+            if (ended) return;
+
             var comp = Weapon.TryGetComp<CompDynamicTraits>();
             if (comp == null || ModDataList == null) return;
 
-            foreach (var modData in ModDataList) {
-                if (modData.Type == ModificationType.Install) {
-                    DoInstall(comp, modData);
-                } else {
-                    DoUninstall(comp, modData);
-                }
-            }
+            PerformModifications(comp, ModDataList);
 
             Messages.Message("CWF_Message_ModificationComplete"
                     .Translate(pawn.Named("PAWN"), Weapon.Named("WEAPON")),
@@ -110,22 +118,25 @@ public class JobDriver_ModifyWeaponHaul : JobDriver {
         yield return finalToil;
     }
 
-    // === Helper ===
-    private void DoInstall(CompDynamicTraits comp, ModificationData modData) {
-        var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == modData.ModuleDef);
-        if (moduleToUse == null) {
-            Log.Warning(
-                $"[CWF] Pawn {pawn.LabelShort} planned to install {modData.ModuleDef.label} but could not find it in inventory at the last moment.");
-            return; // fail silently, proceed to the next
+    // helper
+    private void PerformModifications(CompDynamicTraits comp, List<ModificationData> modList) {
+        // uninstall
+        foreach (var modData in modList.Where(md => md.Type == ModificationType.Uninstall)) {
+            comp.UninstallTrait(modData.Part);
+            var moduleThing = ThingMaker.MakeThing(modData.ModuleDef);
+            GenPlace.TryPlaceThing(moduleThing, pawn.Position, pawn.Map, ThingPlaceMode.Near);
         }
 
-        comp.InstallTrait(modData.Part, modData.Trait);
-        moduleToUse.Destroy();
-    }
+        // install
+        foreach (var modData in modList.Where(md => md.Type == ModificationType.Install)) {
+            var moduleToUse = pawn.inventory.innerContainer.FirstOrDefault(t => t.def == modData.ModuleDef);
 
-    private void DoUninstall(CompDynamicTraits comp, ModificationData modData) {
-        comp.UninstallTrait(modData.Part);
-        var moduleThing = ThingMaker.MakeThing(modData.ModuleDef);
-        GenPlace.TryPlaceThing(moduleThing, pawn.Position, pawn.Map, ThingPlaceMode.Near);
+            if (moduleToUse != null) {
+                comp.InstallTrait(modData.Part, modData.Trait);
+                moduleToUse.SplitOff(1).Destroy();
+            } else {
+                Log.Error($"[CWF] '{modData.ModuleDef.defName}' missing in FinishAction despite passing EndCondition.");
+            }
+        }
     }
 }

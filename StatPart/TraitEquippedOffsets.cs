@@ -76,6 +76,9 @@ public class TraitEquippedOffsets : StatPart
         var seen = new HashSet<Def>();
         foreach (var t in traits)
         {
+            var factors = t?.equippedStatOffsets?.Where(o => o.stat == parentStat)?.ToList();
+            if (factors == null) continue;
+
             if (t == null || !seen.Add(t) || !TraitModuleDatabase.TryGetModuleDef(t, out ThingDef? traitDef)) continue;
             yield return new Dialog_InfoCard.Hyperlink(traitDef);
         }

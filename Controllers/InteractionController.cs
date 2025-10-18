@@ -12,7 +12,7 @@ public class InteractionController(Thing weapon) {
 
     public event Action OnDataChanged = delegate { };
 
-    private string FailureReason => weapon.ParentHolder is Pawn
+    private string FailureReason => weapon.ParentHolder is Pawn_EquipmentTracker
         ? "CWF_UI_NoCompatiblePartsInInventory".Translate()
         : "CWF_UI_NoCompatiblePartsOnMap".Translate();
 

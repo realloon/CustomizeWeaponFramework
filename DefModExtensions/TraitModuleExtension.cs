@@ -22,7 +22,7 @@ public class TraitModuleExtension : DefModExtension {
     // public Rarity rarity; // enum
 
     public override IEnumerable<string> ConfigErrors() {
-        if (weaponTraitDef.defName == "UnnamedDef") {
+        if (weaponTraitDef.defName == Def.DefaultDefName) {
             yield return "Required field 'weaponTraitDef' is missing in XML.";
         }
 

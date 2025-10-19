@@ -44,9 +44,9 @@ public static class TraitModuleDatabase {
 
         foreach (var moduleDef in TraitToModule.Values) {
             // inject description
-            var description = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef.description;
-            if (description != null) {
-                moduleDef.description = description;
+            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+            if (traitDef?.description != null) {
+                moduleDef.description = $"{traitDef.description}\n\n{GetTraitEffectLines(traitDef).ToLineList()}";
             }
 
             // inject hyperlinks

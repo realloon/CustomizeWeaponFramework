@@ -7,7 +7,7 @@ internal static class Extensions {
         return string.IsNullOrEmpty(str);
     }
 
-    internal static bool IsNullOrEmpty<T>([NotNullWhen(false)] this ICollection<T>? collection) {
+    internal static bool IsNullOrEmpty<T>([NotNullWhen(false)] this IReadOnlyCollection<T>? collection) {
         return collection == null || collection.Count == 0;
     }
 }

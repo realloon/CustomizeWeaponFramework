@@ -51,7 +51,7 @@ public class CompColorable : ThingComp {
             yield return g;
         }
 
-        if (!Prefs.DevMode) yield break;
+        if (!Prefs.DevMode || parent.IsForbidden(Faction.OfPlayer)) yield break;
 
         yield return new Command_Action {
             defaultLabel = "Dev: Randomize color",

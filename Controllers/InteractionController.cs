@@ -93,8 +93,8 @@ public class InteractionController(Thing weapon) {
                     "CWF_UI_ConfirmUninstallTitle".Translate(),
                     "CWF_UI_ConfirmUninstallBody".Translate(
                         installedTrait.LabelCap.Named("MODULE"),
-                        string.Join("\n", analysis.ModulesToRemove
-                                .Select(t => " - " + t.LabelCap.ToString()))
+                        analysis.ModulesToRemove
+                            .Select(t => " - " + t.LabelCap.ToString()).ToLineList()
                             .Named("DEPENDENCIES")
                     ),
                     () => {
@@ -149,8 +149,8 @@ public class InteractionController(Thing weapon) {
                 "CWF_UI_ConfirmInstallTitle".Translate(),
                 "CWF_UI_ConfirmInstallBody".Translate(
                     traitToInstall.LabelCap.Named("MODULE"),
-                    string.Join("\n", analysis.ModulesToRemove
-                            .Select(t => " - " + t.LabelCap.ToString()))
+                    analysis.ModulesToRemove
+                        .Select(t => " - " + t.LabelCap.ToString()).ToLineList()
                         .Named("CONFLICTS")
                 ),
                 () => {

@@ -107,6 +107,14 @@ public static class TraitModuleDatabase {
                 $" - {"CWF_UI_AdditionalStoppingPower".Translate()}: {traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
         }
 
+        // EquipeddOffsets
+        if (!traitDef.equippedStatOffsets.IsNullOrEmpty())
+        {
+            effectLines.AddRange(traitDef.equippedStatOffsets
+                .Select(m =>
+                    $" - {m.stat.LabelCap}: {m.stat.ValueToString(m.value)}"));
+        }
+
         return effectLines;
     }
 

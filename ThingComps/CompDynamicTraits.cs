@@ -111,8 +111,7 @@ public class CompDynamicTraits : ThingComp {
         sb.AppendLine();
 
         var traitsList = Traits.ToList();
-        for (var i = 0; i < traitsList.Count; i++) {
-            // todo refactor
+        for (var i = 0; i < traitsList.Count; i++) { // todo refactor
             var trait = traitsList[i];
             sb.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             sb.AppendLine(trait.description);
@@ -137,8 +136,15 @@ public class CompDynamicTraits : ThingComp {
     // === Callback ===
     public override void PostPostMake() {
         base.PostPostMake();
+
         InitializeTraits();
+
+        if (!CreationContext.IsPlayerCrafting) {
+            RandomizeTraits();
+        }
+
         RecalculateAvailableParts();
+        SetupAbility(false);
     }
 
     public override void PostExposeData() {
@@ -252,7 +258,8 @@ public class CompDynamicTraits : ThingComp {
         return traitDef;
     }
 
-    // === Private Helper ===
+    #region Private Helper
+
     private void InitializeTraits() {
         var defaultTraitsList = Props.defaultWeaponTraitDefs;
         if (defaultTraitsList.IsNullOrEmpty()) return;
@@ -296,6 +303,38 @@ public class CompDynamicTraits : ThingComp {
         }
 
         #endregion
+    }
+
+    private void RandomizeTraits() {
+        var allSupportedParts = Props.supportParts;
+        if (allSupportedParts.NullOrEmpty()) return;
+
+        var occupiedParts = _installedTraits.Keys;
+        var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();
+        if (availableEmptyParts.NullOrEmpty()) return;
+
+        var modulesToInstallCount = Rand.RangeInclusive(1, 2); // tmp
+
+        for (var i = 0; i < modulesToInstallCount; i++) {
+            if (!availableEmptyParts.Any()) break;
+
+            var randomPart = availableEmptyParts.RandomElement();
+            availableEmptyParts.Remove(randomPart);
+
+            var compatibleTraits = DefDatabase<WeaponTraitDef>.AllDefs
+                .Where(traitDef => {
+                    if (!traitDef.TryGetPart(out var part) || part != randomPart) return false;
+
+                    return traitDef.TryGetModuleDef(out var moduleDef) &&
+                           TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                })
+                .ToList();
+
+            if (!compatibleTraits.Any()) continue;
+
+            var traitToInstall = compatibleTraits.RandomElement();
+            InstallTrait(randomPart, traitToInstall);
+        }
     }
 
     private void RecalculateAvailableParts() {
@@ -354,4 +393,6 @@ public class CompDynamicTraits : ThingComp {
         AccessTools.Field(typeof(Verb), "cachedBurstShotCount").SetValue(verb, null);
         AccessTools.Field(typeof(Verb), "cachedTicksBetweenBurstShots").SetValue(verb, null);
     }
+
+    #endregion
 }

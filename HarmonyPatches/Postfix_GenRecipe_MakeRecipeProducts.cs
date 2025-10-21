@@ -4,12 +4,7 @@ using Verse;
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(typeof(GenRecipe), nameof(GenRecipe.MakeRecipeProducts))]
-public static class Patch_GenRecipe_MakeRecipeProducts {
-    [HarmonyPrefix]
-    public static void Prefix() {
-        CreationContext.IsPlayerCrafting = true;
-    }
-
+public static class Postfix_GenRecipe_MakeRecipeProducts {
     [HarmonyPostfix]
     public static void Postfix() {
         CreationContext.IsPlayerCrafting = false;

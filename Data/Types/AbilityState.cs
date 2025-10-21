@@ -9,8 +9,7 @@ public class AbilityState : IExposable {
     public int cooldownTicksRemaining;
     public int cooldownTicksTotal;
 
-    public AbilityState() {
-    }
+    public AbilityState() { }
 
     public AbilityState(Ability ability) {
         defName = ability.def.defName;

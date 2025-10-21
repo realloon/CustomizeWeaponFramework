@@ -32,8 +32,7 @@ public class CompDynamicTraits : ThingComp {
 
     public void InstallTrait(Part part, WeaponTraitDef traitDef) {
         if (!_installedTraits.TryAdd(part, traitDef)) {
-            Log.Error(
-                $"[CWF] Trying to install part {traitDef.defName} into already occupied slot {part} on {parent.LabelCap}.");
+            Log.Warning($"[CWF] {traitDef.defName}'s slot {part} on {parent.LabelCap} already occupied.");
             return;
         }
 
@@ -113,6 +112,7 @@ public class CompDynamicTraits : ThingComp {
 
         var traitsList = Traits.ToList();
         for (var i = 0; i < traitsList.Count; i++) {
+            // todo refactor
             var trait = traitsList[i];
             sb.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             sb.AppendLine(trait.description);
@@ -281,9 +281,12 @@ public class CompDynamicTraits : ThingComp {
         SetupAbility(false);
         ClearAllCaches();
 
-        // graphic dirty
+        #region Refresh graphic
+
         if (!parent.TryGetComp<CompDynamicGraphic>(out var compDynamicGraphic)) return;
+
         compDynamicGraphic.Notify_GraphicDirty();
+
         if (parent.Map != null) {
             // ground graphic dirty
             parent.Map.mapDrawer.MapMeshDirty(parent.Position, MapMeshFlagDefOf.Things);
@@ -291,6 +294,8 @@ public class CompDynamicTraits : ThingComp {
             // equipment graphic dirty
             equipmentTracker.pawn.Drawer.renderer.SetAllGraphicsDirty();
         }
+
+        #endregion
     }
 
     private void RecalculateAvailableParts() {
@@ -318,6 +323,7 @@ public class CompDynamicTraits : ThingComp {
         // temporary old save check mechanism
         foreach (var installedPart in _installedTraits.Keys) {
             if (_availableParts.Contains(installedPart)) continue;
+
             Log.Warning($"[CWF] Part '{installedPart}' on weapon '{parent.LabelCap}' is no longer available.");
         }
     }
@@ -335,7 +341,7 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void ClearAllCaches() {
-        // === Stats ===
+        // === stats ===
         foreach (var statDef in DefDatabase<StatDef>.AllDefs) {
             statDef.Worker.ClearCacheForThing(parent);
         }
@@ -344,6 +350,7 @@ public class CompDynamicTraits : ThingComp {
         var verb = parent.TryGetComp<CompEquippable>()?.PrimaryVerb;
         if (verb == null) return;
 
+        // === cached ===
         AccessTools.Field(typeof(Verb), "cachedBurstShotCount").SetValue(verb, null);
         AccessTools.Field(typeof(Verb), "cachedTicksBetweenBurstShots").SetValue(verb, null);
     }

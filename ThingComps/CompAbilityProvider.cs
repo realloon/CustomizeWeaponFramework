@@ -118,10 +118,10 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
             List<string>? defNameList = null;
             Scribe_Collections.Look(ref defNameList, "abilityPropsToManageDefNames", LookMode.Value);
             if (defNameList != null) {
-                _abilityPropsToManage = new List<CompProperties_EquippableAbility>();
+                _abilityPropsToManage = [];
                 foreach (var defName in defNameList) {
-                    var trait = DefDatabase<WeaponTraitDef>.AllDefs.FirstOrFallback(t =>
-                        t?.abilityProps?.abilityDef.defName == defName);
+                    var trait = DefDatabase<WeaponTraitDef>.AllDefs
+                        .FirstOrFallback(t => t?.abilityProps?.abilityDef.defName == defName);
                     if (trait != null) {
                         _abilityPropsToManage.Add(trait.abilityProps);
                     }

@@ -51,7 +51,13 @@ public class CompDynamicTraits : ThingComp {
     //     OnTraitsChanged();
     // }
 
-    // === Stat ===
+    public WeaponTraitDef? GetInstalledTraitFor(Part part) {
+        _installedTraits.TryGetValue(part, out var traitDef);
+        return traitDef;
+    }
+
+    #region Stat
+
     public override float GetStatOffset(StatDef stat) {
         return Traits
             .Sum(traitDef => traitDef.statOffsets.GetStatOffsetFromList(stat));
@@ -63,7 +69,10 @@ public class CompDynamicTraits : ThingComp {
                 => current * traitDef.statFactors.GetStatFactorFromList(stat));
     }
 
-    // === Display ===
+    #endregion
+
+    #region Display
+
     public override void GetStatsExplanation(StatDef stat, StringBuilder sb, string whitespace = "") {
         StringBuilder? stringBuilder = null;
 
@@ -110,30 +119,34 @@ public class CompDynamicTraits : ThingComp {
         sb.AppendLine("CWF_UI_WeaponModules_Desc".Translate());
         sb.AppendLine();
 
-        var traitsList = Traits.ToList();
-        for (var i = 0; i < traitsList.Count; i++) { // todo refactor
-            var trait = traitsList[i];
-            sb.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
-            sb.AppendLine(trait.description);
+        var traitDescriptionBlocks = Traits.Select(trait => {
+            var blockBuilder = new StringBuilder();
+            blockBuilder.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
+            blockBuilder.AppendLine(trait.description);
 
             var effectLines = TraitModuleDatabase.GetTraitEffectLines(trait);
             if (effectLines.Count > 0) {
-                sb.AppendLine(effectLines.ToLineList());
+                blockBuilder.AppendLine(effectLines.ToLineList());
             }
 
-            if (i < traitsList.Count - 1) sb.AppendLine();
-        }
+            return blockBuilder.ToString();
+        });
+
+        sb.Append(traitDescriptionBlocks.ToLineList());
 
         yield return new StatDrawEntry(
             parent.def.IsMeleeWeapon ? StatCategoryDefOf.Weapon_Melee : StatCategoryDefOf.Weapon_Ranged,
             "CWF_UI_WeaponModules".Translate(),
-            traitsList.Select(x => x.label).ToCommaList().CapitalizeFirst(),
+            Traits.Select(x => x.label).ToCommaList().CapitalizeFirst(),
             sb.ToString(),
             1105
         );
     }
 
-    // === Callback ===
+    #endregion
+
+    #region Callback
+
     public override void PostPostMake() {
         base.PostPostMake();
 
@@ -158,7 +171,10 @@ public class CompDynamicTraits : ThingComp {
         SetupAbility(true);
     }
 
-    // === Gizmos ===
+    #endregion
+
+    #region Gizmos
+
     public override IEnumerable<Gizmo> CompGetGizmosExtra() {
         foreach (var g in base.CompGetGizmosExtra()) {
             yield return g;
@@ -252,11 +268,7 @@ public class CompDynamicTraits : ThingComp {
         }
     }
 
-    // Public Helper
-    public WeaponTraitDef? GetInstalledTraitFor(Part part) {
-        _installedTraits.TryGetValue(part, out var traitDef);
-        return traitDef;
-    }
+    #endregion
 
     #region Private Helper
 

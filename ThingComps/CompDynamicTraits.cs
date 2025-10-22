@@ -318,6 +318,9 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void RandomizeTraits() {
+        var settings = LoadedModManager.GetMod<ConfigWindow>().GetSettings<Settings>();
+        if (!settings.randomModulesEnabled) return;
+
         var allSupportedParts = Props.supportParts;
         if (allSupportedParts.NullOrEmpty()) return;
 
@@ -325,7 +328,8 @@ public class CompDynamicTraits : ThingComp {
         var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();
         if (availableEmptyParts.NullOrEmpty()) return;
 
-        var modulesToInstallCount = Rand.RangeInclusive(1, 2); // tmp
+        var modulesToInstallCount = Rand.RangeInclusive(settings.minRandomModules, settings.maxRandomModules);
+        modulesToInstallCount = Mathf.Min(modulesToInstallCount, availableEmptyParts.Count);
 
         for (var i = 0; i < modulesToInstallCount; i++) {
             if (!availableEmptyParts.Any()) break;

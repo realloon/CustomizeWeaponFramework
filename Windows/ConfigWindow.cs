@@ -30,7 +30,7 @@ public class ConfigWindow : Mod {
 
         listing.Gap(24f);
 
-        if (listing.ButtonText("Reset".Translate(), "tag", 0.5f)) {
+        if (listing.ButtonText("Reset".Translate(), widthPct: 0.5f)) {
             _settings.Reset();
         }
 

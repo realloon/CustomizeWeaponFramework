@@ -17,8 +17,8 @@ public class ConfigWindow : Mod {
         var listing = new Listing_Standard();
         listing.Begin(inRect);
 
-        listing.CheckboxLabeled("Enable random modules", ref _settings.randomModulesEnabled,
-            "If checked, enemies and loot can spawn with random modules.");
+        listing.CheckboxLabeled("CWF_UI_RandomModuleGeneration".Translate(), ref _settings.randomModulesEnabled,
+            "CWF_UI_RandomModuleGenerationDesc".Translate());
 
         if (_settings.randomModulesEnabled) {
             var range = new IntRange(_settings.minRandomModules, _settings.maxRandomModules);
@@ -29,8 +29,8 @@ public class ConfigWindow : Mod {
         }
 
         listing.Gap(24f);
-        
-        if (listing.ButtonText("Reset", "tag", 0.5f)) {
+
+        if (listing.ButtonText("Reset".Translate(), "tag", 0.5f)) {
             _settings.Reset();
         }
 

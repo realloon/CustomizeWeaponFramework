@@ -43,3 +43,10 @@ public class TraitModuleExtension : DefModExtension {
         }
     }
 }
+
+[UsedImplicitly]
+public class GraphicCase {
+    public WeaponMatcher? matcher;
+    public ModuleGraphicData? graphicData;
+    public readonly int priority = 0;
+}

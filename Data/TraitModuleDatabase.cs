@@ -6,15 +6,14 @@ using CWF.Extensions;
 
 namespace CWF;
 
-[StaticConstructorOnStartup]
 public static class TraitModuleDatabase {
     private static readonly Dictionary<WeaponTraitDef, Part> TraitToPart = new();
     private static readonly Dictionary<WeaponTraitDef, ThingDef> TraitToModule = new();
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
 
-    public static IEnumerable<ThingDef> GetAllModuleDefs() => TraitToModule.Values;
+    public static IEnumerable<ThingDef> GetAllModuleDefs() => TraitToModule.Values; // todo
 
-    static TraitModuleDatabase() {
+    internal static void BuildCache() {
         foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
             // fill weapon caches
             if (thingDef.IsWeapon && !thingDef.weaponTags.IsNullOrEmpty() && thingDef.race == null &&

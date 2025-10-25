@@ -124,7 +124,7 @@ public class CompDynamicTraits : ThingComp {
             blockBuilder.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             blockBuilder.AppendLine(trait.description);
 
-            var effectLines = TraitModuleDatabase.GetTraitEffectLines(trait);
+            var effectLines = ModuleDatabase.GetTraitEffectLines(trait);
             if (effectLines.Count > 0) {
                 blockBuilder.AppendLine(effectLines.ToLineList());
             }
@@ -199,7 +199,7 @@ public class CompDynamicTraits : ThingComp {
                         if (_installedTraits.ContainsKey(part)) return false;
 
                         return traitDef.TryGetModuleDef(out var moduleDef) &&
-                               TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                               ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
                     })
                     .ToList();
 
@@ -342,7 +342,7 @@ public class CompDynamicTraits : ThingComp {
                     if (!traitDef.TryGetPart(out var part) || part != randomPart) return false;
 
                     return traitDef.TryGetModuleDef(out var moduleDef) &&
-                           TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                           ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
                 })
                 .ToList();
 
@@ -359,19 +359,14 @@ public class CompDynamicTraits : ThingComp {
         foreach (var traitDef in Traits) {
             if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
 
-            var modifiers = moduleDef.GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
+            var modifiers = moduleDef.GetModExtension<ModuleExtension>()?.conditionalPartModifiers;
             if (modifiers == null) continue;
 
             foreach (var rule in modifiers) {
                 if (rule.matcher == null || !rule.matcher.IsMatch(parent.def)) continue;
 
-                if (!rule.enablesParts.IsNullOrEmpty()) {
-                    _availableParts.UnionWith(rule.enablesParts);
-                }
-
-                if (!rule.disablesParts.IsNullOrEmpty()) {
-                    _availableParts.ExceptWith(rule.disablesParts);
-                }
+                _availableParts.UnionWith(rule.enablesParts);
+                _availableParts.ExceptWith(rule.disablesParts);
             }
         }
 

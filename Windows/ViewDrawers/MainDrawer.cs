@@ -120,7 +120,7 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
             var tip =
                 $"<b>{installedTrait.LabelCap}</b>\n" +
                 (!installedTrait.description.NullOrEmpty() ? $"{installedTrait.description}\n\n" : string.Empty) +
-                TraitModuleDatabase.GetTraitEffectLines(installedTrait).ToLineList();
+                ModuleDatabase.GetTraitEffectLines(installedTrait).ToLineList();
 
             TooltipHandler.TipRegion(rect, tip);
 

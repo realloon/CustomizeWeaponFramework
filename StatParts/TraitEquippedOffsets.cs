@@ -51,6 +51,32 @@ public class TraitEquippedOffsets : StatPart {
         }
     }
 
+    internal static void Inject() {
+        var targets = DefDatabase<StatDef>.AllDefsListForReading
+            .Where(stat => stat.showOnPawns && stat.showOnHumanlikes)
+            .ToList();
+
+        if (targets.IsNullOrEmpty()) {
+            Log.Warning("[CWF] No suitable StatDefs found to inject TraitEquippedOffsets.");
+            return;
+        }
+
+        foreach (var stat in targets) {
+            // try {
+            stat.parts ??= [];
+            if (stat.parts.Any(p => p is TraitEquippedOffsets)) continue;
+
+            stat.parts.Add(new TraitEquippedOffsets { parentStat = stat });
+            // } catch (Exception e) {
+            // Log.Error($"[CWF] Failed to inject TraitEquippedOffsets into '{stat?.defName}': {e}");
+            // }
+        }
+
+        #if DEBUG
+        Log.Message("[CWF] Injection of TraitEquippedOffsets complete.");
+        #endif
+    }
+
     // helper
     private IReadOnlyCollection<WeaponTraitDef>? GetApplicableTraits(StatRequest req) {
         if (!req.HasThing || req.Thing is not Pawn pawn) return null;

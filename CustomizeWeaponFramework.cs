@@ -8,5 +8,9 @@ public class CustomizeWeaponFramework {
     static CustomizeWeaponFramework() {
         var harmony = new Harmony("Vortex.CustomizeWeaponFramework");
         harmony.PatchAll();
+
+        AdapterDef.Inject();
+        TraitModuleDatabase.BuildCache();
+        TraitEquippedOffsets.Inject();
     }
 }

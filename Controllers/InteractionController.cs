@@ -173,7 +173,7 @@ public class InteractionController(Thing weapon) {
 
         var partsToDisable = new HashSet<Part>();
         foreach (var rule in ext.conditionalPartModifiers) {
-            if (rule.matcher != null && rule.matcher.IsMatch(weapon.def) && !rule.disablesParts.IsNullOrEmpty()) {
+            if (rule.matcher != null && rule.matcher.IsMatch(weapon.def)) {
                 partsToDisable.UnionWith(rule.disablesParts);
             }
         }
@@ -219,13 +219,8 @@ public class InteractionController(Thing weapon) {
             foreach (var rule in ext.conditionalPartModifiers) {
                 if (rule.matcher == null || !rule.matcher.IsMatch(weapon.def)) continue;
 
-                if (!rule.enablesParts.IsNullOrEmpty()) {
-                    availableParts.UnionWith(rule.enablesParts);
-                }
-
-                if (!rule.disablesParts.IsNullOrEmpty()) {
-                    availableParts.ExceptWith(rule.disablesParts);
-                }
+                availableParts.UnionWith(rule.enablesParts);
+                availableParts.ExceptWith(rule.disablesParts);
             }
         }
 
@@ -244,10 +239,16 @@ public class InteractionController(Thing weapon) {
     }
 
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
-        return TraitModuleDatabase.GetAllModuleDefs()
+        return ModuleDatabase.GetAllModuleDefs()
             .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
-            .Where(moduleDef => TraitModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
+            .Where(moduleDef => ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
     }
 
     #endregion
+}
+
+public class ConflictAnalysisResult {
+    public List<WeaponTraitDef> ModulesToRemove { get; } = [];
+
+    public bool HasConflict => !ModulesToRemove.NullOrEmpty();
 }

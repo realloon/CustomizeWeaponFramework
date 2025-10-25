@@ -1,9 +1,15 @@
-// ReSharper disable UnassignedField.Global
+using JetBrains.Annotations;
+
 namespace CWF;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[UsedImplicitly]
 public class ConditionalPartModifier {
-    public WeaponMatcher? matcher;
-    public List<Part>? enablesParts;
-    public List<Part>? disablesParts;
+    [UsedImplicitly]
+    public readonly WeaponMatcher? matcher;
+
+    [UsedImplicitly]
+    public readonly List<Part> enablesParts = [];
+
+    [UsedImplicitly]
+    public readonly List<Part> disablesParts = [];
 }

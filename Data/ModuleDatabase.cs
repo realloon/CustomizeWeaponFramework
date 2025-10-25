@@ -6,7 +6,7 @@ using CWF.Extensions;
 
 namespace CWF;
 
-public static class TraitModuleDatabase {
+public static class ModuleDatabase {
     private static readonly Dictionary<WeaponTraitDef, Part> TraitToPart = new();
     private static readonly Dictionary<WeaponTraitDef, ThingDef> TraitToModule = new();
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
@@ -27,7 +27,7 @@ public static class TraitModuleDatabase {
                 }
             }
 
-            var ext = thingDef.GetModExtension<TraitModuleExtension>();
+            var ext = thingDef.GetModExtension<ModuleExtension>();
             if (ext?.weaponTraitDef == null) continue;
 
             // fill trait caches
@@ -43,7 +43,7 @@ public static class TraitModuleDatabase {
 
         foreach (var moduleDef in TraitToModule.Values) {
             // inject description
-            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+            var traitDef = moduleDef.GetModExtension<ModuleExtension>()?.weaponTraitDef;
             if (traitDef?.description != null) {
                 moduleDef.description = $"{traitDef.description}\n\n{GetTraitEffectLines(traitDef).ToLineList()}";
             }
@@ -116,7 +116,7 @@ public static class TraitModuleDatabase {
     }
 
     public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, ThingDef weaponDef) {
-        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        var ext = moduleDef.GetModExtension<ModuleExtension>();
         if (ext == null) return false;
 
         // exclude first 
@@ -146,7 +146,7 @@ public static class TraitModuleDatabase {
     #region Helpers
 
     private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
-        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        var ext = moduleDef.GetModExtension<ModuleExtension>();
         if (ext == null) yield break;
 
         var results = new HashSet<ThingDef>();

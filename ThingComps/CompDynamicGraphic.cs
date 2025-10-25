@@ -44,7 +44,7 @@ public class CompDynamicGraphic : ThingComp {
     public ModuleGraphicData? GetGraphicDataFor(WeaponTraitDef traitDef) {
         if (!traitDef.TryGetModuleDef(out var moduleDef)) return null;
 
-        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+        var ext = moduleDef.GetModExtension<ModuleExtension>();
         if (ext?.graphicCases.IsNullOrEmpty() ?? true) return null;
 
         var matchingCases = ext.graphicCases

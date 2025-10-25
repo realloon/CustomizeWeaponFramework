@@ -14,14 +14,14 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
             yield return entry;
         }
 
-        var ext = __instance.GetModExtension<TraitModuleExtension>();
+        var ext = __instance.GetModExtension<ModuleExtension>();
         if (ext?.weaponTraitDef == null) yield break;
 
         var traitDef = ext.weaponTraitDef;
         var part = ext.part;
 
         var sb = new StringBuilder();
-        var effectLines = TraitModuleDatabase.GetTraitEffectLines(traitDef);
+        var effectLines = ModuleDatabase.GetTraitEffectLines(traitDef);
 
         if (effectLines.Count > 0) {
             sb.AppendLine($"CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");

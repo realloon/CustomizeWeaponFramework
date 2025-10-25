@@ -1,8 +1,9 @@
+using JetBrains.Annotations;
 using Verse;
 
 namespace CWF;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[UsedImplicitly]
 public class AttachmentPointData {
     public Part part;
     public ModuleGraphicData? baseTexture;

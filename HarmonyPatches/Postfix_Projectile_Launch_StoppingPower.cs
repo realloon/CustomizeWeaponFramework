@@ -2,6 +2,8 @@ using HarmonyLib;
 using UnityEngine;
 using Verse;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF.HarmonyPatches;
 
 [HarmonyPatch(
@@ -12,7 +14,6 @@ namespace CWF.HarmonyPatches;
     }
 )]
 public static class Postfix_Projectile_Launch_StoppingPower {
-    // ReSharper disable once InconsistentNaming
     public static void Postfix(Projectile __instance, Thing? equipment) {
         if (equipment == null || !equipment.TryGetComp<CompDynamicTraits>(out var comp)) return;
 

@@ -57,7 +57,7 @@ public class InteractionController(Thing weapon) {
             );
 
             foreach (var module in availableModules) {
-                var trait = module.def.GetModExtension<TraitModuleExtension>().weaponTraitDef;
+                var trait = module.def.GetModExtension<TraitModuleExtension>().weaponTraitDef!; // todo: fixme
                 installCandidates.TryAdd(trait, module.def);
             }
         }

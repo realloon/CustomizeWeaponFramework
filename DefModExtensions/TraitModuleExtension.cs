@@ -1,28 +1,40 @@
+using JetBrains.Annotations;
 using RimWorld;
 using Verse;
 
-// ReSharper disable UnassignedField.Global
 
 namespace CWF;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[UsedImplicitly]
 public class TraitModuleExtension : DefModExtension {
-    public readonly WeaponTraitDef weaponTraitDef = new();
+    [UsedImplicitly]
+    public readonly WeaponTraitDef? weaponTraitDef;
+
+    [UsedImplicitly]
     public Part part;
 
+    [UsedImplicitly]
     public List<ConditionalPartModifier>? conditionalPartModifiers;
 
+    [UsedImplicitly]
     public List<ThingDef>? requiredWeaponDefs;
+
+    [UsedImplicitly]
     public List<string>? requiredWeaponTags;
+
+    [UsedImplicitly]
     public List<ThingDef>? excludeWeaponDefs;
+
+    [UsedImplicitly]
     public List<string>? excludeWeaponTags;
 
+    [UsedImplicitly]
     public List<GraphicCase>? graphicCases;
 
     // public Rarity rarity; // enum
 
     public override IEnumerable<string> ConfigErrors() {
-        if (weaponTraitDef.defName == Def.DefaultDefName) {
+        if (weaponTraitDef == null) {
             yield return "Required field 'weaponTraitDef' is missing in XML.";
         }
 

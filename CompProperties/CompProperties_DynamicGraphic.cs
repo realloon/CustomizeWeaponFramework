@@ -1,10 +1,11 @@
+using JetBrains.Annotations;
 using Verse;
 
 namespace CWF;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[UsedImplicitly]
 public class CompProperties_DynamicGraphic : CompProperties {
-    // ReSharper disable once CollectionNeverUpdated.Global
+    [UsedImplicitly]
     public readonly List<AttachmentPointData> attachmentPoints = [];
 
     public CompProperties_DynamicGraphic() => compClass = typeof(CompDynamicGraphic);

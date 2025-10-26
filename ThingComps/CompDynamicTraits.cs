@@ -246,8 +246,8 @@ public class CompDynamicTraits : ThingComp {
                     options.Add(option);
                 }
 
-                if (options.Count == 0) {
-                    options.Add((new FloatMenuOption("Nothing to remove", null)));
+                if (options.Empty()) {
+                    options.Add(new FloatMenuOption("Nothing to remove", null));
                 }
 
                 Find.WindowStack.Add(new FloatMenu(options));

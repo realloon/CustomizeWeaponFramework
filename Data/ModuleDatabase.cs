@@ -59,10 +59,6 @@ public static class ModuleDatabase {
                 moduleDef.descriptionHyperlinks.Add(new DefHyperlink(weaponDef));
             }
         }
-
-        #if DEBUG
-        Log.Message($"[CWF] Built Trait caches with {TraitToPart.Count} entries and injected hyperlinks.");
-        #endif
     }
 
     internal static bool TryGetPart(this WeaponTraitDef traitDef, out Part part) {

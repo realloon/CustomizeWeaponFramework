@@ -71,10 +71,6 @@ public class TraitEquippedOffsets : StatPart {
             // Log.Error($"[CWF] Failed to inject TraitEquippedOffsets into '{stat?.defName}': {e}");
             // }
         }
-
-        #if DEBUG
-        Log.Message("[CWF] Injection of TraitEquippedOffsets complete.");
-        #endif
     }
 
     // helper

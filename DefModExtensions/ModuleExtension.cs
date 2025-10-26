@@ -8,7 +8,7 @@ namespace CWF;
 [UsedImplicitly]
 public class ModuleExtension : DefModExtension {
     [UsedImplicitly]
-    public readonly WeaponTraitDef? weaponTraitDef;
+    public readonly WeaponTraitDef weaponTraitDef = new();
 
     [UsedImplicitly]
     public Part part;
@@ -34,7 +34,7 @@ public class ModuleExtension : DefModExtension {
     // public Rarity rarity; // enum
 
     public override IEnumerable<string> ConfigErrors() {
-        if (weaponTraitDef == null) {
+        if (weaponTraitDef.defName == Def.DefaultDefName) {
             yield return "Required field 'weaponTraitDef' is missing in XML.";
         }
 
@@ -46,7 +46,12 @@ public class ModuleExtension : DefModExtension {
 
 [UsedImplicitly]
 public class GraphicCase {
-    public WeaponMatcher? matcher;
-    public ModuleGraphicData? graphicData;
-    public readonly int priority = 0;
+    [UsedImplicitly]
+    public readonly WeaponMatcher? matcher;
+
+    [UsedImplicitly]
+    public readonly ModuleGraphicData? graphicData;
+
+    [UsedImplicitly]
+    public readonly int priority;
 }

@@ -4,6 +4,7 @@ using Verse;
 namespace CWF;
 
 [UsedImplicitly]
+[Obsolete("This class is deprecated and will be removed in a future version. Use AdapterDef system instead.")]
 public class UpgradeExtension : DefModExtension {
     [UsedImplicitly]
     public readonly ThingDef? baseWeaponDef;

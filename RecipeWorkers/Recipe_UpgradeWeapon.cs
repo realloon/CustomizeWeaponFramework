@@ -4,6 +4,7 @@ using Verse;
 
 namespace CWF;
 
+[Obsolete("This class is deprecated and will be removed in a future version. Use AdapterDef system instead.")]
 public class Recipe_UpgradeWeapon : RecipeWorker {
     // Cache: Key is the base weaponDef, Value is the custom weaponDef.
     private static Dictionary<ThingDef, ThingDef> _upgradePaths = new();

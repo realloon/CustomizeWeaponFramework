@@ -1,9 +1,10 @@
+using JetBrains.Annotations;
 using UnityEngine;
 using Verse;
 
 namespace CWF;
 
-// ReSharper disable once ClassNeverInstantiated.Global
+[UsedImplicitly]
 public class ConfigWindow : Mod {
     private readonly Settings _settings;
 

@@ -1,7 +1,6 @@
 using RimWorld;
 using Verse;
 using Verse.Sound;
-using CWF.Extensions;
 
 namespace CWF.Controllers;
 
@@ -57,7 +56,7 @@ public class InteractionController(Thing weapon) {
             );
 
             foreach (var module in availableModules) {
-                var trait = module.def.GetModExtension<ModuleExtension>().weaponTraitDef!; // todo: fixme
+                var trait = module.def.GetModExtension<ModuleExtension>().weaponTraitDef; // todo: fixme
                 installCandidates.TryAdd(trait, module.def);
             }
         }
@@ -239,7 +238,7 @@ public class InteractionController(Thing weapon) {
     }
 
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
-        return ModuleDatabase.GetAllModuleDefs()
+        return ModuleDatabase.AllModuleDefs
             .Where(moduleDef => moduleDef.GetModExtension<ModuleExtension>().part == part)
             .Where(moduleDef => ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
     }

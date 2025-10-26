@@ -11,7 +11,7 @@ public static class ModuleDatabase {
     private static readonly Dictionary<WeaponTraitDef, ThingDef> TraitToModule = new();
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
 
-    public static IEnumerable<ThingDef> GetAllModuleDefs() => TraitToModule.Values; // todo
+    public static IEnumerable<ThingDef> AllModuleDefs => TraitToModule.Values;
 
     internal static void BuildCache() {
         foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
@@ -74,7 +74,7 @@ public static class ModuleDatabase {
     }
 
     public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
-        var effectLines = new List<string>();
+        var effectLines = new List<string>(); // todo: refactor
 
         // offset
         if (!traitDef.statOffsets.IsNullOrEmpty()) {

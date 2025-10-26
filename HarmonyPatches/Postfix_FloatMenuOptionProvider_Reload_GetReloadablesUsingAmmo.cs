@@ -3,7 +3,7 @@ using RimWorld;
 using RimWorld.Utility;
 using Verse;
 
-// ReSharper disable  InconsistentNaming
+// ReSharper disable InconsistentNaming
 
 namespace CWF.HarmonyPatches;
 

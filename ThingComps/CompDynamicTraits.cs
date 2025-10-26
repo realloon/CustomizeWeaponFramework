@@ -274,7 +274,7 @@ public class CompDynamicTraits : ThingComp {
 
     private void InitializeTraits() {
         var defaultTraitsList = Props.defaultWeaponTraitDefs;
-        if (defaultTraitsList.IsNullOrEmpty()) return;
+        if (defaultTraitsList.Empty()) return;
 
         foreach (var traitDef in defaultTraitsList) {
             if (traitDef.TryGetPart(out var part)) {
@@ -322,7 +322,7 @@ public class CompDynamicTraits : ThingComp {
         if (!settings.randomModulesEnabled) return;
 
         var allSupportedParts = Props.supportParts;
-        if (allSupportedParts.NullOrEmpty()) return;
+        if (allSupportedParts.Empty()) return;
 
         var occupiedParts = _installedTraits.Keys;
         var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();

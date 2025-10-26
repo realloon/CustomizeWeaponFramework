@@ -67,7 +67,7 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
         if (_compDynamicTraits == null) return;
 
         var supportedParts = groupParts.Where(p => _compDynamicTraits.AvailableParts.Contains(p)).ToList();
-        if (supportedParts.Count == 0) return;
+        if (supportedParts.Empty()) return;
 
         var count = supportedParts.Count;
         if (direction == Direction.Horizontal) {

@@ -27,7 +27,7 @@ public static class ModuleDatabase {
                 }
             }
 
-            var ext = thingDef.GetModExtension<ModuleExtension>();
+            var ext = thingDef.GetModExtension<TraitModuleExtension>();
             if (ext?.weaponTraitDef == null) continue;
 
             // fill trait caches
@@ -43,7 +43,7 @@ public static class ModuleDatabase {
 
         foreach (var moduleDef in TraitToModule.Values) {
             // inject description
-            var traitDef = moduleDef.GetModExtension<ModuleExtension>()?.weaponTraitDef;
+            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
             if (traitDef?.description != null) {
                 moduleDef.description = $"{traitDef.description}\n\n{GetTraitEffectLines(traitDef).ToLineList()}";
             }
@@ -116,7 +116,7 @@ public static class ModuleDatabase {
     }
 
     public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, ThingDef weaponDef) {
-        var ext = moduleDef.GetModExtension<ModuleExtension>();
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) return false;
 
         // exclude first 
@@ -146,7 +146,7 @@ public static class ModuleDatabase {
     #region Helpers
 
     private static IEnumerable<ThingDef> GetCompatibleWeaponDefsFor(ThingDef moduleDef) {
-        var ext = moduleDef.GetModExtension<ModuleExtension>();
+        var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) yield break;
 
         var results = new HashSet<ThingDef>();

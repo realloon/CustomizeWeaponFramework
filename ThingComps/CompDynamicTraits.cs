@@ -359,7 +359,7 @@ public class CompDynamicTraits : ThingComp {
         foreach (var traitDef in Traits) {
             if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
 
-            var modifiers = moduleDef.GetModExtension<ModuleExtension>()?.conditionalPartModifiers;
+            var modifiers = moduleDef.GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
             if (modifiers == null) continue;
 
             foreach (var rule in modifiers) {

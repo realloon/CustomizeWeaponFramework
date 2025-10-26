@@ -14,7 +14,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
             yield return entry;
         }
 
-        var ext = __instance.GetModExtension<ModuleExtension>();
+        var ext = __instance.GetModExtension<TraitModuleExtension>();
         if (ext?.weaponTraitDef == null) yield break;
 
         var traitDef = ext.weaponTraitDef;

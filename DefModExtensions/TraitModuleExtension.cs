@@ -6,7 +6,7 @@ using Verse;
 namespace CWF;
 
 [UsedImplicitly]
-public class ModuleExtension : DefModExtension {
+public class TraitModuleExtension : DefModExtension {
     [UsedImplicitly]
     public readonly WeaponTraitDef weaponTraitDef = new();
 

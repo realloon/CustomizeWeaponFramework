@@ -56,7 +56,7 @@ public class InteractionController(Thing weapon) {
             );
 
             foreach (var module in availableModules) {
-                var trait = module.def.GetModExtension<ModuleExtension>().weaponTraitDef; // todo: fixme
+                var trait = module.def.GetModExtension<TraitModuleExtension>().weaponTraitDef; // todo: fixme
                 installCandidates.TryAdd(trait, module.def);
             }
         }
@@ -167,7 +167,7 @@ public class InteractionController(Thing weapon) {
 
     private ConflictAnalysisResult AnalyzeInstallConflict(ThingDef moduleToInstall) {
         var result = new ConflictAnalysisResult();
-        var ext = moduleToInstall.GetModExtension<ModuleExtension>();
+        var ext = moduleToInstall.GetModExtension<TraitModuleExtension>();
         if (ext?.conditionalPartModifiers == null) return result;
 
         var partsToDisable = new HashSet<Part>();
@@ -212,7 +212,7 @@ public class InteractionController(Thing weapon) {
         foreach (var traitDef in futureTraits) {
             if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
 
-            var ext = moduleDef.GetModExtension<ModuleExtension>();
+            var ext = moduleDef.GetModExtension<TraitModuleExtension>();
             if (ext?.conditionalPartModifiers == null) continue;
 
             foreach (var rule in ext.conditionalPartModifiers) {
@@ -239,7 +239,7 @@ public class InteractionController(Thing weapon) {
 
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
         return ModuleDatabase.AllModuleDefs
-            .Where(moduleDef => moduleDef.GetModExtension<ModuleExtension>().part == part)
+            .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
             .Where(moduleDef => ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
     }
 

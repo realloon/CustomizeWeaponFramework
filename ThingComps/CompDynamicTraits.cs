@@ -168,6 +168,23 @@ public class CompDynamicTraits : ThingComp {
         if (Scribe.mode != LoadSaveMode.PostLoadInit) return;
 
         _installedTraits ??= new Dictionary<Part, WeaponTraitDef>(); // for legacy saves
+
+        #region AutoFixMissing
+
+        var partsWithMissingTraits = _installedTraits
+            .Where(pair => pair.Value == null)
+            .Select(pair => pair.Key)
+            .ToArray();
+
+        if (partsWithMissingTraits.Any()) {
+            _installedTraits.RemoveRange(partsWithMissingTraits);
+
+            Log.Message($"[CWF] Removed {partsWithMissingTraits.Length} missing traits from '{parent.LabelCap}'. " +
+                        $"This is a safe, one-time operation.");
+        }
+
+        #endregion
+
         RecalculateAvailableParts();
         SetupAbility(true);
     }

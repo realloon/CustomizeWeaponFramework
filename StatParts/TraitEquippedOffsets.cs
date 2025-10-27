@@ -22,7 +22,7 @@ public class TraitEquippedOffsets : StatPart {
 
         var sb = new StringBuilder();
         sb.AppendLine();
-        sb.AppendLine("CWF_UI_FromEquipped".Translate());
+        sb.Append("CWF_UI_FromEquipped".Translate());
 
         foreach (var trait in traits) {
             var localOffset = trait.equippedStatOffsets?
@@ -32,10 +32,12 @@ public class TraitEquippedOffsets : StatPart {
             if (localOffset == 0f) continue;
 
             var valueStr = parentStat.ValueToString(localOffset, numberSense: ToStringNumberSense.Offset);
-            sb.AppendLine($"    {trait.LabelCap}: {valueStr}"); // consistent with interface format
+            sb.AppendInNewLine($"    {trait.LabelCap}: {valueStr}"); // consistent with interface format
         }
+        
+        sb.AppendLine();
 
-        return sb.ToString(); // \n
+        return sb.ToString();
     }
 
     public override IEnumerable<Dialog_InfoCard.Hyperlink> GetInfoCardHyperlinks(StatRequest req) {

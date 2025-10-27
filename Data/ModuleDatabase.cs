@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UnityEngine;
 using RimWorld;
 using Verse;
@@ -45,7 +46,10 @@ public static class ModuleDatabase {
             // inject description
             var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
             if (traitDef?.description != null) {
-                moduleDef.description = $"{traitDef.description}\n\n{GetTraitEffectLines(traitDef).ToLineList()}";
+                var sb = new StringBuilder();
+                sb.AppendLine(traitDef.description);
+                sb.AppendInNewLine(GetTraitEffectLines(traitDef).ToLineList());
+                moduleDef.description = sb.ToString();
             }
 
             // inject hyperlinks

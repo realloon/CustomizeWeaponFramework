@@ -1,3 +1,4 @@
+using System.Text;
 using RimWorld;
 using UnityEngine;
 using Verse;
@@ -117,12 +118,12 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
                 Text.Anchor = originalAnchor;
             }
 
-            var tip =
-                $"<b>{installedTrait.LabelCap}</b>\n" +
-                (!installedTrait.description.NullOrEmpty() ? $"{installedTrait.description}\n\n" : string.Empty) +
-                ModuleDatabase.GetTraitEffectLines(installedTrait).ToLineList();
+            var tipSb = new StringBuilder();
+            tipSb.AppendLine($"<b>{installedTrait.LabelCap}</b>");
+            tipSb.AppendLine(installedTrait.description);
+            tipSb.AppendInNewLine(ModuleDatabase.GetTraitEffectLines(installedTrait).ToLineList());
 
-            TooltipHandler.TipRegion(rect, tip);
+            TooltipHandler.TipRegion(rect, tipSb.ToString());
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {

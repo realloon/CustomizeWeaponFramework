@@ -92,7 +92,7 @@ public class CompDynamicTraits : ThingComp {
             if (!Mathf.Approximately(statFactorFromList, 1f)) {
                 stringBuilder ??= new StringBuilder();
                 stringBuilder.AppendLine(
-                    whitespace + "- " +
+                    whitespace + " - " +
                     weaponTraitDef.LabelCap + ": " +
                     stat.Worker.ValueToString(statFactorFromList, false, ToStringNumberSense.Factor));
             }
@@ -100,6 +100,7 @@ public class CompDynamicTraits : ThingComp {
 
         if (stringBuilder == null) return;
 
+        sb.AppendLine();
         sb.AppendLine(whitespace + "CWF_UI_WeaponModules".Translate() + ":");
         sb.Append(stringBuilder);
     }

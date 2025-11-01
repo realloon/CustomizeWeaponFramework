@@ -56,6 +56,42 @@ public class CompDynamicTraits : ThingComp {
         return traitDef;
     }
 
+    public void RandomizeTraits() {
+        var settings = LoadedModManager.GetMod<ConfigWindow>().GetSettings<Settings>();
+        if (!settings.randomModulesEnabled) return;
+
+        var allSupportedParts = Props.supportParts;
+        if (allSupportedParts.Empty()) return;
+
+        var occupiedParts = _installedTraits.Keys;
+        var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();
+        if (availableEmptyParts.NullOrEmpty()) return;
+
+        var modulesToInstallCount = Rand.RangeInclusive(settings.minRandomModules, settings.maxRandomModules);
+        modulesToInstallCount = Mathf.Min(modulesToInstallCount, availableEmptyParts.Count);
+
+        for (var i = 0; i < modulesToInstallCount; i++) {
+            if (!availableEmptyParts.Any()) break;
+
+            var randomPart = availableEmptyParts.RandomElement();
+            availableEmptyParts.Remove(randomPart);
+
+            var compatibleTraits = DefDatabase<WeaponTraitDef>.AllDefs
+                .Where(traitDef => {
+                    if (!traitDef.TryGetPart(out var part) || part != randomPart) return false;
+
+                    return traitDef.TryGetModuleDef(out var moduleDef) &&
+                           ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                })
+                .ToList();
+
+            if (!compatibleTraits.Any()) continue;
+
+            var traitToInstall = compatibleTraits.RandomElement();
+            InstallTrait(randomPart, traitToInstall);
+        }
+    }
+
     #region Stat
 
     public override float GetStatOffset(StatDef stat) {
@@ -152,11 +188,6 @@ public class CompDynamicTraits : ThingComp {
         base.PostPostMake();
 
         InitializeTraits();
-
-        if (!CreationContext.IsPlayerCrafting) {
-            RandomizeTraits();
-        }
-
         RecalculateAvailableParts();
         SetupAbility(false);
     }
@@ -333,42 +364,6 @@ public class CompDynamicTraits : ThingComp {
         }
 
         #endregion
-    }
-
-    private void RandomizeTraits() {
-        var settings = LoadedModManager.GetMod<ConfigWindow>().GetSettings<Settings>();
-        if (!settings.randomModulesEnabled) return;
-
-        var allSupportedParts = Props.supportParts;
-        if (allSupportedParts.Empty()) return;
-
-        var occupiedParts = _installedTraits.Keys;
-        var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();
-        if (availableEmptyParts.NullOrEmpty()) return;
-
-        var modulesToInstallCount = Rand.RangeInclusive(settings.minRandomModules, settings.maxRandomModules);
-        modulesToInstallCount = Mathf.Min(modulesToInstallCount, availableEmptyParts.Count);
-
-        for (var i = 0; i < modulesToInstallCount; i++) {
-            if (!availableEmptyParts.Any()) break;
-
-            var randomPart = availableEmptyParts.RandomElement();
-            availableEmptyParts.Remove(randomPart);
-
-            var compatibleTraits = DefDatabase<WeaponTraitDef>.AllDefs
-                .Where(traitDef => {
-                    if (!traitDef.TryGetPart(out var part) || part != randomPart) return false;
-
-                    return traitDef.TryGetModuleDef(out var moduleDef) &&
-                           ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
-                })
-                .ToList();
-
-            if (!compatibleTraits.Any()) continue;
-
-            var traitToInstall = compatibleTraits.RandomElement();
-            InstallTrait(randomPart, traitToInstall);
-        }
     }
 
     private void RecalculateAvailableParts() {

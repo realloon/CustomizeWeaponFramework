@@ -48,48 +48,42 @@ public class Recipe_UpgradeWeapon : RecipeWorker {
     /// Called when a crafting iteration is completed. This is where we create the new item.
     /// </summary>
     public override void Notify_IterationCompleted(Pawn billDoer, List<Thing> ingredients) {
-        CreationContext.IsPlayerCrafting = true;
+        base.Notify_IterationCompleted(billDoer, ingredients);
 
-        try {
-            base.Notify_IterationCompleted(billDoer, ingredients);
-
-            // Find the base weapon from the ingredients list.
-            var baseWeapon = Enumerable.FirstOrDefault(ingredients, ing => _upgradePaths.ContainsKey(ing.def));
-            if (baseWeapon == null) {
-                Log.Error("[CWF] Recipe_UpgradeWeapon's Notify_IterationCompleted was called, " +
-                          "but no valid base weapon was found in ingredients.");
-                return;
-            }
-
-            // Get the ThingDef for the custom weapon to be created.
-            var customWeaponDef = _upgradePaths[baseWeapon.def];
-
-            // Read the quality and durability from the original weapon.
-            var hasQuality = baseWeapon.TryGetComp<CompQuality>(out var qualityComp);
-            var quality = hasQuality ? qualityComp.Quality : QualityCategory.Good;
-
-            var maxHitPoints = baseWeapon.MaxHitPoints;
-            // This is the direct, simplified way to get the current durability.
-            var currentHitPoints = baseWeapon.HitPoints;
-
-            // Create the new custom weapon instance.
-            var customWeapon = ThingMaker.MakeThing(customWeaponDef);
-
-            // Apply the saved quality and durability to the new weapon.
-            customWeapon.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
-
-            // Calculate the health percentage.
-            var hitPoints = (float)currentHitPoints / maxHitPoints;
-            // Calculate the new weapon's target hit points.
-            var newHitPoints = customWeapon.MaxHitPoints * hitPoints;
-
-            // Set the final hit points, using RoundRandom and ensuring it's at least 1.
-            customWeapon.HitPoints = Mathf.Max(1, GenMath.RoundRandom(newHitPoints));
-
-            // Spawn the newly created weapon near the crafter.
-            GenPlace.TryPlaceThing(customWeapon, billDoer.Position, billDoer.Map, ThingPlaceMode.Near);
-        } finally {
-            CreationContext.IsPlayerCrafting = false;
+        // Find the base weapon from the ingredients list.
+        var baseWeapon = Enumerable.FirstOrDefault(ingredients, ing => _upgradePaths.ContainsKey(ing.def));
+        if (baseWeapon == null) {
+            Log.Error("[CWF] Recipe_UpgradeWeapon's Notify_IterationCompleted was called, " +
+                      "but no valid base weapon was found in ingredients.");
+            return;
         }
+
+        // Get the ThingDef for the custom weapon to be created.
+        var customWeaponDef = _upgradePaths[baseWeapon.def];
+
+        // Read the quality and durability from the original weapon.
+        var hasQuality = baseWeapon.TryGetComp<CompQuality>(out var qualityComp);
+        var quality = hasQuality ? qualityComp.Quality : QualityCategory.Good;
+
+        var maxHitPoints = baseWeapon.MaxHitPoints;
+        // This is the direct, simplified way to get the current durability.
+        var currentHitPoints = baseWeapon.HitPoints;
+
+        // Create the new custom weapon instance.
+        var customWeapon = ThingMaker.MakeThing(customWeaponDef);
+
+        // Apply the saved quality and durability to the new weapon.
+        customWeapon.TryGetComp<CompQuality>()?.SetQuality(quality, ArtGenerationContext.Colony);
+
+        // Calculate the health percentage.
+        var hitPoints = (float)currentHitPoints / maxHitPoints;
+        // Calculate the new weapon's target hit points.
+        var newHitPoints = customWeapon.MaxHitPoints * hitPoints;
+
+        // Set the final hit points, using RoundRandom and ensuring it's at least 1.
+        customWeapon.HitPoints = Mathf.Max(1, GenMath.RoundRandom(newHitPoints));
+
+        // Spawn the newly created weapon near the crafter.
+        GenPlace.TryPlaceThing(customWeapon, billDoer.Position, billDoer.Map, ThingPlaceMode.Near);
     }
 }

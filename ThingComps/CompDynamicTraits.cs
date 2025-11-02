@@ -210,7 +210,7 @@ public class CompDynamicTraits : ThingComp {
         if (partsWithMissingTraits.Any()) {
             _installedTraits.RemoveRange(partsWithMissingTraits);
 
-            Log.Message($"[CWF] Removed {partsWithMissingTraits.Length} missing traits from '{parent.LabelCap}'. " +
+            Log.Warning($"[CWF] Removed {partsWithMissingTraits.Length} missing traits from '{parent.LabelCap}'. " +
                         $"This is a safe, one-time operation.");
         }
 

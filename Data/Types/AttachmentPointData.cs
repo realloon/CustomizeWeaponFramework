@@ -5,9 +5,16 @@ namespace CWF;
 
 [UsedImplicitly]
 public class AttachmentPointData {
+    // ReSharper disable once InconsistentNaming
     public Part part;
+
+    // ReSharper disable once InconsistentNaming
     public ModuleGraphicData? baseTexture;
+
+    // ReSharper disable once InconsistentNaming
     public int layer;
+
+    // ReSharper disable once InconsistentNaming
     public bool receivesColor;
 
     public void ExposeData() {

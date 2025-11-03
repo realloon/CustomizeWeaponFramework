@@ -1,20 +1,18 @@
 using JetBrains.Annotations;
-using UnityEngine.Tilemaps;
 using Verse;
+
+// ReSharper disable InconsistentNaming
 
 namespace CWF;
 
 public class AdapterDef : Def {
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public readonly GraphicData? graphicData;
 
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public readonly List<string> weaponTags = [];
 
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public readonly List<CompProperties> comps = [];
 
     public override IEnumerable<string> ConfigErrors() {

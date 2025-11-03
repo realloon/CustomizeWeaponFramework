@@ -1,17 +1,17 @@
 using JetBrains.Annotations;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF;
 
 [UsedImplicitly]
 public class ConditionalPartModifier {
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public readonly WeaponMatcher? matcher;
 
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
-    public readonly List<Part> enablesParts = [];
+    public readonly List<PartDef> enablesParts = [];
 
     [UsedImplicitly]
-    public readonly List<Part> disablesParts = [];
+    public readonly List<PartDef> disablesParts = [];
 }

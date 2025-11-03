@@ -2,16 +2,16 @@ using Verse;
 using CWF.Extensions;
 using JetBrains.Annotations;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF;
 
 [UsedImplicitly]
 public class WeaponMatcher {
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public List<ThingDef> weaponDefs = [];
 
     [UsedImplicitly]
-    // ReSharper disable once InconsistentNaming
     public List<string> weaponTags = [];
 
     public bool IsMatch(ThingDef weaponDef) {

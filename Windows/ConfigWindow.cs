@@ -18,15 +18,15 @@ public class ConfigWindow : Mod {
         var listing = new Listing_Standard();
         listing.Begin(inRect);
 
-        listing.CheckboxLabeled("CWF_UI_RandomModuleGeneration".Translate(), ref _settings.randomModulesEnabled,
+        listing.CheckboxLabeled("CWF_UI_RandomModuleGeneration".Translate(), ref _settings.RandomModulesEnabled,
             "CWF_UI_RandomModuleGenerationDesc".Translate());
 
-        if (_settings.randomModulesEnabled) {
-            var range = new IntRange(_settings.minRandomModules, _settings.maxRandomModules);
+        if (_settings.RandomModulesEnabled) {
+            var range = new IntRange(_settings.MinRandomModules, _settings.MaxRandomModules);
             listing.IntRange(ref range, 0, 10);
 
-            _settings.minRandomModules = range.min;
-            _settings.maxRandomModules = range.max;
+            _settings.MinRandomModules = range.min;
+            _settings.MaxRandomModules = range.max;
         }
 
         listing.Gap(24f);

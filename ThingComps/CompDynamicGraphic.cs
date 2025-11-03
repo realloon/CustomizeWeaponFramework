@@ -72,9 +72,11 @@ public class CompDynamicGraphic : ThingComp {
 
         if (_compDynamicTraits != null) {
             foreach (var point in Props.attachmentPoints) {
-                var installedTrait = _compDynamicTraits.GetInstalledTraitFor(point.part!); // todo
+                if (point.part == null) continue;
 
+                var installedTrait = _compDynamicTraits.GetInstalledTraitFor(point.part);
                 ModuleGraphicData? graphicToRender = null;
+
                 if (installedTrait != null) {
                     graphicToRender = GetGraphicDataFor(installedTrait);
                 }

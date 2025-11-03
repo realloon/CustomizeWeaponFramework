@@ -10,27 +10,27 @@ namespace CWF;
 public class CompDynamicTraits : ThingComp {
     private CompProperties_DynamicTraits Props => (CompProperties_DynamicTraits)props;
 
-    private Dictionary<Part, WeaponTraitDef> _installedTraits = new();
+    private Dictionary<PartDef, WeaponTraitDef> _installedTraits = new();
 
-    private HashSet<Part> _availableParts = [];
+    private HashSet<PartDef> _availableParts = [];
 
     /// <summary>
     /// Gets a copy of the dictionary containing all currently installed Traits,
     /// or sets a new dictionary of Traits, completely overwriting the old one.
     /// </summary>
-    public Dictionary<Part, WeaponTraitDef> InstalledTraits {
+    public Dictionary<PartDef, WeaponTraitDef> InstalledTraits {
         get => new(_installedTraits);
         set {
-            _installedTraits = new Dictionary<Part, WeaponTraitDef>(value);
+            _installedTraits = new Dictionary<PartDef, WeaponTraitDef>(value);
             OnTraitsChanged();
         }
     }
 
     public IReadOnlyCollection<WeaponTraitDef> Traits => _installedTraits.Values;
 
-    public IReadOnlyCollection<Part> AvailableParts => _availableParts;
+    public IReadOnlyCollection<PartDef> AvailableParts => _availableParts;
 
-    public void InstallTrait(Part part, WeaponTraitDef traitDef) {
+    public void InstallTrait(PartDef part, WeaponTraitDef traitDef) {
         if (!_installedTraits.TryAdd(part, traitDef)) {
             Log.Warning($"[CWF] {traitDef.defName}'s slot {part} on {parent.LabelCap} already occupied.");
             return;
@@ -39,7 +39,7 @@ public class CompDynamicTraits : ThingComp {
         OnTraitsChanged();
     }
 
-    public void UninstallTrait(Part part) {
+    public void UninstallTrait(PartDef part) {
         if (!_installedTraits.Remove(part)) return;
 
         OnTraitsChanged();
@@ -51,14 +51,14 @@ public class CompDynamicTraits : ThingComp {
     //     OnTraitsChanged();
     // }
 
-    public WeaponTraitDef? GetInstalledTraitFor(Part part) {
+    public WeaponTraitDef? GetInstalledTraitFor(PartDef part) {
         _installedTraits.TryGetValue(part, out var traitDef);
         return traitDef;
     }
 
     public void RandomizeTraits() {
         var settings = LoadedModManager.GetMod<ConfigWindow>().GetSettings<Settings>();
-        if (!settings.randomModulesEnabled) return;
+        if (!settings.RandomModulesEnabled) return;
 
         var allSupportedParts = Props.supportParts;
         if (allSupportedParts.Empty()) return;
@@ -67,7 +67,7 @@ public class CompDynamicTraits : ThingComp {
         var availableEmptyParts = allSupportedParts.Except(occupiedParts).ToList();
         if (availableEmptyParts.NullOrEmpty()) return;
 
-        var modulesToInstallCount = Rand.RangeInclusive(settings.minRandomModules, settings.maxRandomModules);
+        var modulesToInstallCount = Rand.RangeInclusive(settings.MinRandomModules, settings.MaxRandomModules);
         modulesToInstallCount = Mathf.Min(modulesToInstallCount, availableEmptyParts.Count);
 
         for (var i = 0; i < modulesToInstallCount; i++) {
@@ -194,11 +194,37 @@ public class CompDynamicTraits : ThingComp {
 
     public override void PostExposeData() {
         base.PostExposeData();
-        Scribe_Collections.Look(ref _installedTraits, "installedParts", LookMode.Value, LookMode.Def);
+
+        if (Scribe.mode == LoadSaveMode.Saving) {
+            Scribe_Collections.Look(ref _installedTraits, "installedTraits", LookMode.Def, LookMode.Def);
+        } else if (Scribe.mode == LoadSaveMode.LoadingVars) {
+            Scribe_Collections.Look(ref _installedTraits, "installedTraits", LookMode.Def, LookMode.Def);
+
+            if (_installedTraits == null) { // old enum part
+                _installedTraits = new Dictionary<PartDef, WeaponTraitDef>();
+
+                var oldInstalledParts = new Dictionary<Part, WeaponTraitDef>();
+                Scribe_Collections.Look(ref oldInstalledParts, "installedParts", LookMode.Value, LookMode.Def);
+
+                if (!oldInstalledParts.IsNullOrEmpty()) {
+                    Log.Message($"[CWF] Found old Part data for '{parent.LabelCap}'. Converting...");
+
+                    foreach (var kvp in oldInstalledParts) {
+                        var newPartDef = PartEnumConverter.Convert(kvp.Key);
+                        if (newPartDef != null) {
+                            _installedTraits.Add(newPartDef, kvp.Value);
+                        } else {
+                            Log.Warning($"[CWF] Failed to convert Part '{kvp.Key}' on weapon '{parent.LabelCap}'. " +
+                                        $"This trait will be lost.");
+                        }
+                    }
+                }
+            }
+        }
 
         if (Scribe.mode != LoadSaveMode.PostLoadInit) return;
 
-        _installedTraits ??= new Dictionary<Part, WeaponTraitDef>(); // for legacy saves
+        _installedTraits ??= new Dictionary<PartDef, WeaponTraitDef>();
 
         #region AutoFixMissing
 
@@ -367,7 +393,7 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void RecalculateAvailableParts() {
-        _availableParts = new HashSet<Part>(Props.supportParts);
+        _availableParts = new HashSet<PartDef>(Props.supportParts);
 
         foreach (var traitDef in Traits) {
             if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;

@@ -8,7 +8,7 @@ using CWF.Extensions;
 namespace CWF;
 
 public static class ModuleDatabase {
-    private static readonly Dictionary<WeaponTraitDef, Part> TraitToPart = new();
+    private static readonly Dictionary<WeaponTraitDef, PartDef> TraitToPart = new();
     private static readonly Dictionary<WeaponTraitDef, ThingDef> TraitToModule = new();
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
 
@@ -65,7 +65,7 @@ public static class ModuleDatabase {
         }
     }
 
-    internal static bool TryGetPart(this WeaponTraitDef traitDef, out Part part) {
+    internal static bool TryGetPart(this WeaponTraitDef traitDef, out PartDef part) {
         return TraitToPart.TryGetValue(traitDef, out part);
     }
 

@@ -19,7 +19,7 @@ public class InteractionController(Thing weapon) {
     /// Opens a float-menu for the clicked slot.  
     /// If installedTrait is null, lists traits to install; otherwise offers to uninstall the installed trait.
     /// </summary>
-    public void HandleSlotClick(Part part, WeaponTraitDef? installedTrait) {
+    public void HandleSlotClick(PartDef part, WeaponTraitDef? installedTrait) {
         var options = new List<FloatMenuOption>();
 
         if (installedTrait == null) {
@@ -33,7 +33,7 @@ public class InteractionController(Thing weapon) {
         }
     }
 
-    private void BuildInstallOptions(Part part, List<FloatMenuOption> options) {
+    private void BuildInstallOptions(PartDef part, List<FloatMenuOption> options) {
         var installCandidates = new Dictionary<WeaponTraitDef, ThingDef>();
 
         var compatibleModuleDefs = new HashSet<ThingDef>(GetCompatibleModuleDefsFor(part));
@@ -82,7 +82,7 @@ public class InteractionController(Thing weapon) {
     }
 
 
-    private void BuildUninstallOption(Part part, List<FloatMenuOption> options, WeaponTraitDef installedTrait) {
+    private void BuildUninstallOption(PartDef part, List<FloatMenuOption> options, WeaponTraitDef installedTrait) {
         options.Add(new FloatMenuOption("CWF_UI_Uninstall".Translate(installedTrait.LabelCap), () => {
             var analysis = AnalyzeUninstallConflict(part);
             if (!analysis.HasConflict) {
@@ -110,7 +110,7 @@ public class InteractionController(Thing weapon) {
         }));
     }
 
-    private void DoInstall(Part part, WeaponTraitDef traitToInstall) {
+    private void DoInstall(PartDef part, WeaponTraitDef traitToInstall) {
         _stagedUninstalls.Remove(traitToInstall);
 
         _compDynamicTraits.InstallTrait(part, traitToInstall);
@@ -118,7 +118,7 @@ public class InteractionController(Thing weapon) {
         OnDataChanged();
     }
 
-    private void DoUninstall(Part part) {
+    private void DoUninstall(PartDef part) {
         var traitToUninstall = _compDynamicTraits.GetInstalledTraitFor(part);
         if (traitToUninstall != null) {
             _stagedUninstalls.Add(traitToUninstall);
@@ -131,7 +131,7 @@ public class InteractionController(Thing weapon) {
 
     #region Helpers
 
-    private Action CreateInstallAction(Part part, WeaponTraitDef traitToInstall) {
+    private Action CreateInstallAction(PartDef part, WeaponTraitDef traitToInstall) {
         return () => {
             if (!traitToInstall.TryGetModuleDef(out var moduleDef)) {
                 DoInstall(part, traitToInstall);
@@ -170,7 +170,7 @@ public class InteractionController(Thing weapon) {
         var ext = moduleToInstall.GetModExtension<TraitModuleExtension>();
         if (ext?.conditionalPartModifiers == null) return result;
 
-        var partsToDisable = new HashSet<Part>();
+        var partsToDisable = new HashSet<PartDef>();
         foreach (var rule in ext.conditionalPartModifiers) {
             if (rule.matcher != null && rule.matcher.IsMatch(weapon.def)) {
                 partsToDisable.UnionWith(rule.disablesParts);
@@ -187,7 +187,7 @@ public class InteractionController(Thing weapon) {
         return result;
     }
 
-    private ConflictAnalysisResult AnalyzeUninstallConflict(Part partToUninstall) {
+    private ConflictAnalysisResult AnalyzeUninstallConflict(PartDef partToUninstall) {
         var result = new ConflictAnalysisResult();
         var currentTraits = _compDynamicTraits.InstalledTraits;
 
@@ -204,10 +204,10 @@ public class InteractionController(Thing weapon) {
         return result;
     }
 
-    private HashSet<Part> CalculateFutureAvailableParts(IEnumerable<WeaponTraitDef> futureTraits) {
+    private HashSet<PartDef> CalculateFutureAvailableParts(IEnumerable<WeaponTraitDef> futureTraits) {
         if (weapon.TryGetComp<CompDynamicTraits>()?.props is not CompProperties_DynamicTraits props) return [];
 
-        var availableParts = new HashSet<Part>(props.supportParts);
+        var availableParts = new HashSet<PartDef>(props.supportParts);
 
         foreach (var traitDef in futureTraits) {
             if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
@@ -237,7 +237,7 @@ public class InteractionController(Thing weapon) {
         Find.WindowStack.Add(dialog);
     }
 
-    private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(Part part) {
+    private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(PartDef part) {
         return ModuleDatabase.AllModuleDefs
             .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
             .Where(moduleDef => ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));

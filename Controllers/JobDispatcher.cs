@@ -7,7 +7,7 @@ namespace CWF.Controllers;
 public class JobDispatcher {
     private readonly Thing _weapon;
     private readonly CompDynamicTraits _compDynamicTraits;
-    private readonly Dictionary<Part, WeaponTraitDef> _initialTraitsState;
+    private readonly Dictionary<PartDef, WeaponTraitDef> _initialTraitsState;
 
     public JobDispatcher(Thing weapon) {
         _weapon = weapon;
@@ -97,11 +97,11 @@ public class JobDispatcher {
             new LookTargets(bestPawn, _weapon), MessageTypeDefOf.PositiveEvent);
     }
 
-    private static List<ModificationData> CalculateNetChanges(Dictionary<Part, WeaponTraitDef> initial,
-        Dictionary<Part, WeaponTraitDef> final) {
+    private static List<ModificationData> CalculateNetChanges(Dictionary<PartDef, WeaponTraitDef> initial,
+        Dictionary<PartDef, WeaponTraitDef> final) {
         var changes = new List<ModificationData>();
-        var allParts = Enum.GetValues(typeof(Part)).Cast<Part>();
-
+        var allParts = DefDatabase<PartDef>.AllDefs;
+        
         foreach (var part in allParts) {
             initial.TryGetValue(part, out var initialTrait);
             final.TryGetValue(part, out var finalTrait);

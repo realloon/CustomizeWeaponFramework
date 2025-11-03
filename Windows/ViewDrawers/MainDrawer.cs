@@ -5,10 +5,11 @@ using Verse;
 
 namespace CWF.ViewDrawers;
 
-public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick) {
+public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotClick) {
     // Data source
     private readonly CompDynamicTraits? _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
 
+    // private readonly Thing _weapon = weapon;
     private const float SlotSize = 56f;
     private const float SlotPadding = 12f;
 
@@ -17,12 +18,9 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
         Vertical
     }
 
-    private static readonly Part[] TopParts = [Part.Receiver, Part.Sight, Part.Barrel];
-    private static readonly Part[] LeftParts = [Part.Stock];
-    private static readonly Part[] RightParts = [Part.Muzzle, Part.Ammo];
-    private static readonly Part[] BottomParts = [Part.Grip, Part.Trigger, Part.Magazine, Part.Underbarrel];
-
     public void Draw(in Rect rect) {
+        if (_compDynamicTraits == null) return;
+
         // define gird row Height
         const float topRowHeight = SlotSize + SlotPadding;
         const float bottomRowHeight = SlotSize + SlotPadding;
@@ -57,27 +55,32 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
             middleCenterRect.center.y - iconHeight / 2f, iconWidth, iconHeight);
         Widgets.ThingIcon(weaponIconRect, weapon);
 
-        DrawPartGroup(in topCenterRect, TopParts, Direction.Horizontal);
-        DrawPartGroup(in middleLeftRect, LeftParts, Direction.Horizontal);
-        DrawPartGroup(in middleRightRect, RightParts, Direction.Vertical);
-        DrawPartGroup(in bottomCenterRect, BottomParts, Direction.Horizontal);
+        var availableParts = _compDynamicTraits.AvailableParts;
+
+        var topParts = availableParts.Where(p => p.group == PartGroup.Top).OrderBy(p => p.order).ToList();
+        var bottomParts = availableParts.Where(p => p.group == PartGroup.Bottom).OrderBy(p => p.order).ToList();
+        var leftParts = availableParts.Where(p => p.group == PartGroup.Left).OrderBy(p => p.order).ToList();
+        var rightParts = availableParts.Where(p => p.group == PartGroup.Right).OrderBy(p => p.order).ToList();
+
+        DrawPartGroup(in topCenterRect, topParts, Direction.Horizontal);
+        DrawPartGroup(in bottomCenterRect, bottomParts, Direction.Horizontal);
+        DrawPartGroup(in middleLeftRect, leftParts, Direction.Horizontal);
+        DrawPartGroup(in middleRightRect, rightParts, Direction.Vertical);
     }
 
     // === Helper ===
-    private void DrawPartGroup(in Rect container, IReadOnlyList<Part> groupParts, Direction direction) {
-        if (_compDynamicTraits == null) return;
+    private void DrawPartGroup(in Rect container, List<PartDef> groupParts, Direction direction) {
+        if (groupParts.Empty()) return;
 
-        var supportedParts = groupParts.Where(p => _compDynamicTraits.AvailableParts.Contains(p)).ToList();
-        if (supportedParts.Empty()) return;
+        var count = groupParts.Count;
 
-        var count = supportedParts.Count;
         if (direction == Direction.Horizontal) {
             var totalWidth = (count * SlotSize) + (Math.Max(0, count - 1) * SlotPadding);
             var startX = container.center.x - totalWidth / 2f;
             var startY = container.center.y - SlotSize / 2f;
 
             for (var i = 0; i < count; i++) {
-                var part = supportedParts[i];
+                var part = groupParts[i];
                 var slotRect = new Rect(startX + i * (SlotSize + SlotPadding), startY, SlotSize, SlotSize);
                 TryDrawSlot(part, in slotRect);
             }
@@ -88,14 +91,14 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
             var startY = container.center.y - totalHeight / 2f;
 
             for (var i = 0; i < count; i++) {
-                var part = supportedParts[i];
+                var part = groupParts[i];
                 var slotRect = new Rect(startX, startY + i * (SlotSize + SlotPadding), SlotSize, SlotSize);
                 TryDrawSlot(part, in slotRect);
             }
         }
     }
 
-    private void TryDrawSlot(Part part, in Rect rect) {
+    private void TryDrawSlot(PartDef part, in Rect rect) {
         if (_compDynamicTraits == null || !_compDynamicTraits.AvailableParts.Contains(part)) return;
 
         var installedTrait = _compDynamicTraits.GetInstalledTraitFor(part);
@@ -127,7 +130,7 @@ public class MainDrawer(Thing weapon, Action<Part, WeaponTraitDef?> onSlotClick)
 
             clicked = Widgets.ButtonInvisible(rect);
         } else {
-            clicked = DrawPartSlot(in rect, $"CWF_UI_{part.ToString()}".Translate());
+            clicked = DrawPartSlot(in rect, part.LabelCap);
         }
 
         if (clicked) onSlotClick.Invoke(part, installedTrait);

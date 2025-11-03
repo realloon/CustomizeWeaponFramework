@@ -4,24 +4,25 @@ namespace CWF;
 
 public static class PartEnumConverter {
     public static PartDef? Convert(Part oldPart) {
-        var defName = oldPart switch {
-            Part.Muzzle => "Muzzle",
-            Part.Barrel => "Barrel",
-            Part.Receiver => "Receiver",
-            Part.Trigger => "Trigger",
-            Part.Stock => "Stock",
-            Part.Grip => "Grip",
-            Part.Sight => "Sight",
-            Part.Magazine => "Magazine",
-            Part.Underbarrel => "Underbarrel",
-            Part.Ammo => "Ammo",
+        var partDef = oldPart switch {
+            Part.Muzzle => PartDefOf.Muzzle,
+            Part.Barrel => PartDefOf.Barrel,
+            Part.Receiver => PartDefOf.Receiver,
+            Part.Trigger => PartDefOf.Trigger,
+            Part.Stock => PartDefOf.Stock,
+            Part.Grip => PartDefOf.Grip,
+            Part.Sight => PartDefOf.Sight,
+            Part.Magazine => PartDefOf.Magazine,
+            Part.Underbarrel => PartDefOf.Underbarrel,
+            Part.Ammo => PartDefOf.Ammo,
             _ => null
         };
 
-        if (defName != null) return DefDatabase<PartDef>.GetNamed(defName, false);
+        if (partDef == null) {
+            Log.Error($"[CWF] Could not convert old Part enum value '{oldPart}' to a PartDef.");
+        }
 
-        Log.Error($"[CWF] Could not convert old Part enum value '{oldPart}' to a PartDef.");
-        return null;
+        return partDef;
     }
 }
 

@@ -1,4 +1,3 @@
-using UnityEngine;
 using Verse;
 
 namespace CWF;
@@ -8,20 +7,20 @@ public class Settings : ModSettings {
     private const int DefaultMinRandomModules = 0;
     private const int DefaultMaxRandomModules = 3;
 
-    public bool randomModulesEnabled = DefaultRandomModulesEnabled;
-    public int minRandomModules = DefaultMinRandomModules;
-    public int maxRandomModules = DefaultMaxRandomModules;
+    public bool RandomModulesEnabled = DefaultRandomModulesEnabled;
+    public int MinRandomModules = DefaultMinRandomModules;
+    public int MaxRandomModules = DefaultMaxRandomModules;
 
     public void Reset() {
-        randomModulesEnabled = DefaultRandomModulesEnabled;
-        minRandomModules = DefaultMinRandomModules;
-        maxRandomModules = DefaultMaxRandomModules;
+        RandomModulesEnabled = DefaultRandomModulesEnabled;
+        MinRandomModules = DefaultMinRandomModules;
+        MaxRandomModules = DefaultMaxRandomModules;
     }
 
     public override void ExposeData() {
         base.ExposeData();
-        Scribe_Values.Look(ref randomModulesEnabled, "randomModulesEnabled", DefaultRandomModulesEnabled);
-        Scribe_Values.Look(ref minRandomModules, "minRandomModules", DefaultMinRandomModules);
-        Scribe_Values.Look(ref maxRandomModules, "maxRandomModules", DefaultMaxRandomModules);
+        Scribe_Values.Look(ref RandomModulesEnabled, "randomModulesEnabled", DefaultRandomModulesEnabled);
+        Scribe_Values.Look(ref MinRandomModules, "minRandomModules", DefaultMinRandomModules);
+        Scribe_Values.Look(ref MaxRandomModules, "maxRandomModules", DefaultMaxRandomModules);
     }
 }

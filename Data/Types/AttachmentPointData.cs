@@ -1,24 +1,29 @@
 using JetBrains.Annotations;
 using Verse;
 
+// ReSharper disable InconsistentNaming
+
 namespace CWF;
 
 [UsedImplicitly]
 public class AttachmentPointData {
-    // ReSharper disable once InconsistentNaming
-    public Part part;
-
-    // ReSharper disable once InconsistentNaming
+    public PartDef? part;
     public ModuleGraphicData? baseTexture;
-
-    // ReSharper disable once InconsistentNaming
     public int layer;
-
-    // ReSharper disable once InconsistentNaming
     public bool receivesColor;
 
     public void ExposeData() {
-        Scribe_Values.Look(ref part, "part");
+        Scribe_Defs.Look(ref part, "part");
+
+        if (Scribe.mode == LoadSaveMode.LoadingVars && part == null) { // old enum part
+            var oldPart = Part.None;
+            Scribe_Values.Look(ref oldPart, "part");
+
+            if (oldPart != Part.None) {
+                part = PartEnumConverter.Convert(oldPart);
+            }
+        }
+
         Scribe_Values.Look(ref baseTexture, "baseTexture");
         Scribe_Values.Look(ref layer, "layer");
         Scribe_Values.Look(ref receivesColor, "receivesColor");

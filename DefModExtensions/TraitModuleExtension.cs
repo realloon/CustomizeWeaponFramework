@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using RimWorld;
 using Verse;
 
+// ReSharper disable InconsistentNaming
 
 namespace CWF;
 
@@ -11,7 +12,7 @@ public class TraitModuleExtension : DefModExtension {
     public readonly WeaponTraitDef weaponTraitDef = new();
 
     [UsedImplicitly]
-    public Part part;
+    public PartDef part = new();
 
     [UsedImplicitly]
     public List<ConditionalPartModifier>? conditionalPartModifiers;
@@ -38,7 +39,7 @@ public class TraitModuleExtension : DefModExtension {
             yield return "Required field 'weaponTraitDef' is missing in XML.";
         }
 
-        if (part == Part.None) {
+        if (part.defName == Def.DefaultDefName) {
             yield return "Required field 'part' is missing in XML.";
         }
     }

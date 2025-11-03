@@ -30,7 +30,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
             sb.AppendLine();
         }
 
-        sb.AppendLine("CWF_UI_PartOf".Translate() + ": " + $"CWF_UI_{part}".Translate());
+        sb.AppendLine("CWF_UI_PartOf".Translate() + ": " + part.LabelCap);
 
         yield return new StatDrawEntry(
             StatCategoryDefOf.BasicsImportant,

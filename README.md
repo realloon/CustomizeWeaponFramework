@@ -18,9 +18,9 @@ The following are the key directories of the CWF project and their functions:
 - **`Extensions/`**: Utility extension methods.
 - **`HarmonyPatches/`**: Harmony patch implementations.
 - **`JobDrivers/`** and **`JobGivers/`**: Weapon modification quest system.
-- **`StatParts/`**: Weapon stat modifiers.
+- **`StatParts/`**: Stat modifiers.
 - **`ThingComps/`**: Weapon functionality components.
-- **`Windows/`**: Custom UI windows and logic.
+- **`Windows/`**: Custom UI panels.
 
 ## Development Environment
 

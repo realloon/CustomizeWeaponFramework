@@ -14,7 +14,7 @@ public static class ModuleDatabase {
 
     public static IEnumerable<ThingDef> AllModuleDefs => TraitToModule.Values;
 
-    internal static void BuildCache() {
+    internal static void BuildCacheAndInject() {
         foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
             // fill weapon caches
             if (thingDef.IsWeapon && !thingDef.weaponTags.IsNullOrEmpty() && thingDef.race == null &&

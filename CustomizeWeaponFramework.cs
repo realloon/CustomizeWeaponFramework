@@ -10,7 +10,7 @@ public class CustomizeWeaponFramework {
         harmony.PatchAll();
 
         AdapterDef.Inject();
-        ModuleDatabase.BuildCache();
+        ModuleDatabase.BuildCacheAndInject();
         TraitEquippedOffsets.Inject();
     }
 }

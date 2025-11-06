@@ -46,10 +46,7 @@ public static class ModuleDatabase {
             // inject description
             var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
             if (traitDef?.description != null) {
-                var sb = new StringBuilder();
-                sb.AppendLine(traitDef.description);
-                sb.AppendInNewLine(GetTraitEffectLines(traitDef).ToLineList());
-                moduleDef.description = sb.ToString();
+                moduleDef.description = traitDef.description;
             }
 
             // inject hyperlinks

@@ -24,7 +24,7 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
         var effectLines = ModuleDatabase.GetTraitEffectLines(traitDef);
 
         if (effectLines.Count > 0) {
-            sb.AppendLine($"CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");
+            sb.AppendLine("CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");
             sb.AppendLine();
             sb.AppendLine(effectLines.ToLineList());
             sb.AppendLine();

@@ -55,7 +55,7 @@ public class Dialog_TextInput : Window {
         var buttonY = inRect.height - 35f;
 
         // Cancel
-        var cancelButtonRect = new Rect(inRect.width - (buttonWidth * 2) - 10f, buttonY, buttonWidth, 35f);
+        var cancelButtonRect = new Rect(inRect.width - buttonWidth * 2 - 10f, buttonY, buttonWidth, 35f);
         if (Widgets.ButtonText(cancelButtonRect, _cancelButtonText)) {
             _shouldExecuteOnClose = false;
             Close();

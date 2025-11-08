@@ -21,12 +21,12 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
         var part = ext.part;
 
         var sb = new StringBuilder();
-        var effectLines = ModuleDatabase.GetTraitEffectLines(traitDef);
+        var effect = traitDef.GetTraitEffect();
 
-        if (effectLines.Count > 0) {
+        if (effect.Any()) {
             sb.AppendLine("CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");
             sb.AppendLine();
-            sb.AppendLine(effectLines.ToLineList());
+            sb.AppendLine(effect);
             sb.AppendLine();
         }
 

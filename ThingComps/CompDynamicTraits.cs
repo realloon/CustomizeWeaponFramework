@@ -161,9 +161,9 @@ public class CompDynamicTraits : ThingComp {
             blockBuilder.AppendLine(trait.LabelCap.Colorize(ColorLibrary.Green));
             blockBuilder.AppendLine(trait.description);
 
-            var effectLines = ModuleDatabase.GetTraitEffectLines(trait);
-            if (effectLines.Count > 0) {
-                blockBuilder.AppendLine(effectLines.ToLineList());
+            var effect = trait.GetTraitEffect();
+            if (effect.Any()) {
+                blockBuilder.AppendLine(effect);
             }
 
             return blockBuilder.ToString();

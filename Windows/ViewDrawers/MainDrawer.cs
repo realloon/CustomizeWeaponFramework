@@ -76,7 +76,7 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
         var count = groupParts.Count;
 
         if (direction == Direction.Horizontal) {
-            var totalWidth = (count * SlotSize) + (Math.Max(0, count - 1) * SlotPadding);
+            var totalWidth = count * SlotSize + Math.Max(0, count - 1) * SlotPadding;
             var startX = container.center.x - totalWidth / 2f;
             var startY = container.center.y - SlotSize / 2f;
 
@@ -87,7 +87,7 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
             }
         } else {
             // Vertical
-            var totalHeight = (count * SlotSize) + (Math.Max(0, count - 1) * SlotPadding);
+            var totalHeight = count * SlotSize + Math.Max(0, count - 1) * SlotPadding;
             var startX = container.center.x - SlotSize / 2f;
             var startY = container.center.y - totalHeight / 2f;
 
@@ -121,7 +121,7 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
             var tipSb = new StringBuilder();
             tipSb.AppendLine($"<b>{installedTrait.LabelCap}</b>");
             tipSb.AppendLine(installedTrait.description);
-            tipSb.AppendInNewLine(ModuleDatabase.GetTraitEffectLines(installedTrait).ToLineList());
+            tipSb.AppendInNewLine(installedTrait.GetTraitEffect());
 
             TooltipHandler.TipRegion(rect, tipSb.ToString());
 

@@ -81,7 +81,7 @@ public class CompDynamicTraits : ThingComp {
                     if (!traitDef.TryGetPart(out var part) || part != randomPart) return false;
 
                     return traitDef.TryGetModuleDef(out var moduleDef) &&
-                           ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                           moduleDef.IsCompatibleWith(parent.def);
                 })
                 .ToList();
 
@@ -274,11 +274,11 @@ public class CompDynamicTraits : ThingComp {
                         if (_installedTraits.ContainsKey(part)) return false;
 
                         return traitDef.TryGetModuleDef(out var moduleDef) &&
-                               ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, parent.def);
+                               moduleDef.IsCompatibleWith(parent.def);
                     })
                     .ToList();
 
-                if (availableTraits.IsNullOrEmpty()) {
+                if (availableTraits.Empty()) {
                     Messages.Message("Debug: No available traits to install.", MessageTypeDefOf.NeutralEvent);
                     return;
                 }

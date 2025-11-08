@@ -240,7 +240,7 @@ public class InteractionController(Thing weapon) {
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(PartDef part) {
         return ModuleDatabase.AllModuleDefs
             .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
-            .Where(moduleDef => ModuleDatabase.IsModuleCompatibleWithWeapon(moduleDef, weapon.def));
+            .Where(moduleDef => moduleDef.IsCompatibleWith(weapon.def));
     }
 
     #endregion

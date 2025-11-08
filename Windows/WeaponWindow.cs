@@ -13,6 +13,8 @@ public class WeaponWindow : Window {
     private readonly InteractionController _interactionController;
     private readonly JobDispatcher _jobDispatcher;
 
+    public override Vector2 InitialSize => new(800f, 550f);
+
     public WeaponWindow(Thing weapon) {
         // === UI configs ===
         doCloseX = true;
@@ -35,8 +37,6 @@ public class WeaponWindow : Window {
         _asideDrawer = new AsideDrawer(_specDatabase);
         _mainDrawer = new MainDrawer(weapon, _interactionController.HandleSlotClick);
     }
-
-    public override Vector2 InitialSize => new(800f, 550f);
 
     public override void DoWindowContents(Rect inRect) {
         const float headerHeight = 32f;

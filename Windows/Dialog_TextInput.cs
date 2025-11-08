@@ -36,9 +36,7 @@ public class Dialog_TextInput : Window {
         listing.Begin(inRect);
 
         // Render title
-        Text.Font = GameFont.Medium;
-        listing.Label(_title);
-        Text.Font = GameFont.Small;
+        UIKit.WithStyle(() => listing.Label(_title), GameFont.Medium);
 
         listing.Gap();
 

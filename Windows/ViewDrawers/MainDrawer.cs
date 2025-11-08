@@ -1,7 +1,8 @@
 using System.Text;
-using RimWorld;
 using UnityEngine;
+using RimWorld;
 using Verse;
+using CWF.Extensions;
 
 namespace CWF.ViewDrawers;
 
@@ -109,16 +110,12 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
 
             var moduleGraphicData = weapon.TryGetComp<CompDynamicGraphic>()?.GetGraphicDataFor(installedTrait);
 
-            if (moduleGraphicData != null && !string.IsNullOrEmpty(moduleGraphicData.texturePath)) {
+            if (moduleGraphicData != null && !moduleGraphicData.texturePath.IsNullOrEmpty()) {
                 DrawModuleTexture(in rect, moduleGraphicData);
             } else {
-                var originalFont = Text.Font;
-                var originalAnchor = Text.Anchor;
-                Text.Font = GameFont.Tiny;
-                Text.Anchor = TextAnchor.MiddleCenter;
-                Widgets.Label(rect, installedTrait.LabelCap);
-                Text.Font = originalFont;
-                Text.Anchor = originalAnchor;
+                var inRect = rect;
+                UIKit.WithStyle(() => Widgets.Label(inRect, installedTrait.LabelCap),
+                    GameFont.Tiny, anchor: TextAnchor.MiddleCenter);
             }
 
             var tipSb = new StringBuilder();
@@ -154,26 +151,13 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
     private static bool DrawPartSlot(in Rect rect, string label) {
         Widgets.DrawOptionBackground(rect, Mouse.IsOver(rect));
 
-        var originalAnchor = Text.Anchor;
-        var originalFont = Text.Font;
-        var originalColor = GUI.color;
-
         // render label
         var labelRect = new Rect(rect.x + 4f, rect.y + 2f, rect.width - 8f, rect.height - 3f);
-        Text.Font = GameFont.Tiny;
-        GUI.color = Color.gray;
-        Text.Anchor = TextAnchor.LowerLeft;
-        Widgets.Label(labelRect, label);
+        UIKit.WithStyle(() => Widgets.Label(labelRect, label), GameFont.Tiny, Color.gray, TextAnchor.LowerLeft);
 
         // render '+'
-        Text.Font = GameFont.Medium;
-        GUI.color = Color.white;
-        Text.Anchor = TextAnchor.MiddleCenter;
-        Widgets.Label(rect, "+");
-
-        Text.Anchor = originalAnchor;
-        Text.Font = originalFont;
-        GUI.color = originalColor;
+        var inRect = rect;
+        UIKit.WithStyle(() => Widgets.Label(inRect, "+"), GameFont.Medium, anchor: TextAnchor.MiddleCenter);
 
         return Widgets.ButtonInvisible(rect);
     }

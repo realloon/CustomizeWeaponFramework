@@ -12,30 +12,25 @@ public class HeaderDrawer(Thing weapon) {
         const float buttonSize = 32f;
         const float gap = 8f;
 
-        // Render Icon
+        // Render weapon icon
         var iconRect = new Rect(rect.x, rect.y + (rect.height - iconSize) / 2f, iconSize, iconSize);
         Widgets.ThingIcon(iconRect, weapon);
 
-        // Reserve space
-        var labelRect = new Rect(iconRect.xMax + gap, rect.y,
-            rect.width - iconSize - buttonSize * 2 - gap * 3,
-            rect.height);
-
-        // Render name label
-        var originalAnchor = Text.Anchor;
-        var originalFont = Text.Font;
-        Text.Anchor = TextAnchor.MiddleLeft;
-        Text.Font = GameFont.Medium;
-        var displayName = _compRenamable?.Nickname ?? weapon.LabelCap;
-        Widgets.Label(labelRect, displayName);
-        Text.Anchor = originalAnchor;
-        Text.Font = originalFont;
+        // Render search button
+        var searchButtonRect = new Rect(rect.xMax - buttonSize, rect.y + (rect.height - buttonSize) / 2f,
+            buttonSize, buttonSize);
+        TooltipHandler.TipRegion(searchButtonRect, "Search");
+        var searchVisualRect = searchButtonRect.ContractedBy(4f);
+        if (Widgets.ButtonImage(searchVisualRect, TexButton.OpenInspector)) {
+            Find.WindowStack.Add(new ModuleBrowserWindow(weapon));
+        }
 
         // Render rename button
-        var renameButtonRect = new Rect(labelRect.xMax + gap, rect.y + (rect.height - buttonSize) / 2f,
+        var renameButtonRect = new Rect(searchButtonRect.x - gap - buttonSize, searchButtonRect.y,
             buttonSize, buttonSize);
         TooltipHandler.TipRegion(renameButtonRect, "Rename".Translate());
         if (Widgets.ButtonImage(renameButtonRect, TexButton.Rename)) {
+            var displayName = _compRenamable?.Nickname ?? weapon.LabelCap;
             var inputModal = new Dialog_TextInput(
                 displayName,
                 s => {
@@ -51,5 +46,14 @@ public class HeaderDrawer(Thing weapon) {
                 "Rename".Translate());
             Find.WindowStack.Add(inputModal);
         }
+
+        // Reserve space
+        var labelRect = new Rect(iconRect.xMax + gap, rect.y,
+            renameButtonRect.x - (iconRect.xMax + gap) - gap, rect.height);
+
+        // Render name label
+        var finalDisplayName = _compRenamable?.Nickname ?? weapon.LabelCap;
+        UIKit.WithStyle(() => Widgets.Label(labelRect, finalDisplayName),
+            GameFont.Medium, anchor: TextAnchor.MiddleLeft);
     }
 }

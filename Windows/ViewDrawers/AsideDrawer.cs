@@ -56,27 +56,18 @@ public class AsideDrawer(SpecDatabase specDatabase) {
     }
 
     private static void DrawLabelRow(in Rect rect, string label, string value, float deltaValue = 0f) {
-        var originalAnchor = Text.Anchor;
-        var originalColor = GUI.color;
+        var inRect = rect;
 
         // Label
-        Text.Anchor = TextAnchor.MiddleLeft;
-        GUI.color = Color.white;
-        Widgets.Label(rect, label);
+        UIKit.WithStyle(() => Widgets.Label(inRect, label), anchor: TextAnchor.MiddleLeft);
 
         // Value with color
-        Text.Anchor = TextAnchor.MiddleRight;
-
-        GUI.color = deltaValue switch {
+        var color = deltaValue switch {
             > 0f => new Color(0.15f, 0.85f, 0.15f),
             < 0f => new Color(0.87f, 0.49f, 0.51f),
             _ => Color.white
         };
 
-        Widgets.Label(rect, value);
-
-        // Restore
-        Text.Anchor = originalAnchor;
-        GUI.color = originalColor;
+        UIKit.WithStyle(() => Widgets.Label(inRect, value), color: color, anchor: TextAnchor.MiddleRight);
     }
 }

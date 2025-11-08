@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using UnityEngine;
 using RimWorld;
 using Verse;
@@ -12,47 +13,54 @@ public static class ModuleDatabase {
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
 
     public static IEnumerable<ThingDef> AllModuleDefs => TraitToModule.Values;
-    
-    public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
-        var effectLines = new List<string>(); // todo: refactor
+
+    internal static string GetTraitEffect(this WeaponTraitDef traitDef) {
+        var sb = new StringBuilder();
 
         // offset
         if (!traitDef.statOffsets.IsNullOrEmpty()) {
-            effectLines.AddRange(traitDef.statOffsets
-                .Where(m => m.stat != StatDefOf.MarketValue && m.stat != StatDefOf.Mass)
-                .Select(m =>
-                    $" - {m.stat.LabelCap}: {m.stat.Worker.ValueToString(m.value, false, ToStringNumberSense.Offset)}"));
+            foreach (var modifier in traitDef.statOffsets) {
+                if (modifier.stat == StatDefOf.MarketValue || modifier.stat == StatDefOf.Mass) continue;
+
+                sb.AppendLine($" - {modifier.stat.LabelCap}: " +
+                              modifier.stat.Worker.ValueToString(modifier.value, false, ToStringNumberSense.Offset));
+            }
         }
 
         // factor
         if (!traitDef.statFactors.IsNullOrEmpty()) {
-            effectLines.AddRange(traitDef.statFactors
-                .Select(m =>
-                    $" - {m.stat.LabelCap}: {m.stat.Worker.ValueToString(m.value, false, ToStringNumberSense.Factor)}"));
+            foreach (var modifier in traitDef.statFactors) {
+                sb.AppendLine($" - {modifier.stat.LabelCap}: " +
+                              modifier.stat.Worker.ValueToString(modifier.value, false, ToStringNumberSense.Factor));
+            }
         }
 
         if (!Mathf.Approximately(traitDef.burstShotCountMultiplier, 1f)) {
-            effectLines.Add(
-                $" - {"CWF_UI_BurstShotCountMultiplier".Translate()}: {traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+            sb.AppendLine($" - {"CWF_UI_BurstShotCountMultiplier".Translate()}: " +
+                          traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero,
+                              ToStringNumberSense.Factor));
         }
 
         if (!Mathf.Approximately(traitDef.burstShotSpeedMultiplier, 1f)) {
-            effectLines.Add(
-                $" - {"CWF_UI_BurstShotSpeedMultiplier".Translate()}: {traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero, ToStringNumberSense.Factor)}");
+            sb.AppendLine($" - {"CWF_UI_BurstShotSpeedMultiplier".Translate()}: " +
+                          traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero,
+                              ToStringNumberSense.Factor));
         }
 
         if (!Mathf.Approximately(traitDef.additionalStoppingPower, 0.0f)) {
-            effectLines.Add(
-                $" - {"CWF_UI_AdditionalStoppingPower".Translate()}: {traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne, ToStringNumberSense.Offset)}");
+            sb.AppendLine($" - {"CWF_UI_AdditionalStoppingPower".Translate()}: " +
+                          traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne,
+                              ToStringNumberSense.Offset));
         }
 
         // equippedStat
         if (!traitDef.equippedStatOffsets.IsNullOrEmpty()) {
-            effectLines.AddRange(traitDef.equippedStatOffsets
-                .Select(m => $" - {m.stat.LabelCap}: {m.stat.ValueToString(m.value)}"));
+            foreach (var modifier in traitDef.equippedStatOffsets) {
+                sb.AppendLine($" - {modifier.stat.LabelCap}: {modifier.stat.ValueToString(modifier.value)}");
+            }
         }
 
-        return effectLines;
+        return sb.ToString();
     }
 
     internal static void BuildCacheAndInject() {

@@ -12,63 +12,7 @@ public static class ModuleDatabase {
     private static readonly Dictionary<string, List<ThingDef>> WeaponsByTag = new();
 
     public static IEnumerable<ThingDef> AllModuleDefs => TraitToModule.Values;
-
-    internal static void BuildCacheAndInject() {
-        foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
-            // fill weapon caches
-            if (thingDef.IsWeapon && !thingDef.weaponTags.IsNullOrEmpty() && thingDef.race == null &&
-                !thingDef.IsCorpse) {
-                foreach (var tag in thingDef.weaponTags) {
-                    if (!WeaponsByTag.ContainsKey(tag)) {
-                        WeaponsByTag[tag] = [];
-                    }
-
-                    WeaponsByTag[tag].Add(thingDef);
-                }
-            }
-
-            var ext = thingDef.GetModExtension<TraitModuleExtension>();
-            if (ext?.weaponTraitDef == null) continue;
-
-            // fill trait caches
-            if (TraitToPart.ContainsKey(ext.weaponTraitDef)) {
-                Log.Warning(
-                    $"[CWF] Cache building warning: WeaponTraitDef '{ext.weaponTraitDef.defName}' is defined by multiple TraitModules. " +
-                    $"The one in '{thingDef.defName}' will overwrite previous entries. This may cause unpredictable behavior when uninstalling parts.");
-            }
-
-            TraitToPart[ext.weaponTraitDef] = ext.part;
-            TraitToModule[ext.weaponTraitDef] = thingDef;
-        }
-
-        foreach (var moduleDef in TraitToModule.Values) {
-            // inject description
-            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
-            if (traitDef?.description != null) {
-                moduleDef.description = traitDef.description;
-            }
-
-            // inject hyperlinks
-            var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
-            if (weaponDefs.IsNullOrEmpty()) continue;
-
-            moduleDef.descriptionHyperlinks ??= [];
-            foreach (var weaponDef in weaponDefs) {
-                if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;
-
-                moduleDef.descriptionHyperlinks.Add(new DefHyperlink(weaponDef));
-            }
-        }
-    }
-
-    internal static bool TryGetPart(this WeaponTraitDef traitDef, out PartDef part) {
-        return TraitToPart.TryGetValue(traitDef, out part);
-    }
-
-    internal static bool TryGetModuleDef(this WeaponTraitDef traitDef, [NotNullWhen(true)] out ThingDef? moduleDef) {
-        return TraitToModule.TryGetValue(traitDef, out moduleDef);
-    }
-
+    
     public static List<string> GetTraitEffectLines(WeaponTraitDef traitDef) {
         var effectLines = new List<string>(); // todo: refactor
 
@@ -111,7 +55,63 @@ public static class ModuleDatabase {
         return effectLines;
     }
 
-    public static bool IsModuleCompatibleWithWeapon(ThingDef moduleDef, ThingDef weaponDef) {
+    internal static void BuildCacheAndInject() {
+        foreach (var thingDef in DefDatabase<ThingDef>.AllDefs) {
+            // fill weapon caches
+            if (thingDef.IsWeapon && !thingDef.weaponTags.IsNullOrEmpty() && thingDef.race == null &&
+                !thingDef.IsCorpse) {
+                foreach (var tag in thingDef.weaponTags) {
+                    if (!WeaponsByTag.ContainsKey(tag)) {
+                        WeaponsByTag[tag] = [];
+                    }
+
+                    WeaponsByTag[tag].Add(thingDef);
+                }
+            }
+
+            var ext = thingDef.GetModExtension<TraitModuleExtension>();
+            if (ext?.weaponTraitDef == null) continue;
+
+            // fill trait caches
+            if (TraitToPart.ContainsKey(ext.weaponTraitDef)) {
+                Log.Warning(
+                    $"[CWF] Cache building warning: WeaponTraitDef '{ext.weaponTraitDef.defName}' is defined by multiple TraitModules. " +
+                    $"The one in '{thingDef.defName}' will overwrite previous entries. This may cause unpredictable behavior when uninstalling parts.");
+            }
+
+            TraitToPart[ext.weaponTraitDef] = ext.part;
+            TraitToModule[ext.weaponTraitDef] = thingDef;
+        }
+
+        foreach (var moduleDef in TraitToModule.Values) {
+            // inject description
+            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>()?.weaponTraitDef;
+            if (traitDef?.description != null) {
+                moduleDef.description = traitDef.description;
+            }
+
+            // inject hyperlinks
+            var weaponDefs = GetCompatibleWeaponDefsFor(moduleDef).ToList();
+            if (weaponDefs.Empty()) continue;
+
+            moduleDef.descriptionHyperlinks ??= [];
+            foreach (var weaponDef in weaponDefs) {
+                if (moduleDef.descriptionHyperlinks.Any(h => h.def == weaponDef)) continue;
+
+                moduleDef.descriptionHyperlinks.Add(new DefHyperlink(weaponDef));
+            }
+        }
+    }
+
+    internal static bool TryGetPart(this WeaponTraitDef traitDef, out PartDef part) {
+        return TraitToPart.TryGetValue(traitDef, out part);
+    }
+
+    internal static bool TryGetModuleDef(this WeaponTraitDef traitDef, [NotNullWhen(true)] out ThingDef? moduleDef) {
+        return TraitToModule.TryGetValue(traitDef, out moduleDef);
+    }
+
+    internal static bool IsCompatibleWith(this ThingDef moduleDef, ThingDef weaponDef) {
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext == null) return false;
 

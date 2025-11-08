@@ -12,8 +12,8 @@ public class InteractionController(Thing weapon) {
     public event Action OnDataChanged = delegate { };
 
     private string FailureReason => weapon.ParentHolder is Pawn_EquipmentTracker
-        ? "CWF_UI_NoCompatiblePartsInInventory".Translate()
-        : "CWF_UI_NoCompatiblePartsOnMap".Translate();
+        ? "CWF_UI_NoCompatibleModulesInInventory".Translate()
+        : "CWF_UI_NoCompatibleModulesOnMap".Translate();
 
     /// <summary>
     /// Opens a float-menu for the clicked slot.  

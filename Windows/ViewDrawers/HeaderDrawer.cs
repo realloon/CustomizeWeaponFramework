@@ -19,7 +19,7 @@ public class HeaderDrawer(Thing weapon) {
         // Render search button
         var searchButtonRect = new Rect(rect.xMax - buttonSize, rect.y + (rect.height - buttonSize) / 2f,
             buttonSize, buttonSize);
-        TooltipHandler.TipRegion(searchButtonRect, "Search");
+        TooltipHandler.TipRegion(searchButtonRect, "CWF_UI_BrowseCompatibleModules".Translate());
         var searchVisualRect = searchButtonRect.ContractedBy(4f);
         if (Widgets.ButtonImage(searchVisualRect, TexButton.OpenInspector)) {
             Find.WindowStack.Add(new ModuleBrowserWindow(weapon));

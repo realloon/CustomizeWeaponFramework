@@ -26,8 +26,6 @@
 
     <ItemGroup>
       <None Remove="CWF.csproj.DotSettings" />
-      <None Remove="CWF.sln.DotSettings.user.Corrupted.2025-08-09T13-56-58.Backup.Tmp" />
-      <None Remove="CWF.sln.DotSettings.user.Corrupted.2025-08-09T13-56-58.Description.Tmp" />
       <None Remove=".gitignore" />
       <None Remove="README.md" />
     </ItemGroup>

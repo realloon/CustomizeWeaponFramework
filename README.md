@@ -25,6 +25,5 @@ The following are the key directories of the CWF project and their functions:
 ## Development Environment
 
 1. **Setup**: Clone this repository into your development environment.
-2. **Dependency**: All project dependencies (including Harmony and RimWorld core libraries) are managed via NuGet packages. They will be available immediately after cloning the repository.
-3. **IDE**: This project is primarily developed using *Rider*.
-4. **Build**: Please ensure to modify the project's compilation output path to correctly deploy the compiled Mod folder to RimWorld's Mods directory for testing.
+2. **Dependency**: All project dependencies are managed via NuGet packages.
+4. **Build**: Please ensure to modify the project's compilation output path to your Mod folder.

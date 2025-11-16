@@ -2,6 +2,7 @@ using Verse;
 
 namespace CWF;
 
+[Obsolete]
 public static class PartEnumConverter {
     public static PartDef? Convert(Part oldPart) {
         var partDef = oldPart switch {
@@ -26,6 +27,7 @@ public static class PartEnumConverter {
     }
 }
 
+[Obsolete]
 public enum Part {
     None = 0,
     Muzzle,

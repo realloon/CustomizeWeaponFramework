@@ -200,25 +200,8 @@ public class CompDynamicTraits : ThingComp {
         } else if (Scribe.mode == LoadSaveMode.LoadingVars) {
             Scribe_Collections.Look(ref _installedTraits, "installedTraits", LookMode.Def, LookMode.Def);
 
-            if (_installedTraits == null) { // old enum part
+            if (_installedTraits == null) {
                 _installedTraits = new Dictionary<PartDef, WeaponTraitDef>();
-
-                var oldInstalledParts = new Dictionary<Part, WeaponTraitDef>();
-                Scribe_Collections.Look(ref oldInstalledParts, "installedParts", LookMode.Value, LookMode.Def);
-
-                if (!oldInstalledParts.IsNullOrEmpty()) {
-                    Log.Message($"[CWF] Found old Part data for '{parent.LabelCap}'. Converting...");
-
-                    foreach (var kvp in oldInstalledParts) {
-                        var newPartDef = PartEnumConverter.Convert(kvp.Key);
-                        if (newPartDef != null) {
-                            _installedTraits.Add(newPartDef, kvp.Value);
-                        } else {
-                            Log.Warning($"[CWF] Failed to convert Part '{kvp.Key}' on weapon '{parent.LabelCap}'. " +
-                                        $"This trait will be lost.");
-                        }
-                    }
-                }
             }
         }
 

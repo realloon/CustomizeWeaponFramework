@@ -195,17 +195,11 @@ public class CompDynamicTraits : ThingComp {
     public override void PostExposeData() {
         base.PostExposeData();
 
-        if (Scribe.mode == LoadSaveMode.Saving) {
+        if (Scribe.mode is LoadSaveMode.Saving or LoadSaveMode.LoadingVars) {
             Scribe_Collections.Look(ref _installedTraits, "installedTraits", LookMode.Def, LookMode.Def);
-        } else if (Scribe.mode == LoadSaveMode.LoadingVars) {
-            Scribe_Collections.Look(ref _installedTraits, "installedTraits", LookMode.Def, LookMode.Def);
-
-            if (_installedTraits == null) {
-                _installedTraits = new Dictionary<PartDef, WeaponTraitDef>();
-            }
         }
 
-        if (Scribe.mode != LoadSaveMode.PostLoadInit) return;
+        if (Scribe.mode is not LoadSaveMode.PostLoadInit) return;
 
         _installedTraits ??= new Dictionary<PartDef, WeaponTraitDef>();
 
@@ -390,13 +384,6 @@ public class CompDynamicTraits : ThingComp {
                 _availableParts.UnionWith(rule.enablesParts);
                 _availableParts.ExceptWith(rule.disablesParts);
             }
-        }
-
-        // temporary old save check mechanism
-        foreach (var installedPart in _installedTraits.Keys) {
-            if (_availableParts.Contains(installedPart)) continue;
-
-            Log.Warning($"[CWF] Part '{installedPart}' on weapon '{parent.LabelCap}' is no longer available.");
         }
     }
 

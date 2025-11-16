@@ -28,6 +28,7 @@
       <None Remove="CWF.csproj.DotSettings" />
       <None Remove=".gitignore" />
       <None Remove="README.md" />
+      <None Remove="CLAUDE.md" />
     </ItemGroup>
 
 </Project>

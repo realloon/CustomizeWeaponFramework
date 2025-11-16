@@ -6,29 +6,56 @@ using Verse;
 
 namespace CWF;
 
+/// <summary>
+/// A DefModExtension that serves as the primary data container for a weapon module item (ThingDef). It links the module item to a specific `weaponTraitDef` and a `part` slot. It also defines all compatibility rules (e.g., `requiredWeaponTags`, `excludeWeaponDefs`) and conditional visual appearances (`graphicCases`).
+/// </summary>
 [UsedImplicitly]
 public class TraitModuleExtension : DefModExtension {
+    /// <summary>
+    /// The actual trait (stat bonuses, abilities, etc.) that this module will grant to a weapon.
+    /// </summary>
     [UsedImplicitly]
     public readonly WeaponTraitDef weaponTraitDef = new();
 
+    /// <summary>
+    /// The weapon part slot (e.g., Muzzle, Stock) that this module attaches to.
+    /// </summary>
     [UsedImplicitly]
     public PartDef part = new();
 
+    /// <summary>
+    /// A list of rules that allow this module to enable or disable other part slots on a weapon.
+    /// </summary>
     [UsedImplicitly]
     public List<ConditionalPartModifier>? conditionalPartModifiers;
 
+    /// <summary>
+    /// A list of specific weapon ThingDefs this module is compatible with.
+    /// </summary>
     [UsedImplicitly]
     public List<ThingDef>? requiredWeaponDefs;
 
+    /// <summary>
+    /// A list of weaponTags that a weapon must have for this module to be compatible.
+    /// </summary>
     [UsedImplicitly]
     public List<string>? requiredWeaponTags;
 
+    /// <summary>
+    /// A list of specific weapon ThingDefs this module is incompatible with.
+    /// </summary>
     [UsedImplicitly]
     public List<ThingDef>? excludeWeaponDefs;
 
+    /// <summary>
+    /// A list of weaponTags that will make a weapon incompatible with this module.
+    /// </summary>
     [UsedImplicitly]
     public List<string>? excludeWeaponTags;
 
+    /// <summary>
+    /// Defines different visual appearances for this module based on which weapon it is attached to.
+    /// </summary>
     [UsedImplicitly]
     public List<GraphicCase>? graphicCases;
 
@@ -45,14 +72,26 @@ public class TraitModuleExtension : DefModExtension {
     }
 }
 
+/// <summary>
+/// A rule set class used within `TraitModuleExtension`. It defines a specific visual appearance (`graphicData`) for a module that should only apply when the weapon matches the criteria in the `WeaponMatcher`. The `priority` field resolves conflicts if multiple cases match.
+/// </summary>
 [UsedImplicitly]
 public class GraphicCase {
+    /// <summary>
+    /// The condition for applying this graphic. The graphic only applies if the weapon matches these criteria.
+    /// </summary>
     [UsedImplicitly]
     public readonly WeaponMatcher? matcher;
 
+    /// <summary>
+    /// The module graphic data to use when the matcher condition is met.
+    /// </summary>
     [UsedImplicitly]
     public readonly ModuleGraphicData? graphicData;
 
+    /// <summary>
+    /// If multiple GraphicCases match, the one with the highest priority is chosen.
+    /// </summary>
     [UsedImplicitly]
     public readonly int priority;
 }

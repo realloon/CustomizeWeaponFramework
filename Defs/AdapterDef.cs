@@ -5,13 +5,25 @@ using Verse;
 
 namespace CWF;
 
+/// <summary>
+/// A special Def used to adapt existing vanilla or modded weapons to the CWF system without direct patching. An AdapterDef targets a weapon by its defName and injects necessary components (`comps`), tags (`weaponTags`), and a new base graphic (`graphicData`), making it fully compatible with the framework.
+/// </summary>
 public class AdapterDef : Def {
+    /// <summary>
+    /// The new base graphic data to apply to the adapted weapon.
+    /// </summary>
     [UsedImplicitly]
     public readonly GraphicData? graphicData;
 
+    /// <summary>
+    /// Additional weaponTags to add to the adapted weapon.
+    /// </summary>
     [UsedImplicitly]
     public readonly List<string> weaponTags = [];
 
+    /// <summary>
+    /// A list of CompProperties to inject into the adapted weapon, such as `CompProperties_DynamicTraits`.
+    /// </summary>
     [UsedImplicitly]
     public readonly List<CompProperties> comps = [];
 

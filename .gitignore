@@ -1,5 +1,7 @@
-bin
 obj
+bin
+
+CLAUDE.md
 
 .DS_Store
 

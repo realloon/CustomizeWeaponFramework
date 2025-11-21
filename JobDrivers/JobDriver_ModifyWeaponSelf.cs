@@ -5,6 +5,7 @@ using Verse.Sound;
 
 namespace CWF;
 
+// ReSharper disable once InconsistentNaming
 public class JobDriver_ModifyWeaponSelf : JobDriver {
     private Thing Weapon => TargetA.Thing;
 

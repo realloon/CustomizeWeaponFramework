@@ -6,6 +6,7 @@ using CWF.Extensions;
 
 namespace CWF;
 
+// ReSharper disable once InconsistentNaming
 public class JobDriver_ModifyWeaponHaul : JobDriver {
     private const TargetIndex WeaponInd = TargetIndex.A;
     private const TargetIndex ModuleToHaulInd = TargetIndex.B;

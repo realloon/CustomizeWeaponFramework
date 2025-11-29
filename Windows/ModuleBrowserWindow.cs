@@ -120,18 +120,20 @@ public class ModuleBrowserWindow : Window {
         foreach (var moduleDef in modulesToShow.OrderBy(m => m.LabelCap.ToString())) {
             var rowRect = new Rect(contentRect.x, currentY, contentRect.width, rowHeight);
             Widgets.DrawHighlightIfMouseover(rowRect);
-            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
+
             var sb = new StringBuilder();
+            var traitDef = moduleDef.GetModExtension<TraitModuleExtension>().weaponTraitDef;
             sb.AppendLine(moduleDef.description);
             sb.AppendInNewLine(traitDef.GetTraitEffect());
+
             TooltipHandler.TipRegion(rowRect, sb.ToString());
 
-            // todo: modified calculation
-            var labelRect = new Rect(rowRect.x + padding, rowRect.y, rowRect.width - 100f, rowRect.height);
+            var infoButtonRect = new Rect(rowRect.xMax - rowHeight, rowRect.y, rowHeight, rowHeight);
+            var labelRect = new Rect(rowRect.x + padding, rowRect.y,
+                rowRect.width - padding - rowHeight - padding, rowRect.height);
+
             UIKit.WithStyle(() => Widgets.Label(labelRect, moduleDef.LabelCap), anchor: TextAnchor.MiddleLeft);
 
-            var infoButtonRect = new Rect(rowRect.xMax - 32f, rowRect.y + (rowRect.height - 32f) / 2, rowHeight,
-                rowHeight);
             if (Widgets.ButtonImage(infoButtonRect.ContractedBy(4f), TexButton.Info)) {
                 Find.WindowStack.Add(new Dialog_InfoCard(moduleDef));
             }

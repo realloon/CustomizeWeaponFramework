@@ -34,9 +34,13 @@ public class InteractionController(Thing weapon) {
     }
 
     private void BuildInstallOptions(PartDef part, List<FloatMenuOption> options) {
-        var installCandidates = new Dictionary<WeaponTraitDef, ThingDef>();
-
-        var compatibleModuleDefs = new HashSet<ThingDef>(GetCompatibleModuleDefsFor(part));
+        // 获取所有兼容的配件定义
+        var compatibleModuleDefs = GetCompatibleModuleDefsFor(part).ToList();
+        
+        if (!compatibleModuleDefs.Any()) {
+            options.Add(new FloatMenuOption("CWF_UI_NoSupportedModules".Translate(), null));
+            return;
+        }
 
         var ownerPawn = weapon.ParentHolder switch {
             Pawn_EquipmentTracker equipment => equipment.pawn,
@@ -44,40 +48,51 @@ public class InteractionController(Thing weapon) {
             _ => null
         };
 
-        // from inventory or map
-        if (compatibleModuleDefs.Any()) {
-            var searchScope = ownerPawn != null
-                ? ownerPawn.inventory.innerContainer
-                : weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
+        // 获取搜索范围（库存或地图）
+        var searchScope = ownerPawn != null
+            ? ownerPawn.inventory.innerContainer
+            : weapon.Map?.listerThings.AllThings ?? Enumerable.Empty<Thing>();
 
-            var availableModules = searchScope.Where(t =>
-                compatibleModuleDefs.Contains(t.def) &&
-                (ownerPawn != null || !t.IsForbidden(Faction.OfPlayer))
-            );
+        // 查找库存中已有的配件
+        var availableModulesInStock = searchScope
+            .Where(t => compatibleModuleDefs.Contains(t.def) &&
+                       (ownerPawn != null || !t.IsForbidden(Faction.OfPlayer)))
+            .GroupBy(t => t.def)
+            .ToDictionary(g => g.Key, g => g.ToList());
 
-            foreach (var module in availableModules) {
-                var trait = module.def.GetModExtension<TraitModuleExtension>().weaponTraitDef; // todo: fixme
-                installCandidates.TryAdd(trait, module.def);
-            }
-        }
-
-        // from stack
+        // 处理暂存的卸载配件（这些可以直接安装，不需要检查库存）
         var stagedCompatibleTraits = _stagedUninstalls
-            .Where(trait => trait.TryGetPart(out var p) && p == part);
-        foreach (var trait in stagedCompatibleTraits) {
-            if (trait.TryGetModuleDef(out var moduleDef)) {
-                installCandidates.TryAdd(trait, moduleDef);
+            .Where(trait => trait.TryGetPart(out var p) && p == part)
+            .ToHashSet();
+
+        // 为所有兼容的配件创建选项
+        foreach (var moduleDef in compatibleModuleDefs) {
+            var ext = moduleDef.GetModExtension<TraitModuleExtension>();
+            if (ext?.weaponTraitDef == null) continue;
+
+            var traitToInstall = ext.weaponTraitDef;
+            
+            // 检查是否在暂存列表中（从卸载的配件，这些可以直接安装）
+            var isStaged = stagedCompatibleTraits.Contains(traitToInstall);
+            
+            // 检查库存中是否有该配件
+            var hasInStock = availableModulesInStock.ContainsKey(moduleDef);
+
+            if (hasInStock || isStaged) {
+                // 库存中有配件或暂存中有配件，正常显示并可以安装
+                var installAction = CreateInstallAction(part, traitToInstall);
+                options.Add(new FloatMenuOption(traitToInstall.LabelCap, installAction));
+            } else {
+                // 库存中没有配件，显示"库存不足，点击添加制作订单"
+                var addBillAction = CreateAddBillAction(part, traitToInstall, moduleDef);
+                var label = $"{traitToInstall.LabelCap} ({"CWF_UI_InsufficientStockClickToAddOrder".Translate()})";
+                options.Add(new FloatMenuOption(label, addBillAction));
             }
         }
 
-        if (!installCandidates.Any()) {
+        // 如果没有可用选项，显示提示
+        if (!options.Any()) {
             options.Add(new FloatMenuOption(FailureReason, null));
-            return;
-        }
-
-        foreach (var (traitToInstall, _) in installCandidates) {
-            var installAction = CreateInstallAction(part, traitToInstall);
-            options.Add(new FloatMenuOption(traitToInstall.LabelCap, installAction));
         }
     }
 
@@ -239,8 +254,22 @@ public class InteractionController(Thing weapon) {
 
     private IEnumerable<ThingDef> GetCompatibleModuleDefsFor(PartDef part) {
         return ModuleDatabase.AllModuleDefs
-            .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>().part == part)
+            .Where(moduleDef => moduleDef.GetModExtension<TraitModuleExtension>()?.part == part)
             .Where(moduleDef => moduleDef.IsCompatibleWith(weapon.def));
+    }
+
+    /// <summary>
+    /// 创建添加制作订单的Action
+    /// </summary>
+    private Action CreateAddBillAction(PartDef part, WeaponTraitDef traitDef, ThingDef moduleDef) {
+        return () => {
+            var weaponName = weapon.LabelCap;
+            var map = weapon.Map ?? Find.CurrentMap;
+            
+            if (AttachmentCraftingUtility.AddCraftingBillForModule(moduleDef, weaponName, map)) {
+                SoundDefOf.Tick_High.PlayOneShotOnCamera();
+            }
+        };
     }
 
     #endregion

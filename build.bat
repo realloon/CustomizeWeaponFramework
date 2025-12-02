@@ -23,7 +23,7 @@ set "DLL_PATH="
 if exist "obj\Release\net48\CWF.dll" (
     set "DLL_PATH=obj\Release\net48\CWF.dll"
 ) else if exist "obj\Debug\net48\CWF.dll" (
-    set "DLL_PATH=obj\Debug\net48\CWF.dll"
+    set "DLL_PATH=bin\Debug\net48\CWF.dll"
 ) else (
     echo 错误：找不到编译后的 DLL 文件！
     pause

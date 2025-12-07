@@ -35,10 +35,10 @@ public class CompAbilityProvider : ThingComp, IReloadableComp {
         if (_holder == null) return;
 
         foreach (var ability in _managedAbilities.Keys) {
-            _holder.abilities.RemoveAbility(ability.def);
+            _holder.abilities?.RemoveAbility(ability.def);
         }
 
-        _holder.abilities.Notify_TemporaryAbilitiesChanged();
+        _holder.abilities?.Notify_TemporaryAbilitiesChanged();
 
         _managedAbilities.Clear();
         _holder = null;

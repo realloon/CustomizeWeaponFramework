@@ -71,7 +71,7 @@ public class CompDynamicTraits : ThingComp {
         modulesToInstallCount = Mathf.Min(modulesToInstallCount, availableEmptyParts.Count);
 
         for (var i = 0; i < modulesToInstallCount; i++) {
-            if (!availableEmptyParts.Any()) break;
+            if (availableEmptyParts.Empty()) break;
 
             var randomPart = availableEmptyParts.RandomElement();
             availableEmptyParts.Remove(randomPart);
@@ -85,7 +85,7 @@ public class CompDynamicTraits : ThingComp {
                 })
                 .ToList();
 
-            if (!compatibleTraits.Any()) continue;
+            if (compatibleTraits.Empty()) continue;
 
             var traitToInstall = compatibleTraits.RandomElement();
             InstallTrait(randomPart, traitToInstall);

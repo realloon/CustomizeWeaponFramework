@@ -51,7 +51,7 @@ public class CompDynamicGraphic : ThingComp {
             .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent.def))
             .ToList();
 
-        if (!matchingCases.Any()) return null;
+        if (matchingCases.Empty()) return null;
 
         var bestCase = matchingCases.MaxBy(c => c.priority);
         return bestCase.graphicData;

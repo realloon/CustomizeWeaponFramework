@@ -96,7 +96,7 @@ public class CompDynamicGraphic : ThingComp {
                 }
 
                 // module
-                if (string.IsNullOrEmpty(graphicToRender.texturePath)) continue;
+                if (graphicToRender.texturePath.IsNullOrEmpty()) continue;
                 var moduleTexture = ContentFinder<Texture2D>.Get(graphicToRender.texturePath, false);
                 if (moduleTexture == null) continue;
 

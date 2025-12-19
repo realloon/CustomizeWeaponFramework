@@ -33,7 +33,7 @@ public class WeaponWindow : Window {
         _jobDispatcher = new JobDispatcher(weapon);
 
         // Drawers
-        _headerDrawer = new HeaderDrawer(weapon);
+        _headerDrawer = new HeaderDrawer(weapon, _interactionController);
         _asideDrawer = new AsideDrawer(_specDatabase);
         _mainDrawer = new MainDrawer(weapon, _interactionController.HandleSlotClick);
     }

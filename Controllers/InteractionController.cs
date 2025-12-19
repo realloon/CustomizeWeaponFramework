@@ -11,6 +11,8 @@ public class InteractionController(Thing weapon) {
 
     public event Action OnDataChanged = delegate { };
 
+    public bool HasInstalledModules => _compDynamicTraits.Traits.Any();
+
     private string FailureReason => weapon.ParentHolder is Pawn_EquipmentTracker
         ? "CWF_UI_NoCompatibleModulesInInventory".Translate()
         : "CWF_UI_NoCompatibleModulesOnMap".Translate();
@@ -81,7 +83,6 @@ public class InteractionController(Thing weapon) {
         }
     }
 
-
     private void BuildUninstallOption(PartDef part, List<FloatMenuOption> options, WeaponTraitDef installedTrait) {
         options.Add(new FloatMenuOption("CWF_UI_Uninstall".Translate(installedTrait.LabelCap), () => {
             var analysis = AnalyzeUninstallConflict(part);
@@ -112,8 +113,8 @@ public class InteractionController(Thing weapon) {
 
     private void DoInstall(PartDef part, WeaponTraitDef traitToInstall) {
         _stagedUninstalls.Remove(traitToInstall);
-
         _compDynamicTraits.InstallTrait(part, traitToInstall);
+
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
         OnDataChanged();
     }
@@ -126,6 +127,14 @@ public class InteractionController(Thing weapon) {
 
         _compDynamicTraits.UninstallTrait(part);
         SoundDefOf.Tick_High.PlayOneShotOnCamera();
+        OnDataChanged();
+    }
+
+    public void ClearAllModules() {
+        _stagedUninstalls.AddRange(_compDynamicTraits.Traits);
+        _compDynamicTraits.ClearTraits();
+
+        SoundDefOf.Click.PlayOneShotOnCamera();
         OnDataChanged();
     }
 

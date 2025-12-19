@@ -45,11 +45,11 @@ public class CompDynamicTraits : ThingComp {
         OnTraitsChanged();
     }
 
-    // public void ClearTraits() {
-    //     _installedTraits.Clear();
-    //
-    //     OnTraitsChanged();
-    // }
+    public void ClearTraits() {
+        _installedTraits.Clear();
+
+        OnTraitsChanged();
+    }
 
     public WeaponTraitDef? GetInstalledTraitFor(PartDef part) {
         _installedTraits.TryGetValue(part, out var traitDef);

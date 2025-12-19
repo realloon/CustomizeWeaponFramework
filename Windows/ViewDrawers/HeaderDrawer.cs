@@ -1,10 +1,12 @@
-using RimWorld;
 using UnityEngine;
+using RimWorld;
 using Verse;
+using CWF.Controllers;
+using CWF.Extensions;
 
 namespace CWF.ViewDrawers;
 
-public class HeaderDrawer(Thing weapon) {
+public class HeaderDrawer(Thing weapon, InteractionController controller) {
     private readonly CompRenamable? _compRenamable = weapon.TryGetComp<CompRenamable>();
 
     public void Draw(in Rect rect) {
@@ -35,7 +37,7 @@ public class HeaderDrawer(Thing weapon) {
                 s => {
                     if (_compRenamable == null) return;
 
-                    if (s.Trim().NullOrEmpty() || s.Length > 20) {
+                    if (s.Trim().IsNullOrEmpty() || s.Length > 20) {
                         Messages.Message("NameIsInvalid".Translate(), MessageTypeDefOf.RejectInput, false);
                         return;
                     }
@@ -46,9 +48,19 @@ public class HeaderDrawer(Thing weapon) {
             Find.WindowStack.Add(inputModal);
         }
 
+        // Render action button
+        var actionButtonRect = new Rect(renameButtonRect.x - gap - buttonSize, renameButtonRect.y,
+            buttonSize, buttonSize);
+        if (Widgets.ButtonImage(actionButtonRect.ContractedBy(4f), TexButton.OpenDebugActionsMenu)) {
+            var options = new List<FloatMenuOption> {
+                new("CWF_UI_ClearAllModules", controller.HasInstalledModules ? controller.ClearAllModules : null)
+            };
+            Find.WindowStack.Add(new FloatMenu(options));
+        }
+
         // Reserve space
         var labelRect = new Rect(iconRect.xMax + gap, rect.y,
-            renameButtonRect.x - (iconRect.xMax + gap) - gap, rect.height);
+            actionButtonRect.x - (iconRect.xMax + gap) - gap, rect.height);
 
         // Render name label
         var finalDisplayName = _compRenamable?.Nickname ?? weapon.LabelCap;

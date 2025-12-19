@@ -3,6 +3,7 @@ using Verse;
 
 namespace CWF;
 
+// ReSharper disable once InconsistentNaming
 public class Dialog_TextInput : Window {
     private string _currentValue;
     private readonly Action<string> _onConfirm;

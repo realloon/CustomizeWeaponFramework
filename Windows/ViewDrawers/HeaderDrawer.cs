@@ -53,7 +53,7 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
             buttonSize, buttonSize);
         if (Widgets.ButtonImage(actionButtonRect.ContractedBy(4f), TexButton.OpenDebugActionsMenu)) {
             var options = new List<FloatMenuOption> {
-                new("CWF_UI_ClearAllModules", controller.HasInstalledModules ? controller.ClearAllModules : null)
+                new("CWF_UI_ClearAllModules".Translate(), controller.HasInstalledModules ? controller.ClearAllModules : null)
             };
             Find.WindowStack.Add(new FloatMenu(options));
         }

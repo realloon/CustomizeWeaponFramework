@@ -157,9 +157,15 @@ public class ModuleBrowserWindow : Window {
             if (!Mouse.IsOver(rowRect)) continue;
 
             // craft
-            if (_recipeCache.ContainsKey(moduleDef) &&
-                Widgets.ButtonImage(actionButtonRect, TexButton.Add, tooltip: "CWF_UI_Craft".Translate())) {
-                TryAddCraftingBill(moduleDef);
+            if (_recipeCache.TryGetValue(moduleDef, out var recipe)) {
+                if (recipe.AvailableNow) {
+                    if (Widgets.ButtonImage(actionButtonRect, TexButton.Add, tooltip: "CWF_UI_Craft".Translate())) {
+                        TryAddCraftingBill(moduleDef);
+                    }
+                } else {
+                    Widgets.ButtonImage(actionButtonRect, TexButton.Add, Color.gray,
+                        tooltip: "CWF_UI_CannotCraft".Translate());
+                }
             }
 
             // info

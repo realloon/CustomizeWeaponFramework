@@ -1,7 +1,5 @@
 # Customize Weapon Framework
 
-## Overview
-
 **Customize Weapon Framework (CWF)** is a weapon customization framework Mod designed for RimWorld. It provides a powerful underlying system that allows developers to create highly configurable weapons and add deep customization features to existing ones.
 
 CWF aims to be an extensible platform, enabling other Mod authors to easily introduce new weapon parts, modules, and customization options to RimWorld.

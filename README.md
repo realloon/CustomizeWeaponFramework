@@ -8,17 +8,17 @@ CWF aims to be an extensible platform, enabling other Mod authors to easily intr
 
 The following are the key directories of the CWF project and their functions:
 
-- **`CompProperties/`**: Component property class definitions.
-- **`Controllers/`**: Game logic and event controllers.
-- **`Data/`**: Module and specification data management.
-- **`DefModExtensions/`**: Defs extension class definitions.
-- **`Defs/`**: C# implementations for Mod Defs.
-- **`Extensions/`**: Utility extension methods.
-- **`HarmonyPatches/`**: Harmony patch implementations.
-- **`JobDrivers/`** and **`JobGivers/`**: Weapon modification quest system.
-- **`StatParts/`**: Stat modifiers.
-- **`ThingComps/`**: Weapon functionality components.
-- **`Windows/`**: Custom UI panels.
+- `CompProperties/`: Component property class definitions.
+- `Controllers/`: Game logic and event controllers.
+- `Data/`: Module and specification data management.
+- `DefModExtensions/`: Defs extension class definitions.
+- `Defs/`: C# implementations for Mod Defs.
+- `Extensions/`: Utility extension methods.
+- `HarmonyPatches/`: Harmony patch implementations.
+- `JobDrivers/` and `JobGivers/`: Weapon modification quest system.
+- `StatParts/`: Stat modifiers.
+- `ThingComps/`: Weapon functionality components.
+- `Windows/`: Custom UI panels.
 
 ## Development Environment
 

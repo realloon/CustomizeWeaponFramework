@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Text;
+﻿using System.Text;
 using RimWorld;
 using Verse;
 using CWF.Extensions;
@@ -98,7 +97,8 @@ public class TraitEquippedOffsets : StatPart {
         if (traits.IsNullOrEmpty()) return false;
 
         var list = traits
-            .Where(trait => trait != null && trait.equippedStatOffsets?.Any(modifier => modifier?.stat == parentStat) == true)
+            .Where(trait => trait != null && trait.equippedStatOffsets?
+                .Any(modifier => modifier?.stat == parentStat) == true)
             .ToList();
 
         if (list.Count == 0) return false;

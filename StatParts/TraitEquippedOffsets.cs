@@ -1,5 +1,5 @@
-﻿using System.Text;
-using UnityEngine;
+﻿using System.Linq;
+using System.Text;
 using RimWorld;
 using Verse;
 using CWF.Extensions;
@@ -10,21 +10,12 @@ public class TraitEquippedOffsets : StatPart {
     public override void TransformValue(StatRequest req, ref float val) {
         if (!TryGetApplicableTraits(req, out var traits)) return;
 
-        var totalOffset = 0f;
+        var totalOffset = traits
+            .SelectMany(trait => trait.equippedStatOffsets)
+            .Where(modifier => modifier?.stat == parentStat)
+            .Sum(modifier => modifier!.value);
 
-        for (var i = 0; i < traits.Count; i++) {
-            var modifiers = traits[i].equippedStatOffsets;
-            if (modifiers.NullOrEmpty()) continue;
-
-            for (var j = 0; j < modifiers.Count; j++) {
-                var modifier = modifiers[j];
-                if (modifier?.stat == parentStat) {
-                    totalOffset += modifier.value;
-                }
-            }
-        }
-
-        if (!Mathf.Approximately(totalOffset, 0f)) {
+        if (totalOffset != 0f) {
             val += totalOffset;
         }
     }
@@ -36,25 +27,20 @@ public class TraitEquippedOffsets : StatPart {
         sb.AppendLine();
         sb.Append("CWF_UI_FromEquipped".Translate());
 
-        for (var i = 0; i < traits.Count; i++) {
-            var trait = traits[i];
+        foreach (var trait in traits) {
             var modifiers = trait.equippedStatOffsets;
             if (modifiers.NullOrEmpty()) continue;
 
-            var localOffset = 0f;
-            for (var j = 0; j < modifiers.Count; j++) {
-                var modifier = modifiers[j];
-                if (modifier?.stat == parentStat) {
-                    localOffset += modifier.value;
-                }
-            }
+            var localOffset = modifiers
+                .Where(modifier => modifier?.stat == parentStat)
+                .Sum(modifier => modifier.value);
 
-            if (Mathf.Approximately(localOffset, 0f)) continue;
+            if (localOffset == 0f) continue;
 
             var valueStr = parentStat.ValueToString(localOffset, numberSense: ToStringNumberSense.Offset);
             sb.AppendInNewLine($"    {trait.LabelCap}: {valueStr}"); // consistent with interface format
         }
-        
+
         sb.AppendLine();
 
         return sb.ToString();
@@ -64,8 +50,7 @@ public class TraitEquippedOffsets : StatPart {
         if (!TryGetApplicableTraits(req, out var traits)) yield break;
 
         var seenModules = new HashSet<ThingDef>();
-        for (var i = 0; i < traits.Count; i++) {
-            var trait = traits[i];
+        foreach (var trait in traits) {
             if (trait.TryGetModuleDef(out var moduleDef) && seenModules.Add(moduleDef)) {
                 yield return new Dialog_InfoCard.Hyperlink(moduleDef);
             }
@@ -76,12 +61,11 @@ public class TraitEquippedOffsets : StatPart {
         var targetStats = new HashSet<StatDef>();
         var allTraits = DefDatabase<WeaponTraitDef>.AllDefsListForReading;
 
-        for (var i = 0; i < allTraits.Count; i++) {
-            var modifiers = allTraits[i].equippedStatOffsets;
+        foreach (var t in allTraits) {
+            var modifiers = t.equippedStatOffsets;
             if (modifiers.NullOrEmpty()) continue;
 
-            for (var j = 0; j < modifiers.Count; j++) {
-                var modifier = modifiers[j];
+            foreach (var modifier in modifiers) {
                 if (modifier?.stat == null) continue;
                 if (!modifier.stat.showOnPawns || !modifier.stat.showOnHumanlikes) continue;
 
@@ -113,23 +97,9 @@ public class TraitEquippedOffsets : StatPart {
         var traits = weapon.TryGetComp<CompDynamicTraits>()?.Traits;
         if (traits.IsNullOrEmpty()) return false;
 
-        var list = new List<WeaponTraitDef>();
-
-        foreach (var trait in traits) {
-            if (trait == null || trait.equippedStatOffsets.NullOrEmpty()) continue;
-
-            var hasMatch = false;
-            for (var i = 0; i < trait.equippedStatOffsets.Count; i++) {
-                if (trait.equippedStatOffsets[i]?.stat == parentStat) {
-                    hasMatch = true;
-                    break;
-                }
-            }
-
-            if (hasMatch) {
-                list.Add(trait);
-            }
-        }
+        var list = traits
+            .Where(trait => trait != null && trait.equippedStatOffsets?.Any(modifier => modifier?.stat == parentStat) == true)
+            .ToList();
 
         if (list.Count == 0) return false;
 

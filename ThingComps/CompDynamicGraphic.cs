@@ -9,6 +9,7 @@ public class CompDynamicGraphic : ThingComp {
     private CompProperties_DynamicGraphic Props => (CompProperties_DynamicGraphic)props;
 
     private Graphic? _cachedGraphic;
+    private Texture2D? _cachedBakedTexture;
 
     private bool _isDirty = true;
 
@@ -28,6 +29,10 @@ public class CompDynamicGraphic : ThingComp {
         return _cachedGraphic;
     }
 
+    public Texture? GetUIIconTexture() {
+        return GetDynamicGraphic().MatSingleFor(parent).mainTexture;
+    }
+
     public void Notify_GraphicDirty() {
         _isDirty = true;
     }
@@ -35,6 +40,23 @@ public class CompDynamicGraphic : ThingComp {
     public override void Notify_ColorChanged() {
         base.Notify_ColorChanged();
         Notify_GraphicDirty();
+    }
+
+    public override bool DontDrawParent() => true;
+
+    public override void DrawAt(Vector3 drawLoc, bool flip = false) {
+        if (parent.def.drawerType == DrawerType.RealtimeOnly || !parent.Spawned) {
+            var rotation = flip ? parent.Rotation.Opposite : parent.Rotation;
+            GetDynamicGraphic().Draw(drawLoc, rotation, parent);
+        }
+
+        SilhouetteUtility.DrawGraphicSilhouette(parent, drawLoc);
+    }
+
+    public override void PostPrintOnto(SectionLayer layer) {
+        if (parent.def.dontPrint) return;
+
+        GetDynamicGraphic().Print(layer, parent, 0f);
     }
 
     /// <summary>
@@ -142,9 +164,14 @@ public class CompDynamicGraphic : ThingComp {
 
         GL.PopMatrix();
 
+        if (_cachedBakedTexture != null) {
+            UnityEngine.Object.Destroy(_cachedBakedTexture);
+        }
+
         var finalBakedTexture = new Texture2D(renderTexture.width, renderTexture.height);
         finalBakedTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
         finalBakedTexture.Apply();
+        _cachedBakedTexture = finalBakedTexture;
 
         RenderTexture.active = null;
         RenderTexture.ReleaseTemporary(renderTexture);

@@ -4,7 +4,7 @@
         <TargetFramework>net48</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>12</LangVersion>
+        <LangVersion>14</LangVersion>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
@@ -28,7 +28,7 @@
       <None Remove=".gitignore" />
       <None Remove="CWF.csproj.DotSettings" />
       <None Remove="README.md" />
-      <None Remove="CLAUDE.md" />
+      <None Remove="AGENTS.md" />
     </ItemGroup>
 
 </Project>

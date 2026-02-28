@@ -49,8 +49,6 @@ public class CompDynamicGraphic : ThingComp {
             var rotation = flip ? parent.Rotation.Opposite : parent.Rotation;
             GetDynamicGraphic().Draw(drawLoc, rotation, parent);
         }
-
-        SilhouetteUtility.DrawGraphicSilhouette(parent, drawLoc);
     }
 
     public override void PostPrintOnto(SectionLayer layer) {

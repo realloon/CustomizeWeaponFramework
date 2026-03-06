@@ -91,7 +91,7 @@ public class CompDynamicGraphic : ThingComp {
         var renderWidth = sizeReference?.width ?? _cachedBakedTexture?.width ?? 512;
         var renderHeight = sizeReference?.height ?? _cachedBakedTexture?.height ?? 512;
 
-        var renderTexture = RenderTexture.GetTemporary(renderWidth, renderHeight, 0);
+        var renderTexture = RenderTexture.GetTemporary(renderWidth, renderHeight, 0, RenderTextureFormat.ARGB32);
 
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
             Color color, Texture2D? maskTexture)>();
@@ -176,8 +176,7 @@ public class CompDynamicGraphic : ThingComp {
         GL.PopMatrix();
 
         var finalBakedTexture = EnsureBakedTexture(renderTexture.width, renderTexture.height, out var textureRecreated);
-        finalBakedTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
-        finalBakedTexture.Apply();
+        Graphics.CopyTexture(renderTexture, finalBakedTexture);
 
         RenderTexture.active = null;
         RenderTexture.ReleaseTemporary(renderTexture);
@@ -206,7 +205,7 @@ public class CompDynamicGraphic : ThingComp {
         ReleaseCachedTexture();
 
         textureRecreated = true;
-        _cachedBakedTexture = new Texture2D(width, height);
+        _cachedBakedTexture = new Texture2D(width, height, TextureFormat.ARGB32, false);
         return _cachedBakedTexture;
     }
 

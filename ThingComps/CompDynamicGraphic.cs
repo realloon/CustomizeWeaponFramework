@@ -181,7 +181,10 @@ public class CompDynamicGraphic : ThingComp {
         RenderTexture.active = null;
         RenderTexture.ReleaseTemporary(renderTexture);
 
-        if (_cachedGraphic is Graphic_Single graphicSingle && !textureRecreated) return graphicSingle;
+        if (_cachedGraphic is Graphic_Single graphicSingle && !textureRecreated) {
+            _cachedGraphic = WrapGraphicIfNeeded(graphicSingle, originalGraphicData);
+            return _cachedGraphic;
+        }
 
         graphicSingle = new Graphic_Single();
         var request = new GraphicRequest(
@@ -191,9 +194,17 @@ public class CompDynamicGraphic : ThingComp {
         );
 
         graphicSingle.Init(request);
-        _cachedGraphic = graphicSingle;
+        _cachedGraphic = WrapGraphicIfNeeded(graphicSingle, originalGraphicData);
 
-        return graphicSingle;
+        return _cachedGraphic;
+    }
+
+    private static Graphic WrapGraphicIfNeeded(Graphic graphic, GraphicData originalGraphicData) {
+        if (originalGraphicData.onGroundRandomRotateAngle > 0.01f) {
+            graphic = new Graphic_RandomRotated(graphic, originalGraphicData.onGroundRandomRotateAngle);
+        }
+
+        return graphic;
     }
 
     private Texture2D EnsureBakedTexture(int width, int height, out bool textureRecreated) {

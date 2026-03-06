@@ -52,7 +52,18 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
         var actionButtonRect = new Rect(renameButtonRect.x - gap - buttonSize, renameButtonRect.y,
             buttonSize, buttonSize);
         if (Widgets.ButtonImage(actionButtonRect.ContractedBy(4f), TexButton.OpenDebugActionsMenu)) {
+            var applicablePresets = controller.GetApplicablePresets().ToList();
             var options = new List<FloatMenuOption> {
+                new("CWF_UI_SaveCurrentPreset".Translate(), controller.HasInstalledModules
+                    ? () => {
+                        Find.WindowStack.Add(new Dialog_TextInput(
+                            string.Empty,
+                            controller.SaveCurrentPreset,
+                            "CWF_UI_SaveCurrentPresetTitle".Translate()));
+                    }
+                    : null),
+                new("CWF_UI_ApplyPreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.ApplyPreset)),
+                new("CWF_UI_DeletePreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.DeletePreset)),
                 new("CWF_UI_ClearAllModules".Translate(), controller.HasInstalledModules ? controller.ClearAllModules : null)
             };
             Find.WindowStack.Add(new FloatMenu(options));
@@ -66,5 +77,17 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
         var finalDisplayName = _compRenamable?.Nickname ?? weapon.LabelCap;
         UIKit.WithStyle(() => Widgets.Label(labelRect, finalDisplayName),
             GameFont.Medium, anchor: TextAnchor.MiddleLeft);
+    }
+
+    private static Action? CreatePresetMenuAction(IEnumerable<AssemblyPresetData> presets, Action<AssemblyPresetData> onSelect) {
+        var presetOptions = presets
+            .Select(preset => new FloatMenuOption(preset.Name, () => onSelect.Invoke(preset)))
+            .ToList();
+
+        if (presetOptions.Count == 0) {
+            return null;
+        }
+
+        return () => Find.WindowStack.Add(new FloatMenu(presetOptions));
     }
 }

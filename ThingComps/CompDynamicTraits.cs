@@ -370,21 +370,7 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void RecalculateAvailableParts() {
-        _availableParts = new HashSet<PartDef>(Props.supportParts);
-
-        foreach (var traitDef in Traits) {
-            if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
-
-            var modifiers = moduleDef.GetModExtension<TraitModuleExtension>()?.conditionalPartModifiers;
-            if (modifiers == null) continue;
-
-            foreach (var rule in modifiers) {
-                if (rule.matcher == null || !rule.matcher.IsMatch(parent.def)) continue;
-
-                _availableParts.UnionWith(rule.enablesParts);
-                _availableParts.ExceptWith(rule.disablesParts);
-            }
-        }
+        _availableParts = new HashSet<PartDef>(PartAvailabilityAnalyzer.Analyze(parent, _installedTraits).AvailableParts);
     }
 
     private void SetupAbility(bool isPostLoad) {

@@ -6,12 +6,19 @@ namespace CWF.Controllers;
 
 public class InteractionController(Thing weapon) {
     private readonly CompDynamicTraits _compDynamicTraits = weapon.TryGetComp<CompDynamicTraits>();
+    private readonly AssemblyPresetManager? _presetManager = Current.Game?.GetComponent<AssemblyPresetManager>();
 
     private readonly List<WeaponTraitDef> _stagedUninstalls = [];
 
     public event Action OnDataChanged = delegate { };
 
     public bool HasInstalledModules => _compDynamicTraits.Traits.Any();
+
+    public bool HasApplicablePresets => _presetManager?.GetPresetsFor(weapon.def).Any() == true;
+
+    public IEnumerable<AssemblyPresetData> GetApplicablePresets() {
+        return _presetManager?.GetPresetsFor(weapon.def) ?? Enumerable.Empty<AssemblyPresetData>();
+    }
 
     private string FailureReason => weapon.ParentHolder is Pawn_EquipmentTracker
         ? "CWF_UI_NoCompatibleModulesInInventory".Translate()
@@ -138,16 +145,94 @@ public class InteractionController(Thing weapon) {
         OnDataChanged();
     }
 
+    public void SaveCurrentPreset(string name) {
+        var normalizedName = name.Trim();
+        if (string.IsNullOrEmpty(normalizedName)) {
+            Messages.Message("CWF_Message_PresetNameEmpty".Translate(), MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        if (_presetManager == null) {
+            Messages.Message("CWF_Message_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        _presetManager.SavePreset(weapon, normalizedName, _compDynamicTraits.InstalledTraits);
+        Messages.Message(
+            "CWF_Message_PresetSaved".Translate(normalizedName.Named("NAME")),
+            MessageTypeDefOf.PositiveEvent,
+            false);
+    }
+
+    public void DeletePreset(AssemblyPresetData preset) {
+        if (_presetManager == null) {
+            Messages.Message("CWF_Message_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
+            return;
+        }
+
+        var deleted = _presetManager.DeletePreset(weapon.def, preset.Name);
+        if (!deleted) {
+            Messages.Message(
+                "CWF_Message_PresetDeleteFailed".Translate(preset.Name.Named("NAME")),
+                MessageTypeDefOf.RejectInput,
+                false);
+            return;
+        }
+
+        Messages.Message(
+            "CWF_Message_PresetDeleted".Translate(preset.Name.Named("NAME")),
+            MessageTypeDefOf.PositiveEvent,
+            false);
+    }
+
+    public void ApplyPreset(AssemblyPresetData preset) {
+        var desiredTraits = new Dictionary<PartDef, WeaponTraitDef>();
+        var missingDefsCount = 0;
+
+        foreach (var entry in preset.Entries) {
+            if (entry.Part == null || entry.Trait == null) {
+                missingDefsCount++;
+                continue;
+            }
+
+            desiredTraits[entry.Part] = entry.Trait;
+        }
+
+        var previousTraits = _compDynamicTraits.InstalledTraits;
+        var analysis = PartAvailabilityAnalyzer.Analyze(weapon, desiredTraits);
+        var nextTraits = new Dictionary<PartDef, WeaponTraitDef>(analysis.ActiveTraits);
+
+        foreach (var (_, previousTrait) in previousTraits) {
+            if (!nextTraits.Values.Contains(previousTrait) && !_stagedUninstalls.Contains(previousTrait)) {
+                _stagedUninstalls.Add(previousTrait);
+            }
+        }
+
+        _stagedUninstalls.RemoveAll(trait => nextTraits.Values.Contains(trait));
+        _compDynamicTraits.InstalledTraits = nextTraits;
+
+        SoundDefOf.Tick_High.PlayOneShotOnCamera();
+        OnDataChanged();
+
+        var skippedCount = missingDefsCount + analysis.SkippedCount;
+        var message = skippedCount > 0
+            ? "CWF_Message_PresetAppliedWithSkipped".Translate(
+                preset.Name.Named("NAME"),
+                skippedCount.Named("COUNT"))
+            : "CWF_Message_PresetApplied".Translate(preset.Name.Named("NAME"));
+        Messages.Message(message, MessageTypeDefOf.PositiveEvent, false);
+    }
+
     #region Helpers
 
     private Action CreateInstallAction(PartDef part, WeaponTraitDef traitToInstall) {
         return () => {
-            if (!traitToInstall.TryGetModuleDef(out var moduleDef)) {
+            if (!traitToInstall.TryGetModuleDef(out _)) {
                 DoInstall(part, traitToInstall);
                 return;
             }
 
-            var analysis = AnalyzeInstallConflict(moduleDef);
+            var analysis = AnalyzeInstallConflict(part, traitToInstall);
             if (!analysis.HasConflict) {
                 DoInstall(part, traitToInstall);
                 return;
@@ -174,65 +259,42 @@ public class InteractionController(Thing weapon) {
         };
     }
 
-    private ConflictAnalysisResult AnalyzeInstallConflict(ThingDef moduleToInstall) {
-        var result = new ConflictAnalysisResult();
-        var ext = moduleToInstall.GetModExtension<TraitModuleExtension>();
-        if (ext?.conditionalPartModifiers == null) return result;
+    private ConflictAnalysisResult AnalyzeInstallConflict(PartDef partToInstall, WeaponTraitDef traitToInstall) {
+        var currentTraits = _compDynamicTraits.InstalledTraits;
+        currentTraits[partToInstall] = traitToInstall;
 
-        var partsToDisable = new HashSet<PartDef>();
-        foreach (var rule in ext.conditionalPartModifiers) {
-            if (rule.matcher != null && rule.matcher.IsMatch(weapon.def)) {
-                partsToDisable.UnionWith(rule.disablesParts);
-            }
-        }
-
-        foreach (var part in partsToDisable) {
-            var conflictingTrait = _compDynamicTraits.GetInstalledTraitFor(part);
-            if (conflictingTrait != null) {
-                result.ModulesToRemove.Add(conflictingTrait);
-            }
-        }
-
-        return result;
+        var analysis = PartAvailabilityAnalyzer.Analyze(weapon, currentTraits);
+        return CollectRemovedTraits(currentTraits, analysis.ActiveTraits, excludePart: partToInstall);
     }
 
     private ConflictAnalysisResult AnalyzeUninstallConflict(PartDef partToUninstall) {
-        var result = new ConflictAnalysisResult();
         var currentTraits = _compDynamicTraits.InstalledTraits;
 
-        if (!currentTraits.Remove(partToUninstall)) return result;
+        if (!currentTraits.Remove(partToUninstall)) return new ConflictAnalysisResult();
 
-        var futureAvailableParts = CalculateFutureAvailableParts(currentTraits.Values);
+        var analysis = PartAvailabilityAnalyzer.Analyze(weapon, currentTraits);
+        return CollectRemovedTraits(currentTraits, analysis.ActiveTraits);
+    }
 
-        foreach (var (part, trait) in currentTraits) {
-            if (futureAvailableParts.Contains(part)) continue;
+    private static ConflictAnalysisResult CollectRemovedTraits(
+        IReadOnlyDictionary<PartDef, WeaponTraitDef> desiredTraits,
+        IReadOnlyDictionary<PartDef, WeaponTraitDef> activeTraits,
+        PartDef? excludePart = null) {
+        var result = new ConflictAnalysisResult();
+
+        foreach (var (part, trait) in desiredTraits) {
+            if (excludePart == part) {
+                continue;
+            }
+
+            if (activeTraits.TryGetValue(part, out var activeTrait) && activeTrait == trait) {
+                continue;
+            }
 
             result.ModulesToRemove.Add(trait);
         }
 
         return result;
-    }
-
-    private HashSet<PartDef> CalculateFutureAvailableParts(IEnumerable<WeaponTraitDef> futureTraits) {
-        if (weapon.TryGetComp<CompDynamicTraits>()?.props is not CompProperties_DynamicTraits props) return [];
-
-        var availableParts = new HashSet<PartDef>(props.supportParts);
-
-        foreach (var traitDef in futureTraits) {
-            if (!traitDef.TryGetModuleDef(out var moduleDef)) continue;
-
-            var ext = moduleDef.GetModExtension<TraitModuleExtension>();
-            if (ext?.conditionalPartModifiers == null) continue;
-
-            foreach (var rule in ext.conditionalPartModifiers) {
-                if (rule.matcher == null || !rule.matcher.IsMatch(weapon.def)) continue;
-
-                availableParts.UnionWith(rule.enablesParts);
-                availableParts.ExceptWith(rule.disablesParts);
-            }
-        }
-
-        return availableParts;
     }
 
     private static void ShowConfirmationDialog(string title, string text, Action onConfirm) {

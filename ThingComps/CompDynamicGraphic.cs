@@ -42,13 +42,18 @@ public class CompDynamicGraphic : ThingComp {
         Notify_GraphicDirty();
     }
 
+    public override void PostDestroy(DestroyMode mode, Map previousMap) {
+        base.PostDestroy(mode, previousMap);
+        ReleaseCachedTexture();
+    }
+
     public override bool DontDrawParent() => true;
 
     public override void DrawAt(Vector3 drawLoc, bool flip = false) {
-        if (parent.def.drawerType == DrawerType.RealtimeOnly || !parent.Spawned) {
-            var rotation = flip ? parent.Rotation.Opposite : parent.Rotation;
-            GetDynamicGraphic().Draw(drawLoc, rotation, parent);
-        }
+        if (parent.def.drawerType != DrawerType.RealtimeOnly && parent.Spawned) return;
+
+        var rotation = flip ? parent.Rotation.Opposite : parent.Rotation;
+        GetDynamicGraphic().Draw(drawLoc, rotation, parent);
     }
 
     public override void PostPrintOnto(SectionLayer layer) {
@@ -82,10 +87,11 @@ public class CompDynamicGraphic : ThingComp {
         var originalGraphicData = parent.def.graphicData;
         if (originalGraphicData == null) return BaseContent.BadGraphic;
 
-        var sizeReference = ContentFinder<Texture2D>.Get(originalGraphicData.texPath, false)
-                            ?? new Texture2D(512, 512);
+        var sizeReference = ContentFinder<Texture2D>.Get(originalGraphicData.texPath, false);
+        var renderWidth = sizeReference?.width ?? _cachedBakedTexture?.width ?? 512;
+        var renderHeight = sizeReference?.height ?? _cachedBakedTexture?.height ?? 512;
 
-        var renderTexture = RenderTexture.GetTemporary(sizeReference.width, sizeReference.height, 0);
+        var renderTexture = RenderTexture.GetTemporary(renderWidth, renderHeight, 0);
 
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
             Color color, Texture2D? maskTexture)>();
@@ -135,54 +141,80 @@ public class CompDynamicGraphic : ThingComp {
         GL.PushMatrix();
         GL.LoadPixelMatrix(0, renderTexture.width, renderTexture.height, 0);
 
-        var sortedLayers = layersToDraw.OrderBy(l => l.sortOrder).ToList();
+        layersToDraw.Sort((left, right) => left.sortOrder.CompareTo(right.sortOrder));
 
-        foreach (var layer in sortedLayers) {
+        Material? tempMaterial = null;
+
+        foreach (var layer in layersToDraw) {
             var scaledWidth = layer.texture.width * layer.scale;
             var scaledHeight = layer.texture.height * layer.scale;
             var y = (renderTexture.height - scaledHeight) - layer.offset.y;
             var destRect = new Rect(layer.offset.x, y, scaledWidth, scaledHeight);
 
             if (layer.color != Color.white && originalGraphicData.shaderType?.Shader != null) {
-                var tempMaterial = new Material(originalGraphicData.shaderType.Shader) { color = layer.color };
+                tempMaterial ??= new Material(originalGraphicData.shaderType.Shader);
+                tempMaterial.color = layer.color;
+
                 if (tempMaterial.HasProperty(ShaderPropertyIDs.ColorTwo)) {
                     tempMaterial.SetColor(ShaderPropertyIDs.ColorTwo, layer.color);
                 }
 
-                if (layer.maskTexture != null && tempMaterial.HasProperty(ShaderPropertyIDs.MaskTex)) {
+                if (tempMaterial.HasProperty(ShaderPropertyIDs.MaskTex)) {
                     tempMaterial.SetTexture(ShaderPropertyIDs.MaskTex, layer.maskTexture);
                 }
 
                 Graphics.DrawTexture(destRect, layer.texture, tempMaterial);
-                UnityEngine.Object.Destroy(tempMaterial);
             } else {
                 Graphics.DrawTexture(destRect, layer.texture);
             }
         }
 
-        GL.PopMatrix();
-
-        if (_cachedBakedTexture != null) {
-            UnityEngine.Object.Destroy(_cachedBakedTexture);
+        if (tempMaterial != null) {
+            UnityEngine.Object.Destroy(tempMaterial);
         }
 
-        var finalBakedTexture = new Texture2D(renderTexture.width, renderTexture.height);
+        GL.PopMatrix();
+
+        var finalBakedTexture = EnsureBakedTexture(renderTexture.width, renderTexture.height, out var textureRecreated);
         finalBakedTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
         finalBakedTexture.Apply();
-        _cachedBakedTexture = finalBakedTexture;
 
         RenderTexture.active = null;
         RenderTexture.ReleaseTemporary(renderTexture);
 
-        var graphic = new Graphic_Single();
+        if (_cachedGraphic is Graphic_Single graphicSingle && !textureRecreated) return graphicSingle;
+
+        graphicSingle = new Graphic_Single();
         var request = new GraphicRequest(
             typeof(Graphic_Single), finalBakedTexture, ShaderDatabase.Cutout,
             originalGraphicData.drawSize, Color.white, Color.white,
             originalGraphicData, 0, null, null
         );
 
-        graphic.Init(request);
-        return graphic;
+        graphicSingle.Init(request);
+        _cachedGraphic = graphicSingle;
+
+        return graphicSingle;
+    }
+
+    private Texture2D EnsureBakedTexture(int width, int height, out bool textureRecreated) {
+        if (_cachedBakedTexture != null && _cachedBakedTexture.width == width && _cachedBakedTexture.height == height) {
+            textureRecreated = false;
+            return _cachedBakedTexture;
+        }
+
+        ReleaseCachedTexture();
+
+        textureRecreated = true;
+        _cachedBakedTexture = new Texture2D(width, height);
+        return _cachedBakedTexture;
+    }
+
+    private void ReleaseCachedTexture() {
+        if (_cachedBakedTexture == null) return;
+
+        UnityEngine.Object.Destroy(_cachedBakedTexture);
+        _cachedBakedTexture = null;
     }
 
     private static Texture2D? GetMaskTexture(GraphicData graphicData, AttachmentPointData point) {

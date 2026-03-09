@@ -29,6 +29,17 @@ public class ConfigWindow : Mod {
             _settings.MaxRandomModules = range.max;
         }
 
+        listing.GapLine();
+        listing.Label("ItemSellPriceFactor".Translate() + ": " + _settings.ModuleSellPriceFactor.ToString("F2"));
+        var sliderRect = listing.GetRect(24f);
+        _settings.ModuleSellPriceFactor = Widgets.HorizontalSlider(
+            sliderRect,
+            _settings.ModuleSellPriceFactor,
+            Settings.MinModuleSellPriceFactor,
+            Settings.MaxModuleSellPriceFactor,
+            roundTo: 0.01f
+        );
+
         listing.Gap(24f);
 
         if (listing.ButtonText("Reset".Translate(), widthPct: 0.5f)) {

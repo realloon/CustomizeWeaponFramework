@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using Verse;
 
 namespace CWF;
@@ -12,5 +12,6 @@ public class CustomizeWeaponFramework {
         AdapterDef.Inject();
         ModuleDatabase.BuildCacheAndInject();
         TraitEquippedOffsets.Inject();
+        ModuleSellPriceFactor.Inject();
     }
 }

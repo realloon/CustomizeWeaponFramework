@@ -1,6 +1,7 @@
 using Verse;
 using CWF.Extensions;
 using JetBrains.Annotations;
+using RimWorld;
 
 // ReSharper disable InconsistentNaming
 
@@ -22,6 +23,29 @@ public class WeaponMatcher {
     /// </summary>
     [UsedImplicitly]
     public List<string> weaponTags = [];
+
+    /// <summary>
+    /// A list of traitsDefs to match against.
+    /// </summary>
+    [UsedImplicitly]
+    public List<WeaponTraitDef> traitsDef = [];
+
+    public bool IsMatch(ThingWithComps weapon)
+    {
+        bool defMatches = weaponDefs.Contains(weapon.def);
+
+        bool tagMatches = !weaponTags.NullOrEmpty() &&
+                          !weapon.def.weaponTags.NullOrEmpty() &&
+                          weaponTags.Any(tag => weapon.def.weaponTags.Contains(tag));
+
+        var currentTraits = weapon.GetComp<CompDynamicTraits>()?.Traits;
+
+        bool traitMatches = traitsDef.NullOrEmpty() ||
+                            (!currentTraits.IsNullOrEmpty() &&
+                             traitsDef.Any(trait => currentTraits.Contains(trait)));
+
+        return traitMatches && (defMatches || tagMatches);
+    }
 
     public bool IsMatch(ThingDef weaponDef) {
         if (weaponDefs.Contains(weaponDef)) return true;

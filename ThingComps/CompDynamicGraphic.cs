@@ -73,7 +73,7 @@ public class CompDynamicGraphic : ThingComp {
         if (ext?.graphicCases.IsNullOrEmpty() ?? true) return null;
 
         var matchingCases = ext.graphicCases
-            .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent.def))
+            .Where(c => c.matcher != null && c.graphicData != null && c.matcher.IsMatch(parent))
             .ToList();
 
         if (matchingCases.Empty()) return null;

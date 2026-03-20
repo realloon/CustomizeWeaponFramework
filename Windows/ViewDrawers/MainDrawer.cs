@@ -65,7 +65,7 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
 
         DrawPartGroup(in topCenterRect, topParts, Direction.Horizontal);
         DrawPartGroup(in bottomCenterRect, bottomParts, Direction.Horizontal);
-        DrawPartGroup(in middleLeftRect, leftParts, Direction.Horizontal);
+        DrawPartGroup(in middleLeftRect, leftParts, Direction.Vertical);
         DrawPartGroup(in middleRightRect, rightParts, Direction.Vertical);
     }
 

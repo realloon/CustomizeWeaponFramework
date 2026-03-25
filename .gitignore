@@ -1,9 +1,12 @@
-obj
-bin
+Assemblies/
 
-.codex
-AGENTS.md
+Textures/
+!Textures/LICENSE
+
+tmp/
 
 .DS_Store
 
-*.DotSettings.user
+Source/obj/
+Source/bin/
+Source/*.DotSettings.user

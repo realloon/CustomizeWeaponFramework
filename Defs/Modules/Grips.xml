@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <!-- > CustomGrip -->
+  <ThingDef ParentName="CWF_Module">
+    <defName>CWF_Module_CustomGrip</defName>
+    <label>custom grip</label>
+    <graphicData>
+      <texPath>CustomizeWeapon/Modules/Grip/Grip</texPath>
+    </graphicData>
+    <statBases>
+      <WorkToMake>1500</WorkToMake>
+    </statBases>
+    <costList>
+      <Steel>10</Steel>
+      <ComponentIndustrial>1</ComponentIndustrial>
+    </costList>
+    <recipeMaker>
+      <researchPrerequisite>Gunsmithing</researchPrerequisite>
+    </recipeMaker>
+    <modExtensions>
+      <li Class="CWF.TraitModuleExtension">
+        <weaponTraitDef>CWF_Trait_CustomGrip</weaponTraitDef>
+        <part>Grip</part>
+        <graphicCases>
+          <li>
+            <matcher>
+              <weaponDefs>
+                <li>Gun_AssaultRifle</li>
+              </weaponDefs>
+            </matcher>
+            <graphicData>
+              <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForAssaultRifle</texturePath>
+            </graphicData>
+          </li>
+          <li>
+            <matcher>
+              <weaponDefs>
+                <li>Gun_ChargeRifle</li>
+              </weaponDefs>
+            </matcher>
+            <graphicData>
+              <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForChargeRifle</texturePath>
+            </graphicData>
+          </li>
+          <li>
+            <matcher>
+              <weaponDefs>
+                <li>Gun_HeavySMG</li>
+              </weaponDefs>
+            </matcher>
+            <graphicData>
+              <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForHeavySMG</texturePath>
+            </graphicData>
+          </li>
+          <li>
+            <matcher>
+              <weaponDefs>
+                <li>Gun_Minigun</li>
+              </weaponDefs>
+            </matcher>
+            <graphicData>
+              <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForMinigun</texturePath>
+              <offset>(-14, 65)</offset>
+            </graphicData>
+          </li>
+        </graphicCases>
+      </li>
+    </modExtensions>
+  </ThingDef>
+</Defs>

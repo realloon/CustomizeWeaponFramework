@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <CWF_Trait_ExtendedBarrel.label>удлиненный ствол</CWF_Trait_ExtendedBarrel.label>
+  <CWF_Trait_ExtendedBarrel.description>Тщательно сделанный удлиненный ствол. Он повышает начальную скорость пули и увеличивает эффективную дальность.</CWF_Trait_ExtendedBarrel.description>
+
+  <CWF_Trait_ShortenedBarrel.label>укороченный ствол</CWF_Trait_ShortenedBarrel.label>
+  <CWF_Trait_ShortenedBarrel.description>Укороченный ствол. Снижает начальную скорость и дальность, но меньший вес и лучший баланс ускоряют прицеливание.</CWF_Trait_ShortenedBarrel.description>
+
+  <CWF_Trait_TacticalBarrel.label>тактический ствол</CWF_Trait_TacticalBarrel.label>
+  <CWF_Trait_TacticalBarrel.description>Переработанный ствол для лучшей эргономики и управления. Облегченный профиль уменьшает вес и ускоряет вывод оружия на цель.</CWF_Trait_TacticalBarrel.description>
+
+  <CWF_Trait_RapidReceiver.label>скоростной ресивер</CWF_Trait_RapidReceiver.label>
+  <CWF_Trait_RapidReceiver.description>Точно настроенный ресивер. Облегченные подвижные части ускоряют цикл работы и повышают темп стрельбы очередями.</CWF_Trait_RapidReceiver.description>
+
+  <CWF_Trait_RapidTrigger.label>скоростной спуск</CWF_Trait_RapidTrigger.label>
+  <CWF_Trait_RapidTrigger.description>Спуск с коротким ходом и быстрым сбросом. Ускоряет срабатывание механизма и повышает темп очереди.</CWF_Trait_RapidTrigger.description>
+
+  <CWF_Trait_ShortenedStock.label>укороченный приклад</CWF_Trait_ShortenedStock.label>
+  <CWF_Trait_ShortenedStock.description>Укороченный приклад снижает вес. Оружие становится легче, компактнее и удобнее в тесных местах.</CWF_Trait_ShortenedStock.description>
+
+  <CWF_Trait_TelescopicStock.label>телескопический приклад</CWF_Trait_TelescopicStock.label>
+  <CWF_Trait_TelescopicStock.description>Регулируемый приклад улучшает посадку и эргономику. Более устойчивое положение повышает точность.</CWF_Trait_TelescopicStock.description>
+
+  <CWF_Trait_FoldStock.label>складной приклад</CWF_Trait_FoldStock.label>
+  <CWF_Trait_FoldStock.description>Складной приклад с надежной фиксацией. Дает устойчивый упор для точной стрельбы и немного снижает вес.</CWF_Trait_FoldStock.description>
+
+  <CWF_Trait_StabilizerBrace.label>стабилизирующий упор</CWF_Trait_StabilizerBrace.label>
+  <CWF_Trait_StabilizerBrace.description>Упор для руки, который заметно повышает устойчивость и точность на ближней дистанции.</CWF_Trait_StabilizerBrace.description>
+
+  <CWF_Trait_CustomGrip.label>кастомная рукоять</CWF_Trait_CustomGrip.label>
+  <CWF_Trait_CustomGrip.description>Эргономичная рукоять. Улучшает контроль и точность на короткой дистанции.</CWF_Trait_CustomGrip.description>
+
+  <CWF_Trait_Holoscope.label>голографический прицел</CWF_Trait_Holoscope.label>
+  <CWF_Trait_Holoscope.description>Продвинутый голографический прицел. Четкая метка ускоряет захват цели и повышает точность на ближней и средней дистанции.</CWF_Trait_Holoscope.description>
+
+  <CWF_Trait_RedDotScope.label>коллиматорный прицел</CWF_Trait_RedDotScope.label>
+  <CWF_Trait_RedDotScope.description>Коллиматорный прицел с яркой точкой. Упрощает прицеливание и повышает точность на всех рабочих дистанциях.</CWF_Trait_RedDotScope.description>
+
+  <CWF_Trait_2xScope.label>прицел 2x</CWF_Trait_2xScope.label>
+  <CWF_Trait_2xScope.description>Оптика 2x делает цели крупнее и четче. Помогает точным выстрелам на средней дистанции.</CWF_Trait_2xScope.description>
+
+  <CWF_Trait_4xScope.label>прицел 4x</CWF_Trait_4xScope.label>
+  <CWF_Trait_4xScope.description>Оптика 4x для средней и дальней дистанции. Помогает распознавать удаленные цели и немного увеличивает эффективную дальность.</CWF_Trait_4xScope.description>
+
+  <CWF_Trait_8xScope.label>прицел 8x</CWF_Trait_8xScope.label>
+  <CWF_Trait_8xScope.description>Оптика 8x для точной стрельбы на дальних дистанциях. Высокое увеличение помогает поражать цели у предела дальности оружия.</CWF_Trait_8xScope.description>
+
+  <CWF_Trait_QuickMagazine.label>быстрый магазин</CWF_Trait_QuickMagazine.label>
+  <CWF_Trait_QuickMagazine.description>Магазин с улучшенным механизмом сброса. Ускоряет перезарядку и сокращает паузы в бою.</CWF_Trait_QuickMagazine.description>
+
+  <CWF_Trait_ExtendedMagazine.label>увеличенный магазин</CWF_Trait_ExtendedMagazine.label>
+  <CWF_Trait_ExtendedMagazine.description>Магазин увеличенной емкости. Позволяет делать больше выстрелов за очередь.</CWF_Trait_ExtendedMagazine.description>
+
+  <CWF_Trait_BeltMagazine.label>ленточный магазин</CWF_Trait_BeltMagazine.label>
+  <CWF_Trait_BeltMagazine.description>Ленточная подача дает стабильный поток боеприпасов и позволяет вести более длинные и подавляющие очереди.</CWF_Trait_BeltMagazine.description>
+
+  <CWF_Trait_DrumMagazine.label>барабанный магазин</CWF_Trait_DrumMagazine.label>
+  <CWF_Trait_DrumMagazine.description>Барабанный магазин большой емкости. Позволяет вести длинные и плотные очереди.</CWF_Trait_DrumMagazine.description>
+
+  <CWF_Trait_VerticalGrip.label>вертикальная рукоять</CWF_Trait_VerticalGrip.label>
+  <CWF_Trait_VerticalGrip.description>Вертикальная рукоять дает более стабильный хват. Улучшает контроль и точность на ближней дистанции.</CWF_Trait_VerticalGrip.description>
+
+  <CWF_Trait_TriangularGrip.label>угловая рукоять</CWF_Trait_TriangularGrip.label>
+  <CWF_Trait_TriangularGrip.description>Эргономичная рукоять улучшает обращение с оружием. Позволяет быстрее вскинуть оружие и стабилизирует выстрелы в упор.</CWF_Trait_TriangularGrip.description>
+
+  <CWF_Trait_LaserSight.label>лазерный целеуказатель</CWF_Trait_LaserSight.label>
+  <CWF_Trait_LaserSight.description>Лазерный целеуказатель проецирует видимую точку на цель. Ускоряет прицеливание и повышает точность на ближней и средней дистанции.</CWF_Trait_LaserSight.description>
+
+  <CWF_Trait_GrenadeLauncher.label>гранатомет</CWF_Trait_GrenadeLauncher.label>
+  <CWF_Trait_GrenadeLauncher.description>Пусковая установка для одной осколочно-фугасной гранаты. Наносит сильный урон по площади. После каждого выстрела нужна перезарядка.</CWF_Trait_GrenadeLauncher.description>
+
+  <CWF_Trait_EMPLauncher.label>ЭМИ-пусковая установка</CWF_Trait_EMPLauncher.label>
+  <CWF_Trait_EMPLauncher.description>Пусковая установка для ЭМИ-снарядов. Оглушает механоидов и выводит из строя электронику. Делает два выстрела до перезарядки.</CWF_Trait_EMPLauncher.description>
+
+  <CWF_Trait_SmokeLauncher.label>дымовая пусковая установка</CWF_Trait_SmokeLauncher.label>
+  <CWF_Trait_SmokeLauncher.description>Пусковая установка для дымовых снарядов. Создает плотную дымовую завесу при попадании. Делает два выстрела до перезарядки.</CWF_Trait_SmokeLauncher.description>
+
+  <CWF_Trait_IncendiaryLauncher.label>зажигательная пусковая установка</CWF_Trait_IncendiaryLauncher.label>
+  <CWF_Trait_IncendiaryLauncher.description>Пусковая установка для одного зажигательного снаряда, который разбрасывает огонь при попадании. После каждого выстрела нужна перезарядка.</CWF_Trait_IncendiaryLauncher.description>
+
+  <CWF_Trait_HeavyRounds.label>тяжелые патроны</CWF_Trait_HeavyRounds.label>
+  <CWF_Trait_HeavyRounds.description>Патроны с более тяжелыми пулями. Сильно повышают останавливающее действие и немного увеличивают урон.</CWF_Trait_HeavyRounds.description>
+
+  <CWF_Trait_HollowPointRounds.label>экспансивные патроны</CWF_Trait_HollowPointRounds.label>
+  <CWF_Trait_HollowPointRounds.description>Экспансивные патроны, раскрывающиеся при попадании. Наносят более тяжелые раны и заметно повышают урон.</CWF_Trait_HollowPointRounds.description>
+
+  <CWF_Trait_ToxRounds.label>токсичные патроны</CWF_Trait_ToxRounds.label>
+  <CWF_Trait_ToxRounds.description>Патроны с сильным токсином. Ранят цель и вызывают накопление отравления.</CWF_Trait_ToxRounds.description>
+
+  <CWF_Trait_PiercingRounds.label>бронебойные патроны</CWF_Trait_PiercingRounds.label>
+  <CWF_Trait_PiercingRounds.description>Патроны с плотным закаленным сердечником для пробития брони. Повышают бронепробитие.</CWF_Trait_PiercingRounds.description>
+
+  <CWF_Trait_IncendiaryRounds.label>зажигательные патроны</CWF_Trait_IncendiaryRounds.label>
+  <CWF_Trait_IncendiaryRounds.description>Патроны с зажигательным составом. При попадании вспыхивают, наносят ожоги и поджигают окружение.</CWF_Trait_IncendiaryRounds.description>
+
+  <CWF_Trait_EMPRounds.label>ЭМИ-патроны</CWF_Trait_EMPRounds.label>
+  <CWF_Trait_EMPRounds.description>Патроны с микроконденсаторами. При попадании выпускают электромагнитный импульс, который мешает электронике и оглушает механоидов.</CWF_Trait_EMPRounds.description>
+
+  <CWF_Trait_HighPowerRounds.label>патроны повышенной мощности</CWF_Trait_HighPowerRounds.label>
+  <CWF_Trait_HighPowerRounds.description>Патроны с мощным метательным зарядом. Наносят больше урона и лучше пробивают броню, но сильная отдача снижает точность.</CWF_Trait_HighPowerRounds.description>
+
+  <CWF_Trait_PulseChargeRounds.label>импульсно-зарядные патроны</CWF_Trait_PulseChargeRounds.label>
+  <CWF_Trait_PulseChargeRounds.description>Продвинутые патроны с нестабильной энергетической ячейкой. Наносят высокий урон и хорошо пробивают броню.</CWF_Trait_PulseChargeRounds.description>
+
+  <CWF_Trait_IncendiaryPellets.label>зажигательная картечь</CWF_Trait_IncendiaryPellets.label>
+  <CWF_Trait_IncendiaryPellets.description>Картечь с зажигательным наполнителем. При попадании разбрасывает горящие фрагменты и легко поджигает цель.</CWF_Trait_IncendiaryPellets.description>
+
+  <CWF_Trait_ToxPellets.label>токсичная картечь</CWF_Trait_ToxPellets.label>
+  <CWF_Trait_ToxPellets.description>Картечь с токсичным наполнителем. При попадании разлетается ядовитыми осколками и быстро накапливает отравление.</CWF_Trait_ToxPellets.description>
+
+  <CWF_Trait_BirdshotPellets.label>мелкая дробь</CWF_Trait_BirdshotPellets.label>
+  <CWF_Trait_BirdshotPellets.description>Мелкая легкая дробь, расходящаяся конусом. Очень эффективна вблизи, но быстро теряет мощность и плохо работает по броне.</CWF_Trait_BirdshotPellets.description>
+</LanguageData>

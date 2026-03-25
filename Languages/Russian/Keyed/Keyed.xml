@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LanguageData>
+  <CWF_Range>Дальность</CWF_Range>
+  <CWF_RangeDPS>DPS</CWF_RangeDPS>
+  <CWF_RangeBurstCount>Выстрелов в очереди</CWF_RangeBurstCount>
+  <CWF_RangeWarmupTime>Время прицеливания</CWF_RangeWarmupTime>
+  <CWF_RangeCooldown>Задержка</CWF_RangeCooldown>
+  <CWF_Projectile>Снаряд</CWF_Projectile>
+  <CWF_Damage>Урон</CWF_Damage>
+  <CWF_ArmorPenetration>Бронепробитие</CWF_ArmorPenetration>
+  <CWF_StoppingPower>Останавливающее действие</CWF_StoppingPower>
+  <CWF_Accuracy>Точность</CWF_Accuracy>
+  <CWF_Touch>В упор</CWF_Touch>
+  <CWF_Short>Близко</CWF_Short>
+  <CWF_Medium>Средне</CWF_Medium>
+  <CWF_Long>Далеко</CWF_Long>
+  <CWF_BurstShotCountMultiplier>Множитель очереди</CWF_BurstShotCountMultiplier>
+  <CWF_BurstShotSpeedMultiplier>Множитель скорострельности</CWF_BurstShotSpeedMultiplier>
+  <CWF_AdditionalStoppingPower>Бонус останавливающего действия</CWF_AdditionalStoppingPower>
+
+  <CWF_WeaponPanel>Панель оружия</CWF_WeaponPanel>
+  <CWF_WeaponPanelDesc>Открыть панель оружия</CWF_WeaponPanelDesc>
+
+  <CWF_PickUp>Подобрать {MODULE_label}</CWF_PickUp>
+
+  <CWF_NoColonistToModifyWeapon>Нет колониста для модификации этого оружия</CWF_NoColonistToModifyWeapon>
+  <CWF_CannotFindModuleForModification>Не удалось найти {MODULE_label} для этой модификации</CWF_CannotFindModuleForModification>
+  <CWF_ModificationJobDispatched>{PAWN_label} модифицирует {WEAPON_label}</CWF_ModificationJobDispatched>
+  <CWF_ModificationComplete>{PAWN_label} закончил модификацию {WEAPON_label}</CWF_ModificationComplete>
+  <CWF_NoWorkbenchToCraftModule>Нет подходящего верстака для создания {MODULE_label}</CWF_NoWorkbenchToCraftModule>
+  <CWF_BillAdded>Добавлен заказ: {MODULE_label} ({BENCH_label})</CWF_BillAdded>
+
+  <CWF_Parts>Части</CWF_Parts>
+  <CWF_CompatibleModules>Совместимые модули</CWF_CompatibleModules>
+  <CWF_BrowseCompatibleModules>Просмотреть совместимые модули</CWF_BrowseCompatibleModules>
+  <CWF_PartOf>Часть</CWF_PartOf>
+  <CWF_Uninstall>Снять</CWF_Uninstall>
+  <CWF_NoCompatibleModules>Нет подходящих модулей</CWF_NoCompatibleModules>
+  <CWF_NoCompatibleModulesInInventory>В инвентаре нет подходящих модулей</CWF_NoCompatibleModulesInInventory>
+  <CWF_NoCompatibleModulesOnMap>На карте нет подходящих модулей</CWF_NoCompatibleModulesOnMap>
+  <CWF_WeaponModules>Модули оружия</CWF_WeaponModules>
+  <CWF_WeaponModules_Desc>Модули, установленные на это оружие.</CWF_WeaponModules_Desc>
+  <CWF_ModuleEffects>Эффекты модуля</CWF_ModuleEffects>
+  <CWF_ModuleEffectsDesc>Установка {MODULE_label} дает оружию следующие эффекты</CWF_ModuleEffectsDesc>
+  <CWF_InputTitle>Ввод</CWF_InputTitle>
+  <CWF_Confirm>Подтвердить</CWF_Confirm>
+  <CWF_Cancel>Отмена</CWF_Cancel>
+  <CWF_NotRanged>Сейчас поддерживается только дальнобойное оружие.</CWF_NotRanged>
+  <CWF_ConfirmInstallTitle>Подтвердить установку</CWF_ConfirmInstallTitle>
+  <CWF_ConfirmInstallBody>Установка {MODULE} также снимет эти модули:\n\n{CONFLICTS}\n\nПродолжить?</CWF_ConfirmInstallBody>
+  <CWF_ConfirmUninstallTitle>Подтвердить снятие</CWF_ConfirmUninstallTitle>
+  <CWF_ConfirmUninstallBody>Снятие {MODULE} также снимет эти модули:\n\n{DEPENDENCIES}\n\nПродолжить?</CWF_ConfirmUninstallBody>
+  <CWF_FromEquipped>От модулей оружия</CWF_FromEquipped>
+  <CWF_RandomModuleGeneration>Случайная генерация модулей</CWF_RandomModuleGeneration>
+  <CWF_RandomModuleGenerationDesc>Если включено, пешки других фракций, включая рейдеров, союзников и торговцев, могут появляться с оружием со случайными модулями</CWF_RandomModuleGenerationDesc>
+  <CWF_All>Все</CWF_All>
+  <CWF_Craft>Создать</CWF_Craft>
+  <CWF_CannotCraft>Нельзя создать</CWF_CannotCraft>
+  <CWF_ClearAllModules>Снять все модули</CWF_ClearAllModules>
+  <CWF_SaveCurrentPreset>Сохранить текущий пресет...</CWF_SaveCurrentPreset>
+  <CWF_SaveCurrentPresetTitle>Сохранить текущий пресет сборки</CWF_SaveCurrentPresetTitle>
+  <CWF_ApplyPreset>Применить пресет сборки...</CWF_ApplyPreset>
+  <CWF_DeletePreset>Удалить пресет сборки...</CWF_DeletePreset>
+  <CWF_PresetNameEmpty>Имя пресета не может быть пустым.</CWF_PresetNameEmpty>
+  <CWF_PresetManagerUnavailable>Хранилище пресетов недоступно в этом сохранении.</CWF_PresetManagerUnavailable>
+  <CWF_PresetSaved>Пресет сохранен: {NAME}</CWF_PresetSaved>
+  <CWF_PresetDeleted>Пресет удален: {NAME}</CWF_PresetDeleted>
+  <CWF_PresetDeleteFailed>Не удалось удалить пресет: {NAME}</CWF_PresetDeleteFailed>
+  <CWF_PresetApplied>Пресет применен: {NAME}</CWF_PresetApplied>
+  <CWF_PresetAppliedWithSkipped>Пресет применен: {NAME} (пропущено {COUNT} отсутствующих или несовместимых модулей)</CWF_PresetAppliedWithSkipped>
+</LanguageData>

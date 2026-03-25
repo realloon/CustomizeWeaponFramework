@@ -20,7 +20,7 @@ public class CompTraitModule : ThingComp {
         }
 
         yield return new FloatMenuOption(
-            "CWF_UI_PickUp".Translate(parent.Named("MODULE")),
+            "CWF_PickUp".Translate(parent.Named("MODULE")),
             () => {
                 var job = JobMaker.MakeJob(JobDefOf.TakeInventory, parent);
                 job.count = 1;

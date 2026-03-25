@@ -18,8 +18,8 @@ public class ConfigWindow : Mod {
         var listing = new Listing_Standard();
         listing.Begin(inRect);
 
-        listing.CheckboxLabeled("CWF_UI_RandomModuleGeneration".Translate(), ref _settings.RandomModulesEnabled,
-            "CWF_UI_RandomModuleGenerationDesc".Translate());
+        listing.CheckboxLabeled("CWF_RandomModuleGeneration".Translate(), ref _settings.RandomModulesEnabled,
+            "CWF_RandomModuleGenerationDesc".Translate());
 
         if (_settings.RandomModulesEnabled) {
             var range = new IntRange(_settings.MinRandomModules, _settings.MaxRandomModules);

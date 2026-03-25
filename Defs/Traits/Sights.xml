@@ -4,7 +4,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_Holoscope</defName>
     <label>holoscope</label>
-    <description>This holographic sight projects a clear reticle into the user's field of view. It enables rapid, both-eyes-open aiming, which significantly reduces targeting time and increases precision from point-blank to medium ranges.</description>
+    <description>An advanced holographic sight. Its clear reticle speeds up target acquisition and improves accuracy at close to medium range.</description>
     <statOffsets>
       <RangedWeapon_WarmupMultiplier>-0.2</RangedWeapon_WarmupMultiplier>
     </statOffsets>
@@ -19,7 +19,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_RedDotScope</defName>
     <label>red dot scope</label>
-    <description>This electronic sight provides a single, illuminated red dot as the aiming point. By eliminating the need to align traditional front and rear sights, it dramatically simplifies the aiming process, improving accuracy across all effective ranges.</description>
+    <description>A red dot sight with a bright aiming point. It simplifies aiming and improves accuracy at all effective ranges.</description>
     <statFactors>
       <AccuracyTouch>1.15</AccuracyTouch>
       <AccuracyShort>1.15</AccuracyShort>
@@ -32,7 +32,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_2xScope</defName>
     <label>2x scope</label>
-    <description>This optical scope offers 2x magnification, making the target appear larger and clearer. It provides a significant advantage for precise aiming in medium-range combat.</description>
+    <description>A 2x optic that makes targets larger and clearer. It helps with precise shots at medium range.</description>
     <statFactors>
       <AccuracyTouch>1.3</AccuracyTouch>
       <AccuracyShort>1.3</AccuracyShort>
@@ -44,7 +44,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_4xScope</defName>
     <label>4x scope</label>
-    <description>Offering 4x magnification, this optical scope is designed for effective engagement at medium to long distances. It allows the user to clearly identify and precisely aim at distant targets, slightly extending the weapon's maximum effective range.</description>
+    <description>A 4x optic built for medium to long range. It helps identify distant targets and slightly extends effective range.</description>
     <statFactors>
       <AccuracyTouch>1.3</AccuracyTouch>
       <AccuracyShort>1.3</AccuracyShort>
@@ -57,7 +57,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_8xScope</defName>
     <label>8x scope</label>
-    <description>A powerful 8x optical scope built for precision at long distances. Its high magnification brings distant targets into sharp focus, allowing for accurate shots at the outer limits of the weapon's effective range.</description>
+    <description>An 8x optic for long-range precision. Its high magnification helps the shooter hit targets near the weapon's range limit.</description>
     <statFactors>
       <AccuracyTouch>1.3</AccuracyTouch>
       <AccuracyShort>1.3</AccuracyShort>

@@ -24,17 +24,17 @@ public static class Postfix_ThingDef_SpecialDisplayStats_Modules {
         var effect = traitDef.GetTraitEffect();
 
         if (effect.Any()) {
-            sb.AppendLine("CWF_UI_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");
+            sb.AppendLine("CWF_ModuleEffectsDesc".Translate(traitDef.Named("MODULE")) + ":");
             sb.AppendLine();
             sb.AppendLine(effect);
             sb.AppendLine();
         }
 
-        sb.AppendLine("CWF_UI_PartOf".Translate() + ": " + part.LabelCap);
+        sb.AppendLine("CWF_PartOf".Translate() + ": " + part.LabelCap);
 
         yield return new StatDrawEntry(
             StatCategoryDefOf.BasicsImportant,
-            "CWF_UI_ModuleEffects".Translate(),
+            "CWF_ModuleEffects".Translate(),
             traitDef.LabelCap,
             sb.ToString().TrimEndNewlines(),
             1000

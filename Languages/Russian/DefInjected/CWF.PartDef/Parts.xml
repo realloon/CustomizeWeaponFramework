@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <Receiver.label>ресивер</Receiver.label>
+  <Sight.label>прицел</Sight.label>
+  <Barrel.label>ствол</Barrel.label>
+  <Stock.label>приклад</Stock.label>
+  <Muzzle.label>дуло</Muzzle.label>
+  <Ammo.label>боеприпас</Ammo.label>
+  <Grip.label>рукоять</Grip.label>
+  <Trigger.label>спуск</Trigger.label>
+  <Magazine.label>магазин</Magazine.label>
+  <Underbarrel.label>подствольный модуль</Underbarrel.label>
+</LanguageData>

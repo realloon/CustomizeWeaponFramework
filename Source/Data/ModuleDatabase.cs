@@ -36,19 +36,19 @@ public static class ModuleDatabase {
         }
 
         if (!Mathf.Approximately(traitDef.burstShotCountMultiplier, 1f)) {
-            sb.AppendLine($" - {"CWF_UI_BurstShotCountMultiplier".Translate()}: " +
+            sb.AppendLine($" - {"CWF_BurstShotCountMultiplier".Translate()}: " +
                           traitDef.burstShotCountMultiplier.ToStringByStyle(ToStringStyle.PercentZero,
                               ToStringNumberSense.Factor));
         }
 
         if (!Mathf.Approximately(traitDef.burstShotSpeedMultiplier, 1f)) {
-            sb.AppendLine($" - {"CWF_UI_BurstShotSpeedMultiplier".Translate()}: " +
+            sb.AppendLine($" - {"CWF_BurstShotSpeedMultiplier".Translate()}: " +
                           traitDef.burstShotSpeedMultiplier.ToStringByStyle(ToStringStyle.PercentZero,
                               ToStringNumberSense.Factor));
         }
 
         if (!Mathf.Approximately(traitDef.additionalStoppingPower, 0.0f)) {
-            sb.AppendLine($" - {"CWF_UI_AdditionalStoppingPower".Translate()}: " +
+            sb.AppendLine($" - {"CWF_AdditionalStoppingPower".Translate()}: " +
                           traitDef.additionalStoppingPower.ToStringByStyle(ToStringStyle.FloatOne,
                               ToStringNumberSense.Offset));
         }

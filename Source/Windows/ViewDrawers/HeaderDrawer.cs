@@ -21,7 +21,7 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
         // Render search button
         var searchButtonRect = new Rect(rect.xMax - buttonSize, rect.y + (rect.height - buttonSize) / 2f,
             buttonSize, buttonSize);
-        TooltipHandler.TipRegion(searchButtonRect, "CWF_UI_BrowseCompatibleModules".Translate());
+        TooltipHandler.TipRegion(searchButtonRect, "CWF_BrowseCompatibleModules".Translate());
         if (Widgets.ButtonImage(searchButtonRect.ContractedBy(4f), TexButton.OpenInspector)) {
             Find.WindowStack.Add(new ModuleBrowserWindow(weapon));
         }
@@ -54,17 +54,17 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
         if (Widgets.ButtonImage(actionButtonRect.ContractedBy(4f), TexButton.OpenDebugActionsMenu)) {
             var applicablePresets = controller.GetApplicablePresets().ToList();
             var options = new List<FloatMenuOption> {
-                new("CWF_UI_SaveCurrentPreset".Translate(), controller.HasInstalledModules
+                new("CWF_SaveCurrentPreset".Translate(), controller.HasInstalledModules
                     ? () => {
                         Find.WindowStack.Add(new Dialog_TextInput(
                             string.Empty,
                             controller.SaveCurrentPreset,
-                            "CWF_UI_SaveCurrentPresetTitle".Translate()));
+                            "CWF_SaveCurrentPresetTitle".Translate()));
                     }
                     : null),
-                new("CWF_UI_ApplyPreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.ApplyPreset)),
-                new("CWF_UI_DeletePreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.DeletePreset)),
-                new("CWF_UI_ClearAllModules".Translate(), controller.HasInstalledModules ? controller.ClearAllModules : null)
+                new("CWF_ApplyPreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.ApplyPreset)),
+                new("CWF_DeletePreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.DeletePreset)),
+                new("CWF_ClearAllModules".Translate(), controller.HasInstalledModules ? controller.ClearAllModules : null)
             };
             Find.WindowStack.Add(new FloatMenu(options));
         }

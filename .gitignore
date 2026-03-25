@@ -1,12 +1,17 @@
-Assemblies/
+.DS_Store
+tmp/
 
+.codex/
+AGENTS.md
+
+# Textures
 Textures/
 !Textures/LICENSE
 
-tmp/
-
-.DS_Store
-
+# C#
 Source/obj/
 Source/bin/
 Source/*.DotSettings.user
+
+# dist
+Assemblies/

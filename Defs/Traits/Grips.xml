@@ -4,7 +4,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_CustomGrip</defName>
     <label>custom grip</label>
-    <description>This customized grip that handles recoil better, improving accuracy at short range.</description>
+    <description>An ergonomic custom grip. It gives better control and improves short-range accuracy.</description>
     <statFactors>
       <AccuracyTouch>1.1</AccuracyTouch>
       <AccuracyShort>1.1</AccuracyShort>

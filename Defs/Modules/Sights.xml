@@ -172,7 +172,7 @@
   <!-- 2xScope -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_2xScope</defName>
-    <label>2x Scope</label>
+    <label>2x scope</label>
     <graphicData>
       <texPath>CustomizeWeapon/Modules/Sight/Sight</texPath>
     </graphicData>
@@ -285,7 +285,7 @@
   <!-- 4xScope -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_4xScope</defName>
-    <label>4x Scope</label>
+    <label>4x scope</label>
     <graphicData>
       <texPath>CustomizeWeapon/Modules/Sight/Sight</texPath>
     </graphicData>
@@ -397,7 +397,7 @@
   <!-- 8xScope -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_8xScope</defName>
-    <label>8x Scope</label>
+    <label>8x scope</label>
     <graphicData>
       <texPath>CustomizeWeapon/Modules/Sight/Sight</texPath>
     </graphicData>

@@ -4,7 +4,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_ShortenedStock</defName>
     <label>shortened stock</label>
-    <description>This stock has been cut down to reduce the weapon's overall mass. The result is a lighter, more compact weapon that is easier to carry and maneuver in tight spaces.</description>
+    <description>A shortened stock that reduces weight. The weapon becomes lighter, more compact, and easier to handle in tight spaces.</description>
     <statFactors>
       <Mass>0.9</Mass>
     </statFactors>
@@ -14,7 +14,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_TelescopicStock</defName>
     <label>telescopic stock</label>
-    <description>Adjustable retractable stock for improved ergonomics. A better fit allows for a more stable shooting stance and greater precision.</description>
+    <description>An adjustable stock that improves fit and ergonomics. A steadier stance gives better accuracy.</description>
     <statFactors>
       <Mass>0.95</Mass>
       <AccuracyTouch>1.1</AccuracyTouch>
@@ -26,7 +26,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_FoldStock</defName>
     <label>fold stock</label>
-    <description>Featuring a robust locking mechanism, this folding stock provides an exceptionally stable shoulder rest when deployed. This solid foundation is crucial for maintaining a steady sight picture for accurate shots at medium to long ranges, while its design also slightly reduces the weapon's overall mass.</description>
+    <description>A folding stock with a solid lockup. It provides a stable shoulder rest for accurate fire while also reducing weight a little.</description>
     <statFactors>
       <Mass>0.95</Mass>
       <AccuracyMedium>1.1</AccuracyMedium>
@@ -38,7 +38,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_StabilizerBrace</defName>
     <label>stabilizer brace</label>
-    <description>The stabilizing brace that connects to the user's arm, increasing its accuracy.</description>
+    <description>A brace that supports the user's arm. It greatly improves stability and short-range accuracy.</description>
     <statOffsets>
     </statOffsets>
     <statFactors>

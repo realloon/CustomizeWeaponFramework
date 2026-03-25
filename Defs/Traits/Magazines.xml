@@ -4,7 +4,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_QuickMagazine</defName>
     <label>quick magazine</label>
-    <description>Designed with an improved release mechanism, this magazine makes the reloading process quicker, helping to reduce downtime during a firefight.</description>
+    <description>This magazine uses an improved release mechanism. Reloads are faster, so downtime is shorter.</description>
     <statFactors>
       <RangedWeapon_Cooldown>0.8</RangedWeapon_Cooldown>
     </statFactors>
@@ -14,7 +14,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_ExtendedMagazine</defName>
     <label>extended magazine</label>
-    <description>This magazine holds more ammunition than the standard version, allowing the weapon to fire more shots in a single burst.</description>
+    <description>This magazine holds more ammo than the standard version, letting the weapon fire more shots per burst.</description>
     <burstShotCountMultiplier>1.25</burstShotCountMultiplier>
   </WeaponTraitDef>
 
@@ -22,7 +22,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_BeltMagazine</defName>
     <label>belt magazine</label>
-    <description>This belt-feeding mechanism provides a continuous stream of ammunition, enabling the weapon to unleash a significantly longer and more suppressive burst of fire.</description>
+    <description>This belt feed provides a steady stream of ammo, allowing longer and more suppressive bursts.</description>
     <burstShotCountMultiplier>1.5</burstShotCountMultiplier>
   </WeaponTraitDef>
 
@@ -30,7 +30,7 @@
   <WeaponTraitDef ParentName="CWF_Trait">
     <defName>CWF_Trait_DrumMagazine</defName>
     <label>drum magazine</label>
-    <description>This high-capacity drum magazine holds a substantial number of rounds, enabling the weapon to deliver a prolonged and overwhelming burst of fire.</description>
+    <description>This high-capacity drum holds far more ammo, allowing long and heavy bursts.</description>
     <burstShotCountMultiplier>1.5</burstShotCountMultiplier>
   </WeaponTraitDef>
 </Defs>

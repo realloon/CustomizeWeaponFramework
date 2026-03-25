@@ -53,7 +53,7 @@ public class JobDispatcher {
     private void DispatchHaulModificationJob(List<ModificationData> netChanges) {
         var bestPawn = FindBestPawnForJob(_weapon.Position, _weapon.Map);
         if (bestPawn == null) {
-            Messages.Message("CWF_Message_NoColonistToModifyWeapon".Translate(), MessageTypeDefOf.NeutralEvent, false);
+            Messages.Message("CWF_NoColonistToModifyWeapon".Translate(), MessageTypeDefOf.NeutralEvent, false);
             return;
         }
 
@@ -65,7 +65,7 @@ public class JobDispatcher {
         foreach (var change in installChanges) {
             var module = FindBestAvailableModuleFor(change, bestPawn);
             if (module == null) {
-                Messages.Message("CWF_Message_CannotFindModuleForModification"
+                Messages.Message("CWF_CannotFindModuleForModification"
                         .Translate(change.ModuleDef.Named("MODULE")),
                     MessageTypeDefOf.RejectInput, false);
                 return;
@@ -92,7 +92,7 @@ public class JobDispatcher {
             bestPawn.jobs.EndCurrentJob(JobCondition.InterruptForced);
         }
 
-        Messages.Message("CWF_Message_ModificationJobDispatched"
+        Messages.Message("CWF_ModificationJobDispatched"
                 .Translate(bestPawn.Named("PAWN"), _weapon.Named("WEAPON")),
             new LookTargets(bestPawn, _weapon), MessageTypeDefOf.PositiveEvent);
     }

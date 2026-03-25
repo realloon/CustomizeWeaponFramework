@@ -24,7 +24,7 @@ public class TraitEquippedOffsets : StatPart {
 
         var sb = new StringBuilder();
         sb.AppendLine();
-        sb.Append("CWF_UI_FromEquipped".Translate());
+        sb.Append("CWF_FromEquipped".Translate());
 
         foreach (var trait in traits) {
             var modifiers = trait.equippedStatOffsets;

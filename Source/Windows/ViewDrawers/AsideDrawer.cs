@@ -9,32 +9,32 @@ public class AsideDrawer(SpecDatabase specDatabase) {
         listing.Begin(rect);
 
         if (specDatabase.IsMeleeWeapon) {
-            listing.Label("CWF_UI_NotRanged".Translate());
+            listing.Label("CWF_NotRanged".Translate());
             listing.End();
             return;
         }
 
         // === Weapon Stats ===
-        DrawStatRow(listing, "CWF_UI_Range".Translate(), specDatabase.Range);
-        DrawStatRow(listing, "CWF_UI_RangeDPS".Translate(), specDatabase.Dps);
-        DrawStatRow(listing, "CWF_UI_RangeBurstCount".Translate(), specDatabase.BurstShotCount);
-        DrawStatRow(listing, "CWF_UI_RangeWarmupTime".Translate(), specDatabase.WarmupTime, "F1", " s");
-        DrawStatRow(listing, "CWF_UI_RangeCooldown".Translate(), specDatabase.Cooldown, "F1", " s");
+        DrawStatRow(listing, "CWF_Range".Translate(), specDatabase.Range);
+        DrawStatRow(listing, "CWF_RangeDPS".Translate(), specDatabase.Dps);
+        DrawStatRow(listing, "CWF_RangeBurstCount".Translate(), specDatabase.BurstShotCount);
+        DrawStatRow(listing, "CWF_RangeWarmupTime".Translate(), specDatabase.WarmupTime, "F1", " s");
+        DrawStatRow(listing, "CWF_RangeCooldown".Translate(), specDatabase.Cooldown, "F1", " s");
 
         // === Projectile Stats ===
         listing.GapLine();
-        listing.Label($"<color=#999999><b>{"CWF_UI_Projectile".Translate()}</b></color>", 22f);
-        DrawStatRow(listing, "CWF_UI_Damage".Translate(), specDatabase.Damage);
-        DrawStatRow(listing, "CWF_UI_ArmorPenetration".Translate(), specDatabase.ArmorPenetration, unit: "%");
-        DrawStatRow(listing, "CWF_UI_StoppingPower".Translate(), specDatabase.StoppingPower, "F1");
+        listing.Label($"<color=#999999><b>{"CWF_Projectile".Translate()}</b></color>", 22f);
+        DrawStatRow(listing, "CWF_Damage".Translate(), specDatabase.Damage);
+        DrawStatRow(listing, "CWF_ArmorPenetration".Translate(), specDatabase.ArmorPenetration, unit: "%");
+        DrawStatRow(listing, "CWF_StoppingPower".Translate(), specDatabase.StoppingPower, "F1");
 
         // === Accuracy Stats ===
         listing.GapLine();
-        listing.Label($"<color=#999999><b>{"CWF_UI_Accuracy".Translate()}</b></color>", 22f);
-        DrawStatRow(listing, "CWF_UI_Touch".Translate(), specDatabase.AccuracyTouch, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Short".Translate(), specDatabase.AccuracyShort, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Medium".Translate(), specDatabase.AccuracyMedium, unit: "%");
-        DrawStatRow(listing, "CWF_UI_Long".Translate(), specDatabase.AccuracyLong, unit: "%");
+        listing.Label($"<color=#999999><b>{"CWF_Accuracy".Translate()}</b></color>", 22f);
+        DrawStatRow(listing, "CWF_Touch".Translate(), specDatabase.AccuracyTouch, unit: "%");
+        DrawStatRow(listing, "CWF_Short".Translate(), specDatabase.AccuracyShort, unit: "%");
+        DrawStatRow(listing, "CWF_Medium".Translate(), specDatabase.AccuracyMedium, unit: "%");
+        DrawStatRow(listing, "CWF_Long".Translate(), specDatabase.AccuracyLong, unit: "%");
 
         // === Other Stats ===
         listing.GapLine();

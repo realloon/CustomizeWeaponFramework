@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
   <!-- #region Stat -->
-  <CWF_UI_Range>Range</CWF_UI_Range>
-  <CWF_UI_RangeDPS>DPS</CWF_UI_RangeDPS>
-  <CWF_UI_RangeBurstCount>Burst count</CWF_UI_RangeBurstCount>
-  <CWF_UI_RangeWarmupTime>Warmup time</CWF_UI_RangeWarmupTime>
-  <CWF_UI_RangeCooldown>Cooldown</CWF_UI_RangeCooldown>
-  <CWF_UI_Projectile>Projectile</CWF_UI_Projectile>
-  <CWF_UI_Damage>Damage</CWF_UI_Damage>
-  <CWF_UI_ArmorPenetration>Armor penetration</CWF_UI_ArmorPenetration>
-  <CWF_UI_StoppingPower>Stopping power</CWF_UI_StoppingPower>
-  <CWF_UI_Accuracy>Accuracy</CWF_UI_Accuracy>
-  <CWF_UI_Touch>Touch</CWF_UI_Touch>
-  <CWF_UI_Short>Short</CWF_UI_Short>
-  <CWF_UI_Medium>Medium</CWF_UI_Medium>
-  <CWF_UI_Long>Long</CWF_UI_Long>
-  <CWF_UI_BurstShotCountMultiplier>Burst shot count multiplier</CWF_UI_BurstShotCountMultiplier>
-  <CWF_UI_BurstShotSpeedMultiplier>Fire rate multiplier</CWF_UI_BurstShotSpeedMultiplier>
-  <CWF_UI_AdditionalStoppingPower>Stopping power offset</CWF_UI_AdditionalStoppingPower>
+  <CWF_Range>Range</CWF_Range>
+  <CWF_RangeDPS>DPS</CWF_RangeDPS>
+  <CWF_RangeBurstCount>Burst count</CWF_RangeBurstCount>
+  <CWF_RangeWarmupTime>Warmup time</CWF_RangeWarmupTime>
+  <CWF_RangeCooldown>Cooldown</CWF_RangeCooldown>
+  <CWF_Projectile>Projectile</CWF_Projectile>
+  <CWF_Damage>Damage</CWF_Damage>
+  <CWF_ArmorPenetration>Armor penetration</CWF_ArmorPenetration>
+  <CWF_StoppingPower>Stopping power</CWF_StoppingPower>
+  <CWF_Accuracy>Accuracy</CWF_Accuracy>
+  <CWF_Touch>Touch</CWF_Touch>
+  <CWF_Short>Short</CWF_Short>
+  <CWF_Medium>Medium</CWF_Medium>
+  <CWF_Long>Long</CWF_Long>
+  <CWF_BurstShotCountMultiplier>Burst count multiplier</CWF_BurstShotCountMultiplier>
+  <CWF_BurstShotSpeedMultiplier>Fire rate multiplier</CWF_BurstShotSpeedMultiplier>
+  <CWF_AdditionalStoppingPower>Stopping power bonus</CWF_AdditionalStoppingPower>
   <!-- #endregion -->
 
   <!-- #region Gizmo -->
-  <CWF_UI_WeaponPanel>Weapon panel</CWF_UI_WeaponPanel>
-  <CWF_UI_WeaponPanelDesc>Open the weapon panel</CWF_UI_WeaponPanelDesc>
+  <CWF_WeaponPanel>Weapon panel</CWF_WeaponPanel>
+  <CWF_WeaponPanelDesc>Open the weapon panel</CWF_WeaponPanelDesc>
   <!-- #endregion -->
 
   <!-- #region Menu -->
-  <CWF_UI_PickUp>Pick up {MODULE_label}</CWF_UI_PickUp>
+  <CWF_PickUp>Pick up {MODULE_label}</CWF_PickUp>
   <!-- #endregion -->
 
   <!-- #region Message -->
-  <CWF_Message_NoColonistToModifyWeapon>No suitable colonist to modify weapon</CWF_Message_NoColonistToModifyWeapon>
-  <CWF_Message_CannotFindModuleForModification>Cannot find {MODULE_label} for modification</CWF_Message_CannotFindModuleForModification>
-  <CWF_Message_ModificationJobDispatched>{PAWN_label} will modify {WEAPON_label}</CWF_Message_ModificationJobDispatched>
-  <CWF_Message_ModificationComplete>{WEAPON_label} has been modified by {PAWN_label}</CWF_Message_ModificationComplete>
-  <CWF_Message_NoWorkbenchToCraftModule>No workbench available to craft {MODULE_label}</CWF_Message_NoWorkbenchToCraftModule>
-  <CWF_Message_BillAdded>Bill added: {MODULE_label} ({BENCH_label})</CWF_Message_BillAdded>
+  <CWF_NoColonistToModifyWeapon>No colonist can modify this weapon</CWF_NoColonistToModifyWeapon>
+  <CWF_CannotFindModuleForModification>Cannot find {MODULE_label} for this modification</CWF_CannotFindModuleForModification>
+  <CWF_ModificationJobDispatched>{PAWN_label} will modify {WEAPON_label}</CWF_ModificationJobDispatched>
+  <CWF_ModificationComplete>{PAWN_label} finished modifying {WEAPON_label}</CWF_ModificationComplete>
+  <CWF_NoWorkbenchToCraftModule>No suitable workbench to craft {MODULE_label}</CWF_NoWorkbenchToCraftModule>
+  <CWF_BillAdded>Bill added: {MODULE_label} ({BENCH_label})</CWF_BillAdded>
   <!-- #endregion -->
 
   <!-- #region Window -->
-  <CWF_UI_Parts>Parts</CWF_UI_Parts>
-  <CWF_UI_CompatibleModules>Compatible modules</CWF_UI_CompatibleModules>
-  <CWF_UI_BrowseCompatibleModules>Browse compatible modules</CWF_UI_BrowseCompatibleModules>
-  <CWF_UI_PartOf>Part of</CWF_UI_PartOf>
-  <CWF_UI_Uninstall>Uninstall</CWF_UI_Uninstall>
-  <CWF_UI_NoCompatibleModules>No compatible modules</CWF_UI_NoCompatibleModules>
-  <CWF_UI_NoCompatibleModulesInInventory>No compatible modules in inventory</CWF_UI_NoCompatibleModulesInInventory>
-  <CWF_UI_NoCompatibleModulesOnMap>No compatible modules on map</CWF_UI_NoCompatibleModulesOnMap>
-  <CWF_UI_WeaponModules>Weapon modules</CWF_UI_WeaponModules>
-  <CWF_UI_WeaponModules_Desc>Modules installed on this weapon.</CWF_UI_WeaponModules_Desc>
-  <CWF_UI_ModuleEffects>Module effects</CWF_UI_ModuleEffects>
-  <CWF_UI_ModuleEffectsDesc>Installing {MODULE_label} will grant the weapon the following effects</CWF_UI_ModuleEffectsDesc>
-  <CWF_UI_InputTitle>Input</CWF_UI_InputTitle>
-  <CWF_UI_Confirm>Confirm</CWF_UI_Confirm>
-  <CWF_UI_Cancel>Cancel</CWF_UI_Cancel>
-  <CWF_UI_NotRanged>This is not a ranged weapon.</CWF_UI_NotRanged>
-  <CWF_UI_ConfirmInstallTitle>Confirm Install</CWF_UI_ConfirmInstallTitle>
-  <CWF_UI_ConfirmInstallBody>Installing {MODULE} will force the removal of the following conflicting modules:\n\n{CONFLICTS}\n\nDo you want to continue?</CWF_UI_ConfirmInstallBody>
-  <CWF_UI_ConfirmUninstallTitle>Confirm Uninstall</CWF_UI_ConfirmUninstallTitle>
-  <CWF_UI_ConfirmUninstallBody>Uninstalling {MODULE} will also remove the following dependent modules:\n\n{DEPENDENCIES}\n\nDo you want to continue?</CWF_UI_ConfirmUninstallBody>
-  <CWF_UI_FromEquipped>From weapon modules</CWF_UI_FromEquipped>
-  <CWF_UI_RandomModuleGeneration>Random Module Generation</CWF_UI_RandomModuleGeneration>
-  <CWF_UI_RandomModuleGenerationDesc>If enabled, characters from other factions (like raiders, allies, and traders) will spawn with weapons that have random modules</CWF_UI_RandomModuleGenerationDesc>
-  <CWF_UI_All>All</CWF_UI_All>
-  <CWF_UI_Craft>Craft</CWF_UI_Craft>
-  <CWF_UI_CannotCraft>Can't craft</CWF_UI_CannotCraft>
-  <CWF_UI_ClearAllModules>Uninstall all modules</CWF_UI_ClearAllModules>
-  <CWF_UI_SaveCurrentPreset>Save current preset...</CWF_UI_SaveCurrentPreset>
-  <CWF_UI_SaveCurrentPresetTitle>Save current assembly preset</CWF_UI_SaveCurrentPresetTitle>
-  <CWF_UI_ApplyPreset>Apply assembly preset...</CWF_UI_ApplyPreset>
-  <CWF_UI_DeletePreset>Delete assembly preset...</CWF_UI_DeletePreset>
-  <CWF_Message_PresetNameEmpty>Preset name cannot be empty.</CWF_Message_PresetNameEmpty>
-  <CWF_Message_PresetManagerUnavailable>Preset storage is unavailable in the current save.</CWF_Message_PresetManagerUnavailable>
-  <CWF_Message_PresetSaved>Saved preset: {NAME}</CWF_Message_PresetSaved>
-  <CWF_Message_PresetDeleted>Deleted preset: {NAME}</CWF_Message_PresetDeleted>
-  <CWF_Message_PresetDeleteFailed>Failed to delete preset: {NAME}</CWF_Message_PresetDeleteFailed>
-  <CWF_Message_PresetApplied>Applied preset: {NAME}</CWF_Message_PresetApplied>
-  <CWF_Message_PresetAppliedWithSkipped>Applied preset: {NAME} (skipped {COUNT} missing or incompatible modules)</CWF_Message_PresetAppliedWithSkipped>
+  <CWF_Parts>Parts</CWF_Parts>
+  <CWF_CompatibleModules>Compatible modules</CWF_CompatibleModules>
+  <CWF_BrowseCompatibleModules>Browse compatible modules</CWF_BrowseCompatibleModules>
+  <CWF_PartOf>Part of</CWF_PartOf>
+  <CWF_Uninstall>Uninstall</CWF_Uninstall>
+  <CWF_NoCompatibleModules>No compatible modules</CWF_NoCompatibleModules>
+  <CWF_NoCompatibleModulesInInventory>No compatible modules in inventory</CWF_NoCompatibleModulesInInventory>
+  <CWF_NoCompatibleModulesOnMap>No compatible modules on map</CWF_NoCompatibleModulesOnMap>
+  <CWF_WeaponModules>Weapon modules</CWF_WeaponModules>
+  <CWF_WeaponModules_Desc>Modules installed on this weapon.</CWF_WeaponModules_Desc>
+  <CWF_ModuleEffects>Module effects</CWF_ModuleEffects>
+  <CWF_ModuleEffectsDesc>Installing {MODULE_label} gives the weapon these effects</CWF_ModuleEffectsDesc>
+  <CWF_InputTitle>Input</CWF_InputTitle>
+  <CWF_Confirm>Confirm</CWF_Confirm>
+  <CWF_Cancel>Cancel</CWF_Cancel>
+  <CWF_NotRanged>Only ranged weapons are supported right now.</CWF_NotRanged>
+  <CWF_ConfirmInstallTitle>Confirm Install</CWF_ConfirmInstallTitle>
+  <CWF_ConfirmInstallBody>Installing {MODULE} will also remove these modules:\n\n{CONFLICTS}\n\nContinue?</CWF_ConfirmInstallBody>
+  <CWF_ConfirmUninstallTitle>Confirm Uninstall</CWF_ConfirmUninstallTitle>
+  <CWF_ConfirmUninstallBody>Uninstalling {MODULE} will also remove these modules:\n\n{DEPENDENCIES}\n\nContinue?</CWF_ConfirmUninstallBody>
+  <CWF_FromEquipped>From weapon modules</CWF_FromEquipped>
+  <CWF_RandomModuleGeneration>Random Module Generation</CWF_RandomModuleGeneration>
+  <CWF_RandomModuleGenerationDesc>If enabled, pawns from other factions, like raiders, allies, and traders, can spawn with weapons that have random modules</CWF_RandomModuleGenerationDesc>
+  <CWF_All>All</CWF_All>
+  <CWF_Craft>Craft</CWF_Craft>
+  <CWF_CannotCraft>Can't craft</CWF_CannotCraft>
+  <CWF_ClearAllModules>Uninstall all modules</CWF_ClearAllModules>
+  <CWF_SaveCurrentPreset>Save current preset...</CWF_SaveCurrentPreset>
+  <CWF_SaveCurrentPresetTitle>Save current assembly preset</CWF_SaveCurrentPresetTitle>
+  <CWF_ApplyPreset>Apply assembly preset...</CWF_ApplyPreset>
+  <CWF_DeletePreset>Delete assembly preset...</CWF_DeletePreset>
+  <CWF_PresetNameEmpty>Preset name cannot be empty.</CWF_PresetNameEmpty>
+  <CWF_PresetManagerUnavailable>Preset storage is unavailable in this save.</CWF_PresetManagerUnavailable>
+  <CWF_PresetSaved>Saved preset: {NAME}</CWF_PresetSaved>
+  <CWF_PresetDeleted>Deleted preset: {NAME}</CWF_PresetDeleted>
+  <CWF_PresetDeleteFailed>Failed to delete preset: {NAME}</CWF_PresetDeleteFailed>
+  <CWF_PresetApplied>Applied preset: {NAME}</CWF_PresetApplied>
+  <CWF_PresetAppliedWithSkipped>Applied preset: {NAME} (skipped {COUNT} missing or incompatible modules)</CWF_PresetAppliedWithSkipped>
   <!-- #endregion -->
 </LanguageData>

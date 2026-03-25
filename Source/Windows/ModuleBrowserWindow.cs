@@ -69,11 +69,11 @@ public class ModuleBrowserWindow : Window {
 
         listing.Begin(rect);
 
-        UIKit.WithStyle(() => listing.Label("CWF_UI_Parts".Translate()), GameFont.Medium);
+        UIKit.WithStyle(() => listing.Label("CWF_Parts".Translate()), GameFont.Medium);
 
         listing.Gap(itemGap);
 
-        if (listing.RadioButton("CWF_UI_All".Translate(), _selectedPart == null)) {
+        if (listing.RadioButton("CWF_All".Translate(), _selectedPart == null)) {
             _selectedPart = null;
         }
 
@@ -104,7 +104,7 @@ public class ModuleBrowserWindow : Window {
         var titleRect = listing.GetRect(titleHeight);
         var paddedTitleRect = new Rect(titleRect.x + padding, titleRect.y, titleRect.width - padding, titleRect.height);
 
-        UIKit.WithStyle(() => Widgets.Label(paddedTitleRect, "CWF_UI_CompatibleModules".Translate()), GameFont.Medium);
+        UIKit.WithStyle(() => Widgets.Label(paddedTitleRect, "CWF_CompatibleModules".Translate()), GameFont.Medium);
 
         var modulesToShow = _selectedPart switch {
             null => _groupedModules.Values.SelectMany(list => list).ToList(),
@@ -114,7 +114,7 @@ public class ModuleBrowserWindow : Window {
         if (modulesToShow.Empty()) {
             var noModuleLabelRect = listing.GetRect(Text.LineHeight);
             noModuleLabelRect.x += padding;
-            Widgets.Label(noModuleLabelRect, "CWF_UI_NoCompatibleModules".Translate());
+            Widgets.Label(noModuleLabelRect, "CWF_NoCompatibleModules".Translate());
             listing.End();
             return;
         }
@@ -159,12 +159,12 @@ public class ModuleBrowserWindow : Window {
             // craft
             if (_recipeCache.TryGetValue(moduleDef, out var recipe)) {
                 if (recipe.AvailableNow) {
-                    if (Widgets.ButtonImage(actionButtonRect, TexButton.Add, tooltip: "CWF_UI_Craft".Translate())) {
+                    if (Widgets.ButtonImage(actionButtonRect, TexButton.Add, tooltip: "CWF_Craft".Translate())) {
                         TryAddCraftingBill(moduleDef);
                     }
                 } else {
                     Widgets.ButtonImage(actionButtonRect, TexButton.Add, Color.gray,
-                        tooltip: "CWF_UI_CannotCraft".Translate());
+                        tooltip: "CWF_CannotCraft".Translate());
                 }
             }
 
@@ -192,7 +192,7 @@ public class ModuleBrowserWindow : Window {
             .FirstOrDefault(b => b is Thing thing && (thing.def.AllRecipes?.Contains(recipe) ?? false));
 
         if (bench == null) {
-            Messages.Message("CWF_Message_NoWorkbenchToCraftModule".Translate(moduleDef.Named("MODULE")),
+            Messages.Message("CWF_NoWorkbenchToCraftModule".Translate(moduleDef.Named("MODULE")),
                 MessageTypeDefOf.RejectInput, false);
             return;
         }
@@ -205,7 +205,7 @@ public class ModuleBrowserWindow : Window {
         }
 
         SoundDefOf.Click.PlayOneShotOnCamera();
-        Messages.Message("CWF_Message_BillAdded".Translate(moduleDef.Named("MODULE"), bench.Named("BENCH")),
+        Messages.Message("CWF_BillAdded".Translate(moduleDef.Named("MODULE"), bench.Named("BENCH")),
             new LookTargets((Thing)bench), MessageTypeDefOf.PositiveEvent);
     }
 }

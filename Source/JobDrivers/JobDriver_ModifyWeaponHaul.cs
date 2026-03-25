@@ -109,7 +109,7 @@ public class JobDriver_ModifyWeaponHaul : JobDriver {
 
             PerformModifications(comp, ModDataList);
 
-            Messages.Message("CWF_Message_ModificationComplete"
+            Messages.Message("CWF_ModificationComplete"
                     .Translate(pawn.Named("PAWN"), Weapon.Named("WEAPON")),
                 new LookTargets(pawn, Weapon), MessageTypeDefOf.PositiveEvent);
 

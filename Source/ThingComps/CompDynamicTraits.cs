@@ -137,14 +137,14 @@ public class CompDynamicTraits : ThingComp {
         if (stringBuilder == null) return;
 
         sb.AppendLine();
-        sb.AppendLine(whitespace + "CWF_UI_WeaponModules".Translate() + ":");
+        sb.AppendLine(whitespace + "CWF_WeaponModules".Translate() + ":");
         sb.Append(stringBuilder);
     }
 
     public override string? CompInspectStringExtra() {
         if (_installedTraits.IsNullOrEmpty()) return null;
 
-        return "CWF_UI_WeaponModules".Translate() + ": " + Traits
+        return "CWF_WeaponModules".Translate() + ": " + Traits
             .Select(traitDef => traitDef.label).ToCommaList()
             .CapitalizeFirst();
     }
@@ -153,7 +153,7 @@ public class CompDynamicTraits : ThingComp {
         if (_installedTraits.IsNullOrEmpty()) yield break;
 
         var sb = new StringBuilder();
-        sb.AppendLine("CWF_UI_WeaponModules_Desc".Translate());
+        sb.AppendLine("CWF_WeaponModules_Desc".Translate());
         sb.AppendLine();
 
         var traitDescriptionBlocks = Traits.Select(trait => {
@@ -173,7 +173,7 @@ public class CompDynamicTraits : ThingComp {
 
         yield return new StatDrawEntry(
             parent.def.IsMeleeWeapon ? StatCategoryDefOf.Weapon_Melee : StatCategoryDefOf.Weapon_Ranged,
-            "CWF_UI_WeaponModules".Translate(),
+            "CWF_WeaponModules".Translate(),
             Traits.Select(x => x.label).ToCommaList().CapitalizeFirst(),
             sb.ToString(),
             1105
@@ -235,8 +235,8 @@ public class CompDynamicTraits : ThingComp {
         if (parent.IsForbidden(Faction.OfPlayer)) yield break;
 
         yield return new Command_Action {
-            defaultLabel = "CWF_UI_WeaponPanel".Translate(),
-            defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
+            defaultLabel = "CWF_WeaponPanel".Translate(),
+            defaultDesc = "CWF_WeaponPanelDesc".Translate(),
             icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
             action = () => { Find.WindowStack.Add(new WeaponWindow(parent)); }
         };
@@ -312,8 +312,8 @@ public class CompDynamicTraits : ThingComp {
         // harmony patched
         if (owner.Faction == Faction.OfPlayer) {
             yield return new Command_Action {
-                defaultLabel = "CWF_UI_WeaponPanel".Translate(),
-                defaultDesc = "CWF_UI_WeaponPanelDesc".Translate(),
+                defaultLabel = "CWF_WeaponPanel".Translate(),
+                defaultDesc = "CWF_WeaponPanelDesc".Translate(),
                 icon = ContentFinder<Texture2D>.Get("CustomizeWeapon/Gizmos/Panel"),
                 action = () => { Find.WindowStack.Add(new WeaponWindow(parent)); }
             };

@@ -21,8 +21,8 @@ public class InteractionController(Thing weapon) {
     }
 
     private string FailureReason => weapon.ParentHolder is Pawn_EquipmentTracker
-        ? "CWF_UI_NoCompatibleModulesInInventory".Translate()
-        : "CWF_UI_NoCompatibleModulesOnMap".Translate();
+        ? "CWF_NoCompatibleModulesInInventory".Translate()
+        : "CWF_NoCompatibleModulesOnMap".Translate();
 
     /// <summary>
     /// Opens a float-menu for the clicked slot.  
@@ -91,14 +91,14 @@ public class InteractionController(Thing weapon) {
     }
 
     private void BuildUninstallOption(PartDef part, List<FloatMenuOption> options, WeaponTraitDef installedTrait) {
-        options.Add(new FloatMenuOption("CWF_UI_Uninstall".Translate(installedTrait.LabelCap), () => {
+        options.Add(new FloatMenuOption("CWF_Uninstall".Translate(installedTrait.LabelCap), () => {
             var analysis = AnalyzeUninstallConflict(part);
             if (!analysis.HasConflict) {
                 DoUninstall(part);
             } else {
                 ShowConfirmationDialog(
-                    "CWF_UI_ConfirmUninstallTitle".Translate(),
-                    "CWF_UI_ConfirmUninstallBody".Translate(
+                    "CWF_ConfirmUninstallTitle".Translate(),
+                    "CWF_ConfirmUninstallBody".Translate(
                         installedTrait.LabelCap.Named("MODULE"),
                         analysis.ModulesToRemove
                             .Select(t => " - " + t.LabelCap.ToString()).ToLineList()
@@ -148,39 +148,39 @@ public class InteractionController(Thing weapon) {
     public void SaveCurrentPreset(string name) {
         var normalizedName = name.Trim();
         if (string.IsNullOrEmpty(normalizedName)) {
-            Messages.Message("CWF_Message_PresetNameEmpty".Translate(), MessageTypeDefOf.RejectInput, false);
+            Messages.Message("CWF_PresetNameEmpty".Translate(), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
         if (_presetManager == null) {
-            Messages.Message("CWF_Message_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
+            Messages.Message("CWF_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
         _presetManager.SavePreset(weapon, normalizedName, _compDynamicTraits.InstalledTraits);
         Messages.Message(
-            "CWF_Message_PresetSaved".Translate(normalizedName.Named("NAME")),
+            "CWF_PresetSaved".Translate(normalizedName.Named("NAME")),
             MessageTypeDefOf.PositiveEvent,
             false);
     }
 
     public void DeletePreset(AssemblyPresetData preset) {
         if (_presetManager == null) {
-            Messages.Message("CWF_Message_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
+            Messages.Message("CWF_PresetManagerUnavailable".Translate(), MessageTypeDefOf.RejectInput, false);
             return;
         }
 
         var deleted = _presetManager.DeletePreset(weapon.def, preset.Name);
         if (!deleted) {
             Messages.Message(
-                "CWF_Message_PresetDeleteFailed".Translate(preset.Name.Named("NAME")),
+                "CWF_PresetDeleteFailed".Translate(preset.Name.Named("NAME")),
                 MessageTypeDefOf.RejectInput,
                 false);
             return;
         }
 
         Messages.Message(
-            "CWF_Message_PresetDeleted".Translate(preset.Name.Named("NAME")),
+            "CWF_PresetDeleted".Translate(preset.Name.Named("NAME")),
             MessageTypeDefOf.PositiveEvent,
             false);
     }
@@ -216,10 +216,10 @@ public class InteractionController(Thing weapon) {
 
         var skippedCount = missingDefsCount + analysis.SkippedCount;
         var message = skippedCount > 0
-            ? "CWF_Message_PresetAppliedWithSkipped".Translate(
+            ? "CWF_PresetAppliedWithSkipped".Translate(
                 preset.Name.Named("NAME"),
                 skippedCount.Named("COUNT"))
-            : "CWF_Message_PresetApplied".Translate(preset.Name.Named("NAME"));
+            : "CWF_PresetApplied".Translate(preset.Name.Named("NAME"));
         Messages.Message(message, MessageTypeDefOf.PositiveEvent, false);
     }
 
@@ -239,8 +239,8 @@ public class InteractionController(Thing weapon) {
             }
 
             ShowConfirmationDialog(
-                "CWF_UI_ConfirmInstallTitle".Translate(),
-                "CWF_UI_ConfirmInstallBody".Translate(
+                "CWF_ConfirmInstallTitle".Translate(),
+                "CWF_ConfirmInstallBody".Translate(
                     traitToInstall.LabelCap.Named("MODULE"),
                     analysis.ModulesToRemove
                         .Select(t => " - " + t.LabelCap.ToString()).ToLineList()

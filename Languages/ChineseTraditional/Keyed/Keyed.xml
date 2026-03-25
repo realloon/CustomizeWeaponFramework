@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LanguageData>
   <!-- #region Stat -->
-  <CWF_UI_Range>射程</CWF_UI_Range>
-  <CWF_UI_RangeDPS>DPS</CWF_UI_RangeDPS>
-  <CWF_UI_RangeBurstCount>連發數</CWF_UI_RangeBurstCount>
-  <CWF_UI_RangeWarmupTime>瞄準時間</CWF_UI_RangeWarmupTime>
-  <CWF_UI_RangeCooldown>冷卻時間</CWF_UI_RangeCooldown>
-  <CWF_UI_Projectile>子弹</CWF_UI_Projectile>
-  <CWF_UI_Damage>單發傷害</CWF_UI_Damage>
-  <CWF_UI_ArmorPenetration>護甲穿透</CWF_UI_ArmorPenetration>
-  <CWF_UI_StoppingPower>抑制力</CWF_UI_StoppingPower>
-  <CWF_UI_Accuracy>射擊精度</CWF_UI_Accuracy>
-  <CWF_UI_Touch>貼近</CWF_UI_Touch>
-  <CWF_UI_Short>近</CWF_UI_Short>
-  <CWF_UI_Medium>中</CWF_UI_Medium>
-  <CWF_UI_Long>遠</CWF_UI_Long>
-  <CWF_UI_BurstShotCountMultiplier>連發倍率</CWF_UI_BurstShotCountMultiplier>
-  <CWF_UI_BurstShotSpeedMultiplier>射速倍率</CWF_UI_BurstShotSpeedMultiplier>
-  <CWF_UI_AdditionalStoppingPower>抑制能力偏移</CWF_UI_AdditionalStoppingPower>
+  <CWF_Range>射程</CWF_Range>
+  <CWF_RangeDPS>DPS</CWF_RangeDPS>
+  <CWF_RangeBurstCount>連發數</CWF_RangeBurstCount>
+  <CWF_RangeWarmupTime>瞄準時間</CWF_RangeWarmupTime>
+  <CWF_RangeCooldown>冷卻時間</CWF_RangeCooldown>
+  <CWF_Projectile>子弹</CWF_Projectile>
+  <CWF_Damage>單發傷害</CWF_Damage>
+  <CWF_ArmorPenetration>護甲穿透</CWF_ArmorPenetration>
+  <CWF_StoppingPower>抑制力</CWF_StoppingPower>
+  <CWF_Accuracy>射擊精度</CWF_Accuracy>
+  <CWF_Touch>貼近</CWF_Touch>
+  <CWF_Short>近</CWF_Short>
+  <CWF_Medium>中</CWF_Medium>
+  <CWF_Long>遠</CWF_Long>
+  <CWF_BurstShotCountMultiplier>連發倍率</CWF_BurstShotCountMultiplier>
+  <CWF_BurstShotSpeedMultiplier>射速倍率</CWF_BurstShotSpeedMultiplier>
+  <CWF_AdditionalStoppingPower>抑制能力偏移</CWF_AdditionalStoppingPower>
   <!-- #endregion -->
 
   <!-- #region Gizmo -->
-  <CWF_UI_WeaponPanel>武器面板</CWF_UI_WeaponPanel>
-  <CWF_UI_WeaponPanelDesc>開啟武器面板</CWF_UI_WeaponPanelDesc>
+  <CWF_WeaponPanel>武器面板</CWF_WeaponPanel>
+  <CWF_WeaponPanelDesc>開啟武器面板</CWF_WeaponPanelDesc>
   <!-- #endregion -->
 
   <!-- #region Menu -->
-  <CWF_UI_PickUp>拾取{MODULE_label}</CWF_UI_PickUp>
+  <CWF_PickUp>拾取{MODULE_label}</CWF_PickUp>
   <!-- #endregion -->
 
   <!-- #region Message -->
-  <CWF_Message_NoColonistToModifyWeapon>沒有合適的殖民者能夠改造武器</CWF_Message_NoColonistToModifyWeapon>
-  <CWF_Message_CannotFindModuleForModification>找不到用於改造的{MODULE_label}</CWF_Message_CannotFindModuleForModification>
-  <CWF_Message_ModificationJobDispatched>{PAWN_label}將改造{WEAPON_label}</CWF_Message_ModificationJobDispatched>
-  <CWF_Message_ModificationComplete>{PAWN_label}完成了對{WEAPON_label}的改造</CWF_Message_ModificationComplete>
-  <CWF_Message_NoWorkbenchToCraftModule>沒有合適的工作台來製作{MODULE_label}</CWF_Message_NoWorkbenchToCraftModule>
-  <CWF_Message_BillAdded>添加清單: {MODULE_label} ({BENCH_label})</CWF_Message_BillAdded>
+  <CWF_NoColonistToModifyWeapon>沒有合適的殖民者能夠改造武器</CWF_NoColonistToModifyWeapon>
+  <CWF_CannotFindModuleForModification>找不到用於改造的{MODULE_label}</CWF_CannotFindModuleForModification>
+  <CWF_ModificationJobDispatched>{PAWN_label}將改造{WEAPON_label}</CWF_ModificationJobDispatched>
+  <CWF_ModificationComplete>{PAWN_label}完成了對{WEAPON_label}的改造</CWF_ModificationComplete>
+  <CWF_NoWorkbenchToCraftModule>沒有合適的工作台來製作{MODULE_label}</CWF_NoWorkbenchToCraftModule>
+  <CWF_BillAdded>添加清單: {MODULE_label} ({BENCH_label})</CWF_BillAdded>
   <!-- #endregion -->
 
   <!-- #region Window -->
-  <CWF_UI_Parts>部件</CWF_UI_Parts>
-  <CWF_UI_CompatibleModules>可用模組</CWF_UI_CompatibleModules>
-  <CWF_UI_BrowseCompatibleModules>瀏覽兼容的模組</CWF_UI_BrowseCompatibleModules>
-  <CWF_UI_PartOf>所屬部件</CWF_UI_PartOf>
-  <CWF_UI_Uninstall>拆卸</CWF_UI_Uninstall>
-  <CWF_UI_NoCompatibleModules>沒有合適的模組</CWF_UI_NoCompatibleModules>
-  <CWF_UI_NoCompatibleModulesInInventory>背包中沒有合適的模組</CWF_UI_NoCompatibleModulesInInventory>
-  <CWF_UI_NoCompatibleModulesOnMap>地圖上沒有合適的模組</CWF_UI_NoCompatibleModulesOnMap>
-  <CWF_UI_WeaponModules>武器模組</CWF_UI_WeaponModules>
-  <CWF_UI_WeaponModules_Desc>安裝在此武器上的模組。</CWF_UI_WeaponModules_Desc>
-  <CWF_UI_ModuleEffects>模組效果</CWF_UI_ModuleEffects>
-  <CWF_UI_ModuleEffectsDesc>安裝{MODULE_label}將賦予武器下列效果</CWF_UI_ModuleEffectsDesc>
-  <CWF_UI_InputTitle>取消</CWF_UI_InputTitle>
-  <CWF_UI_Confirm>接受</CWF_UI_Confirm>
-  <CWF_UI_Cancel>取消</CWF_UI_Cancel>
-  <CWF_UI_NotRanged>暫時僅支援遠程武器。</CWF_UI_NotRanged>
-  <CWF_UI_ConfirmInstallTitle>確認安裝</CWF_UI_ConfirmInstallTitle>
-  <CWF_UI_ConfirmInstallBody>安裝{MODULE}將同時卸下以下模組:\n\n{CONFLICTS}\n\n確認安裝嗎？</CWF_UI_ConfirmInstallBody>
-  <CWF_UI_ConfirmUninstallTitle>確認移除</CWF_UI_ConfirmUninstallTitle>
-  <CWF_UI_ConfirmUninstallBody>移除{MODULE}將會同時卸下以下模組:\n\n{DEPENDENCIES}\n\n確認移除嗎？</CWF_UI_ConfirmUninstallBody>
-  <CWF_UI_FromEquipped>源於武器模組</CWF_UI_FromEquipped>
-  <CWF_UI_RandomModuleGeneration>隨機生成模組</CWF_UI_RandomModuleGeneration>
-  <CWF_UI_RandomModuleGenerationDesc>啟用後，產生其他派系的角色（如商隊、盟友和襲擊者）時，其武器會隨機附帶武器模組</CWF_UI_RandomModuleGenerationDesc>
-  <CWF_UI_All>全部</CWF_UI_All>
-  <CWF_UI_Craft>製作</CWF_UI_Craft>
-  <CWF_UI_CannotCraft>無法製作</CWF_UI_CannotCraft>
-  <CWF_UI_ClearAllModules>拆卸全部模組</CWF_UI_ClearAllModules>
-  <CWF_UI_SaveCurrentPreset>保存目前方案...</CWF_UI_SaveCurrentPreset>
-  <CWF_UI_SaveCurrentPresetTitle>保存目前裝配方案</CWF_UI_SaveCurrentPresetTitle>
-  <CWF_UI_ApplyPreset>套用裝配方案...</CWF_UI_ApplyPreset>
-  <CWF_UI_DeletePreset>刪除裝配方案...</CWF_UI_DeletePreset>
-  <CWF_Message_PresetNameEmpty>方案名稱不能為空。</CWF_Message_PresetNameEmpty>
-  <CWF_Message_PresetManagerUnavailable>目前存檔未能初始化方案庫。</CWF_Message_PresetManagerUnavailable>
-  <CWF_Message_PresetSaved>已保存方案：{NAME}</CWF_Message_PresetSaved>
-  <CWF_Message_PresetDeleted>已刪除方案：{NAME}</CWF_Message_PresetDeleted>
-  <CWF_Message_PresetDeleteFailed>刪除方案失敗：{NAME}</CWF_Message_PresetDeleteFailed>
-  <CWF_Message_PresetApplied>已套用方案：{NAME}</CWF_Message_PresetApplied>
-  <CWF_Message_PresetAppliedWithSkipped>已套用方案：{NAME}（跳過 {COUNT} 個失效或不相容模組）</CWF_Message_PresetAppliedWithSkipped>
+  <CWF_Parts>部件</CWF_Parts>
+  <CWF_CompatibleModules>可用模組</CWF_CompatibleModules>
+  <CWF_BrowseCompatibleModules>瀏覽兼容的模組</CWF_BrowseCompatibleModules>
+  <CWF_PartOf>所屬部件</CWF_PartOf>
+  <CWF_Uninstall>拆卸</CWF_Uninstall>
+  <CWF_NoCompatibleModules>沒有合適的模組</CWF_NoCompatibleModules>
+  <CWF_NoCompatibleModulesInInventory>背包中沒有合適的模組</CWF_NoCompatibleModulesInInventory>
+  <CWF_NoCompatibleModulesOnMap>地圖上沒有合適的模組</CWF_NoCompatibleModulesOnMap>
+  <CWF_WeaponModules>武器模組</CWF_WeaponModules>
+  <CWF_WeaponModules_Desc>安裝在此武器上的模組。</CWF_WeaponModules_Desc>
+  <CWF_ModuleEffects>模組效果</CWF_ModuleEffects>
+  <CWF_ModuleEffectsDesc>安裝{MODULE_label}將賦予武器下列效果</CWF_ModuleEffectsDesc>
+  <CWF_InputTitle>取消</CWF_InputTitle>
+  <CWF_Confirm>接受</CWF_Confirm>
+  <CWF_Cancel>取消</CWF_Cancel>
+  <CWF_NotRanged>暫時僅支援遠程武器。</CWF_NotRanged>
+  <CWF_ConfirmInstallTitle>確認安裝</CWF_ConfirmInstallTitle>
+  <CWF_ConfirmInstallBody>安裝{MODULE}將同時卸下以下模組:\n\n{CONFLICTS}\n\n確認安裝嗎？</CWF_ConfirmInstallBody>
+  <CWF_ConfirmUninstallTitle>確認移除</CWF_ConfirmUninstallTitle>
+  <CWF_ConfirmUninstallBody>移除{MODULE}將會同時卸下以下模組:\n\n{DEPENDENCIES}\n\n確認移除嗎？</CWF_ConfirmUninstallBody>
+  <CWF_FromEquipped>源於武器模組</CWF_FromEquipped>
+  <CWF_RandomModuleGeneration>隨機生成模組</CWF_RandomModuleGeneration>
+  <CWF_RandomModuleGenerationDesc>啟用後，產生其他派系的角色（如商隊、盟友和襲擊者）時，其武器會隨機附帶武器模組</CWF_RandomModuleGenerationDesc>
+  <CWF_All>全部</CWF_All>
+  <CWF_Craft>製作</CWF_Craft>
+  <CWF_CannotCraft>無法製作</CWF_CannotCraft>
+  <CWF_ClearAllModules>拆卸全部模組</CWF_ClearAllModules>
+  <CWF_SaveCurrentPreset>保存目前方案...</CWF_SaveCurrentPreset>
+  <CWF_SaveCurrentPresetTitle>保存目前裝配方案</CWF_SaveCurrentPresetTitle>
+  <CWF_ApplyPreset>套用裝配方案...</CWF_ApplyPreset>
+  <CWF_DeletePreset>刪除裝配方案...</CWF_DeletePreset>
+  <CWF_PresetNameEmpty>方案名稱不能為空。</CWF_PresetNameEmpty>
+  <CWF_PresetManagerUnavailable>目前存檔未能初始化方案庫。</CWF_PresetManagerUnavailable>
+  <CWF_PresetSaved>已保存方案：{NAME}</CWF_PresetSaved>
+  <CWF_PresetDeleted>已刪除方案：{NAME}</CWF_PresetDeleted>
+  <CWF_PresetDeleteFailed>刪除方案失敗：{NAME}</CWF_PresetDeleteFailed>
+  <CWF_PresetApplied>已套用方案：{NAME}</CWF_PresetApplied>
+  <CWF_PresetAppliedWithSkipped>已套用方案：{NAME}（跳過 {COUNT} 個失效或不相容模組）</CWF_PresetAppliedWithSkipped>
   <!-- #endregion -->
 </LanguageData>

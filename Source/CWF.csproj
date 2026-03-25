@@ -9,13 +9,13 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DebugSymbols>false</DebugSymbols>
-      <OutputPath>/Users/lizhen/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods/CustomizeWeapon/Assemblies</OutputPath>
+      <OutputPath>../Assemblies</OutputPath>
       <DebugType>none</DebugType>
+      <DebugSymbols>false</DebugSymbols>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <OutputPath>/Users/lizhen/Library/Application Support/Steam/steamapps/common/RimWorld/RimWorldMac.app/Mods/CustomizeWeapon/Assemblies</OutputPath>
+      <OutputPath>../Assemblies</OutputPath>
       <DebugType>none</DebugType>
     </PropertyGroup>
 

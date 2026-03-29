@@ -249,7 +249,8 @@ public class CompDynamicGraphic : ThingComp {
         return graphic;
     }
 
-    private static GraphicData CreateAdjustedGraphicData(GraphicData originalGraphicData, Vector3 drawOffsetCompensation) {
+    private static GraphicData CreateAdjustedGraphicData(GraphicData originalGraphicData,
+        Vector3 drawOffsetCompensation) {
         var adjustedGraphicData = new GraphicData();
         adjustedGraphicData.CopyFrom(originalGraphicData);
 

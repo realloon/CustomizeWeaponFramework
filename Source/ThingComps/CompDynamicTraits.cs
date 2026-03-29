@@ -370,7 +370,8 @@ public class CompDynamicTraits : ThingComp {
     }
 
     private void RecalculateAvailableParts() {
-        _availableParts = new HashSet<PartDef>(PartAvailabilityAnalyzer.Analyze(parent, _installedTraits).AvailableParts);
+        _availableParts =
+            new HashSet<PartDef>(PartAvailabilityAnalyzer.Analyze(parent, _installedTraits).AvailableParts);
     }
 
     private void SetupAbility(bool isPostLoad) {

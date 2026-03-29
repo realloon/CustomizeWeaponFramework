@@ -88,10 +88,8 @@ public class CompDynamicGraphic : ThingComp {
         if (originalGraphicData == null) return BaseContent.BadGraphic;
 
         var sizeReference = ContentFinder<Texture2D>.Get(originalGraphicData.texPath, false);
-        var renderWidth = sizeReference?.width ?? _cachedBakedTexture?.width ?? 512;
-        var renderHeight = sizeReference?.height ?? _cachedBakedTexture?.height ?? 512;
-
-        var renderTexture = RenderTexture.GetTemporary(renderWidth, renderHeight, 0, RenderTextureFormat.ARGB32);
+        var fallbackWidth = sizeReference?.width ?? _cachedBakedTexture?.width ?? 512;
+        var fallbackHeight = sizeReference?.height ?? _cachedBakedTexture?.height ?? 512;
 
         var layersToDraw = new List<(Texture2D texture, Vector2 offset, float scale, int sortOrder,
             Color color, Texture2D? maskTexture)>();
@@ -136,20 +134,49 @@ public class CompDynamicGraphic : ThingComp {
             }
         }
 
+        layersToDraw.Sort((left, right) => left.sortOrder.CompareTo(right.sortOrder));
+
+        float minX = 0f;
+        float minY = 0f;
+        float maxX = fallbackWidth;
+        float maxY = fallbackHeight;
+
+        foreach (var layer in layersToDraw) {
+            var scaledWidth = layer.texture.width * layer.scale;
+            var scaledHeight = layer.texture.height * layer.scale;
+
+            var x = layer.offset.x;
+            var y = (fallbackHeight - scaledHeight) - layer.offset.y;
+
+            if (x < minX) minX = x;
+            if (y < minY) minY = y;
+            if (x + scaledWidth > maxX) maxX = x + scaledWidth;
+            if (y + scaledHeight > maxY) maxY = y + scaledHeight;
+        }
+
+        var renderWidth = Mathf.CeilToInt(maxX - minX);
+        var renderHeight = Mathf.CeilToInt(maxY - minY);
+
+        var shiftX = -minX;
+        var shiftY = -minY;
+
+        var renderTexture = RenderTexture.GetTemporary(renderWidth, renderHeight, 0, RenderTextureFormat.ARGB32);
+
         RenderTexture.active = renderTexture;
         GL.Clear(true, true, Color.clear);
         GL.PushMatrix();
         GL.LoadPixelMatrix(0, renderTexture.width, renderTexture.height, 0);
-
-        layersToDraw.Sort((left, right) => left.sortOrder.CompareTo(right.sortOrder));
 
         Material? tempMaterial = null;
 
         foreach (var layer in layersToDraw) {
             var scaledWidth = layer.texture.width * layer.scale;
             var scaledHeight = layer.texture.height * layer.scale;
-            var y = (renderTexture.height - scaledHeight) - layer.offset.y;
-            var destRect = new Rect(layer.offset.x, y, scaledWidth, scaledHeight);
+
+            var x = layer.offset.x + shiftX;
+            var y = ((fallbackHeight - scaledHeight) - layer.offset.y) + shiftY;
+
+            var destRect = new Rect(x, y, scaledWidth, scaledHeight);
 
             if (layer.color != Color.white && originalGraphicData.shaderType?.Shader != null) {
                 tempMaterial ??= new Material(originalGraphicData.shaderType.Shader);
@@ -181,20 +208,35 @@ public class CompDynamicGraphic : ThingComp {
         RenderTexture.active = null;
         RenderTexture.ReleaseTemporary(renderTexture);
 
-        if (_cachedGraphic is Graphic_Single graphicSingle && !textureRecreated) {
-            _cachedGraphic = WrapGraphicIfNeeded(graphicSingle, originalGraphicData);
-            return _cachedGraphic;
-        }
+        var drawSizeScaleX = (float)renderTexture.width / fallbackWidth;
+        var drawSizeScaleY = (float)renderTexture.height / fallbackHeight;
 
-        graphicSingle = new Graphic_Single();
+        var adjustedDrawSize = new Vector2(
+            originalGraphicData.drawSize.x * drawSizeScaleX,
+            originalGraphicData.drawSize.y * drawSizeScaleY
+        );
+
+        // Keep the original weapon body anchored when the baked canvas expands on only one side.
+        var originalCenterDeltaX = shiftX + fallbackWidth * 0.5f - renderWidth * 0.5f;
+        var originalCenterDeltaY = shiftY + fallbackHeight * 0.5f - renderHeight * 0.5f;
+
+        var drawOffsetCompensation = new Vector3(
+            -originalCenterDeltaX / fallbackWidth * originalGraphicData.drawSize.x,
+            0f,
+            originalCenterDeltaY / fallbackHeight * originalGraphicData.drawSize.y
+        );
+
+        var adjustedGraphicData = CreateAdjustedGraphicData(originalGraphicData, drawOffsetCompensation);
+
+        var graphicSingle = new Graphic_Single();
         var request = new GraphicRequest(
             typeof(Graphic_Single), finalBakedTexture, ShaderDatabase.Cutout,
-            originalGraphicData.drawSize, Color.white, Color.white,
-            originalGraphicData, 0, null, null
+            adjustedDrawSize, Color.white, Color.white,
+            adjustedGraphicData, 0, null, null
         );
 
         graphicSingle.Init(request);
-        _cachedGraphic = WrapGraphicIfNeeded(graphicSingle, originalGraphicData);
+        _cachedGraphic = WrapGraphicIfNeeded(graphicSingle, adjustedGraphicData);
 
         return _cachedGraphic;
     }
@@ -205,6 +247,38 @@ public class CompDynamicGraphic : ThingComp {
         }
 
         return graphic;
+    }
+
+    private static GraphicData CreateAdjustedGraphicData(GraphicData originalGraphicData, Vector3 drawOffsetCompensation) {
+        var adjustedGraphicData = new GraphicData();
+        adjustedGraphicData.CopyFrom(originalGraphicData);
+
+        adjustedGraphicData.drawOffset = GetOffsetForRotation(originalGraphicData, Rot4.North)
+                                         + RotateOffsetForRotation(drawOffsetCompensation, Rot4.North);
+        adjustedGraphicData.drawOffsetNorth = GetOffsetForRotation(originalGraphicData, Rot4.North)
+                                              + RotateOffsetForRotation(drawOffsetCompensation, Rot4.North);
+        adjustedGraphicData.drawOffsetEast = GetOffsetForRotation(originalGraphicData, Rot4.East)
+                                             + RotateOffsetForRotation(drawOffsetCompensation, Rot4.East);
+        adjustedGraphicData.drawOffsetSouth = GetOffsetForRotation(originalGraphicData, Rot4.South)
+                                              + RotateOffsetForRotation(drawOffsetCompensation, Rot4.South);
+        adjustedGraphicData.drawOffsetWest = GetOffsetForRotation(originalGraphicData, Rot4.West)
+                                             + RotateOffsetForRotation(drawOffsetCompensation, Rot4.West);
+
+        return adjustedGraphicData;
+    }
+
+    private static Vector3 GetOffsetForRotation(GraphicData graphicData, Rot4 rotation) {
+        return rotation.AsInt switch {
+            Rot4.NorthInt => graphicData.drawOffsetNorth ?? graphicData.drawOffset,
+            Rot4.EastInt => graphicData.drawOffsetEast ?? graphicData.drawOffset,
+            Rot4.SouthInt => graphicData.drawOffsetSouth ?? graphicData.drawOffset,
+            Rot4.WestInt => graphicData.drawOffsetWest ?? graphicData.drawOffset,
+            _ => graphicData.drawOffset
+        };
+    }
+
+    private static Vector3 RotateOffsetForRotation(Vector3 offset, Rot4 rotation) {
+        return rotation.AsQuat * offset;
     }
 
     private Texture2D EnsureBakedTexture(int width, int height, out bool textureRecreated) {

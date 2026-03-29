@@ -44,17 +44,7 @@ public class MainDrawer(Thing weapon, Action<PartDef, WeaponTraitDef?> onSlotCli
         var bottomCenterRect = new Rect(rect.x + leftColWidth, rect.y + topRowHeight + middleRowHeight,
             middleColWidth, bottomRowHeight);
 
-        // define weapon icon
-        var weaponGraphic = weapon.Graphic;
-        var weaponAspect = weaponGraphic.drawSize.x / weaponGraphic.drawSize.y;
-        var iconWidth = middleCenterRect.width;
-        var iconHeight = middleCenterRect.height;
-        iconWidth = iconWidth / weaponAspect > iconHeight ? iconHeight * weaponAspect : iconWidth / weaponAspect;
-
-        // render weapon icon
-        var weaponIconRect = new Rect(middleCenterRect.center.x - iconWidth / 2f,
-            middleCenterRect.center.y - iconHeight / 2f, iconWidth, iconHeight);
-        Widgets.ThingIcon(weaponIconRect, weapon);
+        WeaponPreviewDrawer.Draw(in middleCenterRect, weapon);
 
         var availableParts = _compDynamicTraits.AvailableParts;
 

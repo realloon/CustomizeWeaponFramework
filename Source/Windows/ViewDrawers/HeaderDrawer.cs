@@ -16,7 +16,7 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
 
         // Render weapon icon
         var iconRect = new Rect(rect.x, rect.y + (rect.height - iconSize) / 2f, iconSize, iconSize);
-        Widgets.ThingIcon(iconRect, weapon);
+        WeaponPreviewDrawer.Draw(in iconRect, weapon);
 
         // Render search button
         var searchButtonRect = new Rect(rect.xMax - buttonSize, rect.y + (rect.height - buttonSize) / 2f,
@@ -64,7 +64,8 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
                     : null),
                 new("CWF_ApplyPreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.ApplyPreset)),
                 new("CWF_DeletePreset".Translate(), CreatePresetMenuAction(applicablePresets, controller.DeletePreset)),
-                new("CWF_ClearAllModules".Translate(), controller.HasInstalledModules ? controller.ClearAllModules : null)
+                new("CWF_ClearAllModules".Translate(),
+                    controller.HasInstalledModules ? controller.ClearAllModules : null)
             };
             Find.WindowStack.Add(new FloatMenu(options));
         }
@@ -79,7 +80,8 @@ public class HeaderDrawer(Thing weapon, InteractionController controller) {
             GameFont.Medium, anchor: TextAnchor.MiddleLeft);
     }
 
-    private static Action? CreatePresetMenuAction(IEnumerable<AssemblyPresetData> presets, Action<AssemblyPresetData> onSelect) {
+    private static Action? CreatePresetMenuAction(IEnumerable<AssemblyPresetData> presets,
+        Action<AssemblyPresetData> onSelect) {
         var presetOptions = presets
             .Select(preset => new FloatMenuOption(preset.Name, () => onSelect.Invoke(preset)))
             .ToList();

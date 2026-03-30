@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Defs>
-  <!-- ExtendedBarrel -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_ExtendedBarrel</defName>
     <label>extended barrel</label>
@@ -30,66 +29,10 @@
           <li>CWF_LMG</li>
           <li>CWF_Minigun</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_AssaultRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForAssaultRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForLMG</texturePath>
-              <offset>(239, 135)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HeavySMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForHeavySMG</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Minigun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForMinigun</texturePath>
-              <offset>(271, 59)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Revolver</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForRevolver</texturePath>
-              <offset>(227, 145)</offset>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- ShortenedBarrel -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_ShortenedBarrel</defName>
     <label>shortened barrel</label>
@@ -118,75 +61,10 @@
           <li>CWF_SMG</li>
           <li>CWF_LMG</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_AssaultRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForAssaultRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForLMG</texturePath>
-              <offset>(231, 133)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChainShotgun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForChainShotgun</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HeavySMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForHeavySMG</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChargeRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForChargeRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Revolver</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForRevolver</texturePath>
-              <offset>(139, 144)</offset>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- TacticalBarrel -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_TacticalBarrel</defName>
     <label>tactical barrel</label>
@@ -219,38 +97,6 @@
             </enablesParts>
           </li>
         </conditionalPartModifiers>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForLMG</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Minigun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForMinigun</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Revolver</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForRevolver</texturePath>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>

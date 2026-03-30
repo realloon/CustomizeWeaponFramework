@@ -87,6 +87,123 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_RedDotScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/RedDotScope/RedDotScope</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(77, 174)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(77, 170)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+          <offset>(77, 170)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGrip</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_GrenadeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(222, 97)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_EMPLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(222, 97)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_SmokeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(222, 97)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_IncendiaryLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(222, 97)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_CustomGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TelescopicStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/TelescopicStock/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_QuickMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForAssaultRifle</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_BoltActionRifle -->
@@ -142,6 +259,56 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(72, 147)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(77, 174)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(88, 152)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(112, 154)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGrip</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(213, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(166, 75)</offset>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_SniperRifle -->
@@ -217,6 +384,67 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(102, 148)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(69, 152)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGrip</texturePath>
+          <offset>(150, 72)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(160, 73)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(188, 74)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForSniperRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForSniperRifle</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_Revolver -->
@@ -281,6 +509,105 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(128, 187)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(116, 192)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(116, 186)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+          <offset>(147, 186)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForRevolver</texturePath>
+          <offset>(227, 145)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForRevolver</texturePath>
+          <offset>(139, 144)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TacticalBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForRevolver</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGripLong</texturePath>
+          <offset>(225, 109)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(239, 106)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(230, 110)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_GrenadeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(256, 119)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_EMPLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(256, 119)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_SmokeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(256, 119)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_IncendiaryLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(256, 119)</offset>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_ChainShotgun -->
@@ -361,6 +688,111 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(84, 181)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(83, 191)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(88, 187)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+          <offset>(102, 186)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForChainShotgun</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGrip</texturePath>
+          <offset>(248, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(264, 74)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(238, 76)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_GrenadeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(272, 86)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_EMPLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(272, 86)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_SmokeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(272, 86)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_IncendiaryLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(272, 86)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_FoldStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/FoldStock/FoldStock</texturePath>
+          <offset>(105, 180)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_QuickMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForChainShotgun</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForChainShotgun</texturePath>
+          <offset>(215, 130)</offset>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_HeavySMG -->
@@ -442,6 +874,123 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(95, 205)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(153, 216)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(108, 204)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+          <offset>(128, 204)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForHeavySMG</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForHeavySMG</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGripLong</texturePath>
+          <offset>(273, 114)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(268, 111)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(239, 113)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_GrenadeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(274, 122)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_EMPLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(274, 122)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_SmokeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(274, 122)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_IncendiaryLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(274, 122)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_CustomGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForHeavySMG</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForHeavySMG</texturePath>
+          <offset>(-9, 145)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TelescopicStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/TelescopicStock/ForHeavySMG</texturePath>
+          <offset>(-9, 145)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForHeavySMG</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_LMG -->
@@ -521,6 +1070,134 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_Holoscope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/Holoscope/Holoscope</texturePath>
+          <offset>(64, 163)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_2xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/2xScope/2xScope</texturePath>
+          <offset>(64, 167)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_4xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/4xScope/4xScope</texturePath>
+          <offset>(62, 162)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_8xScope</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Sight/8xScope/8xScope</texturePath>
+          <offset>(102, 161)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForLMG</texturePath>
+          <offset>(239, 135)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForLMG</texturePath>
+          <offset>(231, 133)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TacticalBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForLMG</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_VerticalGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/VerticalGrip/VerticalGrip</texturePath>
+          <offset>(171, 68)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TriangularGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/TriangularGrip/TriangularGrip</texturePath>
+          <offset>(195, 66)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_LaserSight</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/AimAssistance/AimAssistance</texturePath>
+          <offset>(182, 68)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_GrenadeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(210, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_EMPLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(210, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_SmokeLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(210, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_IncendiaryLauncher</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Unberbarrel/GrenadeLauncher/GrenadeLauncher</texturePath>
+          <offset>(210, 77)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ShortenedStock</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForLMG</texturePath>
+          <offset>(-62, 128)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_QuickMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForLMG</texturePath>
+          <offset>(69, 206)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_BeltMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/BeltMagazine/BeltMagazine</texturePath>
+          <offset>(129, 150)</offset>
+          <scale>0.62</scale>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_DrumMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/DrumMagazine/DrumMagazine</texturePath>
+          <offset>(95, 103)</offset>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_Minigun -->
@@ -584,6 +1261,40 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_ExtendedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ExtendedBarrel/ForMinigun</texturePath>
+          <offset>(271, 59)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_TacticalBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/TacticalBarrel/ForMinigun</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_CustomGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForMinigun</texturePath>
+          <offset>(-14, 65)</offset>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_QuickMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForMinigun</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForMinigun</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Bow_Great -->
@@ -684,6 +1395,32 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_ShortenedBarrel</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Barrel/ShortenedBarrel/ForChargeRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_CustomGrip</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Grip/CustomGrip/ForChargeRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_QuickMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForChargeRifle</texturePath>
+        </graphicData>
+      </li>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForChargeRifle</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_ChargeLance -->
@@ -794,6 +1531,14 @@
         </attachmentPoints>
       </li>
     </comps>
+    <moduleGraphicOverrides>
+      <li>
+        <moduleDef>CWF_Module_ExtendedMagazine</moduleDef>
+        <graphicData>
+          <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForHellcatRifle</texturePath>
+        </graphicData>
+      </li>
+    </moduleGraphicOverrides>
   </CWF.AdapterDef>
 
   <!-- Gun_BeamRepeater -->

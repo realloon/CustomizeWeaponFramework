@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Defs>
-  <!-- QuickMagazine -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_QuickMagazine</defName>
     <label>quick magazine</label>
@@ -31,64 +30,10 @@
           <li>CWF_Minigun</li>
           <li>CWF_ChargeLance</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_AssaultRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForAssaultRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForLMG</texturePath>
-              <offset>(69, 206)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChainShotgun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForChainShotgun</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChargeRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForChargeRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Minigun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/QuickMagazine/ForMinigun</texturePath>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- ExtendedMagazine -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_ExtendedMagazine</defName>
     <label>extended magazine</label>
@@ -112,84 +57,11 @@
         <requiredWeaponTags>
           <li>CWF_BurstFire</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_AssaultRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForAssaultRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChainShotgun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForChainShotgun</texturePath>
-              <offset>(215, 130)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChargeRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForChargeRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HeavySMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForHeavySMG</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_Minigun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForMinigun</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_SniperRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForSniperRifle</texturePath>
-            </graphicData>
-          </li>
-          <li MayRequire="Ludeon.Rimworld.Anomaly">
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HellcatRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/ExtendedMagazine/ForHellcatRifle</texturePath>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- BeltMagazine -->
+
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_BeltMagazine</defName>
     <label>belt magazine</label>
@@ -227,25 +99,10 @@
           <li>CWF_SMG</li>
           <li>CWF_LMG</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/BeltMagazine/BeltMagazine</texturePath>
-              <offset>(129, 150)</offset>
-              <scale>0.62</scale>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- DrumMagazine -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_DrumMagazine</defName>
     <label>drum magazine</label>
@@ -283,19 +140,6 @@
           <li>CWF_SMG</li>
           <li>CWF_LMG</li>
         </requiredWeaponTags>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Magazine/DrumMagazine/DrumMagazine</texturePath>
-              <offset>(95, 103)</offset>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>

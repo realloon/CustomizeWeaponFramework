@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <Defs>
-  <!-- ShortenedStock -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_ShortenedStock</defName>
     <label>shortened stock</label>
@@ -21,45 +20,10 @@
       <li Class="CWF.TraitModuleExtension">
         <weaponTraitDef>CWF_Trait_ShortenedStock</weaponTraitDef>
         <part>Stock</part>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_LMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForLMG</texturePath>
-              <offset>(-62, 128)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HeavySMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForHeavySMG</texturePath>
-              <offset>(-9, 145)</offset>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_SniperRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/ShortenedStock/ForSniperRifle</texturePath>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- TelescopicStock -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_TelescopicStock</defName>
     <label>telescopic stock</label>
@@ -80,34 +44,10 @@
       <li Class="CWF.TraitModuleExtension">
         <weaponTraitDef>CWF_Trait_TelescopicStock</weaponTraitDef>
         <part>Stock</part>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_AssaultRifle</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/TelescopicStock/ForAssaultRifle</texturePath>
-            </graphicData>
-          </li>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_HeavySMG</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/TelescopicStock/ForHeavySMG</texturePath>
-              <offset>(-9, 145)</offset>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- FoldStock -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_FoldStock</defName>
     <label>fold stock</label>
@@ -128,24 +68,10 @@
       <li Class="CWF.TraitModuleExtension">
         <weaponTraitDef>CWF_Trait_FoldStock</weaponTraitDef>
         <part>Stock</part>
-        <graphicCases>
-          <li>
-            <matcher>
-              <weaponDefs>
-                <li>Gun_ChainShotgun</li>
-              </weaponDefs>
-            </matcher>
-            <graphicData>
-              <texturePath>CustomizeWeapon/Modules/Stock/FoldStock/FoldStock</texturePath>
-              <offset>(105, 180)</offset>
-            </graphicData>
-          </li>
-        </graphicCases>
       </li>
     </modExtensions>
   </ThingDef>
 
-  <!-- StabilizerBrace -->
   <ThingDef ParentName="CWF_Module">
     <defName>CWF_Module_StabilizerBrace</defName>
     <label>stabilizer brace</label>

@@ -5,8 +5,10 @@ tmp/
 AGENTS.md
 
 # Textures
-Textures/
+Textures/*
 !Textures/LICENSE
+About/Preview.png
+About/ModIcon.png
 
 # C#
 Source/obj/

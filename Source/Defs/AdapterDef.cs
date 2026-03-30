@@ -9,6 +9,9 @@ namespace CWF;
 /// A special Def used to adapt existing vanilla or modded weapons to the CWF system without direct patching. An AdapterDef targets a weapon by its defName and injects necessary components (`comps`), tags (`weaponTags`), and a new base graphic (`graphicData`), making it fully compatible with the framework.
 /// </summary>
 public class AdapterDef : Def {
+    private static readonly Dictionary<ThingDef, Dictionary<ThingDef, ModuleGraphicData>>
+        ModuleOverridesByWeapon = new();
+
     /// <summary>
     /// The new base graphic data to apply to the adapted weapon.
     /// </summary>
@@ -27,6 +30,12 @@ public class AdapterDef : Def {
     [UsedImplicitly]
     public readonly List<CompProperties> comps = [];
 
+    /// <summary>
+    /// Per-weapon graphic overrides for specific CWF module ThingDefs.
+    /// </summary>
+    [UsedImplicitly]
+    public readonly List<AdapterModuleGraphicOverride> moduleGraphicOverrides = [];
+
     public override IEnumerable<string> ConfigErrors() {
         foreach (var item in base.ConfigErrors()) {
             yield return item;
@@ -35,10 +44,34 @@ public class AdapterDef : Def {
         if (graphicData == null) {
             yield return "graphicData is null";
         }
+
+        var seenModuleDefs = new HashSet<ThingDef>();
+        foreach (var moduleGraphicOverride in moduleGraphicOverrides) {
+            if (moduleGraphicOverride.moduleDef == null) {
+                yield return "moduleGraphicOverrides contains an entry with null moduleDef";
+                continue;
+            }
+
+            if (moduleGraphicOverride.graphicData == null) {
+                yield return
+                    $"moduleGraphicOverrides for '{moduleGraphicOverride.moduleDef.defName}' has null graphicData";
+            }
+
+            if (moduleGraphicOverride.moduleDef.GetModExtension<TraitModuleExtension>() == null) {
+                yield return
+                    $"moduleGraphicOverrides references '{moduleGraphicOverride.moduleDef.defName}', but it is not a CWF module";
+            }
+
+            if (!seenModuleDefs.Add(moduleGraphicOverride.moduleDef)) {
+                yield return
+                    $"moduleGraphicOverrides contains duplicate moduleDef '{moduleGraphicOverride.moduleDef.defName}'";
+            }
+        }
     }
 
     internal static void Inject() {
         var allAdapters = DefDatabase<AdapterDef>.AllDefs;
+        ModuleOverridesByWeapon.Clear();
 
         foreach (var adapter in allAdapters) {
             var weaponDef = DefDatabase<ThingDef>.GetNamed(adapter.defName, false);
@@ -50,6 +83,15 @@ public class AdapterDef : Def {
 
             AdaptWeapon(weaponDef, adapter);
         }
+    }
+
+    internal static bool TryGetModuleGraphicOverride(ThingDef weaponDef, ThingDef moduleDef,
+        [System.Diagnostics.CodeAnalysis.NotNullWhen(true)]
+        out ModuleGraphicData? graphicData) {
+        graphicData = null;
+
+        return ModuleOverridesByWeapon.TryGetValue(weaponDef, out var overridesByModule)
+               && overridesByModule.TryGetValue(moduleDef, out graphicData);
     }
 
     #region Helper
@@ -78,6 +120,8 @@ public class AdapterDef : Def {
         foreach (var compToAdd in adapter.comps) {
             TryAddComp(weaponDef, compToAdd);
         }
+
+        RegisterModuleGraphicOverrides(weaponDef, adapter);
     }
 
     private static void TryAddComp(ThingDef weaponDef, CompProperties newComp) {
@@ -86,5 +130,45 @@ public class AdapterDef : Def {
         }
     }
 
+    private static void RegisterModuleGraphicOverrides(ThingDef weaponDef, AdapterDef adapter) {
+        if (adapter.moduleGraphicOverrides.Count == 0) return;
+
+        if (!ModuleOverridesByWeapon.TryGetValue(weaponDef, out var overridesByModule)) {
+            overridesByModule = new Dictionary<ThingDef, ModuleGraphicData>();
+            ModuleOverridesByWeapon[weaponDef] = overridesByModule;
+        }
+
+        foreach (var moduleGraphicOverride in adapter.moduleGraphicOverrides) {
+            if (moduleGraphicOverride.moduleDef == null || moduleGraphicOverride.graphicData == null) {
+                continue;
+            }
+
+            if (overridesByModule.ContainsKey(moduleGraphicOverride.moduleDef)) {
+                Log.Warning(
+                    $"[CWF] AdapterDef '{adapter.defName}' defines duplicate module graphic override for '{moduleGraphicOverride.moduleDef.defName}'. The last one wins.");
+            }
+
+            overridesByModule[moduleGraphicOverride.moduleDef] = moduleGraphicOverride.graphicData;
+        }
+    }
+
     #endregion
+}
+
+/// <summary>
+/// Defines a weapon-specific graphic override for a single CWF module ThingDef.
+/// </summary>
+[UsedImplicitly]
+public class AdapterModuleGraphicOverride {
+    /// <summary>
+    /// The CWF module ThingDef to override the appearance of on the adapted weapon.
+    /// </summary>
+    [UsedImplicitly]
+    public ThingDef? moduleDef;
+
+    /// <summary>
+    /// The graphic data to use when this module is installed on the adapted weapon.
+    /// </summary>
+    [UsedImplicitly]
+    public ModuleGraphicData? graphicData;
 }

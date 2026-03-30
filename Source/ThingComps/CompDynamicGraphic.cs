@@ -69,6 +69,10 @@ public class CompDynamicGraphic : ThingComp {
     public ModuleGraphicData? GetGraphicDataFor(WeaponTraitDef traitDef) {
         if (!traitDef.TryGetModuleDef(out var moduleDef)) return null;
 
+        if (AdapterDef.TryGetModuleGraphicOverride(parent.def, moduleDef, out var adapterGraphicData)) {
+            return adapterGraphicData;
+        }
+
         var ext = moduleDef.GetModExtension<TraitModuleExtension>();
         if (ext?.graphicCases.IsNullOrEmpty() ?? true) return null;
 
@@ -202,7 +206,7 @@ public class CompDynamicGraphic : ThingComp {
 
         GL.PopMatrix();
 
-        var finalBakedTexture = EnsureBakedTexture(renderTexture.width, renderTexture.height, out var textureRecreated);
+        var finalBakedTexture = EnsureBakedTexture(renderTexture.width, renderTexture.height);
         Graphics.CopyTexture(renderTexture, finalBakedTexture);
 
         RenderTexture.active = null;
@@ -282,15 +286,13 @@ public class CompDynamicGraphic : ThingComp {
         return rotation.AsQuat * offset;
     }
 
-    private Texture2D EnsureBakedTexture(int width, int height, out bool textureRecreated) {
+    private Texture2D EnsureBakedTexture(int width, int height) {
         if (_cachedBakedTexture != null && _cachedBakedTexture.width == width && _cachedBakedTexture.height == height) {
-            textureRecreated = false;
             return _cachedBakedTexture;
         }
 
         ReleaseCachedTexture();
 
-        textureRecreated = true;
         _cachedBakedTexture = new Texture2D(width, height, TextureFormat.ARGB32, false);
         return _cachedBakedTexture;
     }

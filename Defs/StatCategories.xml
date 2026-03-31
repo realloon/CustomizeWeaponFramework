@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <StatCategoryDef>
+    <defName>CWF_WeaponModule</defName>
+    <label>weapon module</label>
+    <displayOrder>500</displayOrder>
+    <displayAllByDefault>true</displayAllByDefault>
+  </StatCategoryDef>
+</Defs>

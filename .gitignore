@@ -14,6 +14,7 @@ About/ModIcon.png
 Source/obj/
 Source/bin/
 Source/*.DotSettings.user
+Source/.idea/.idea.CWF/.idea/.name
 
 # dist
 Assemblies/
